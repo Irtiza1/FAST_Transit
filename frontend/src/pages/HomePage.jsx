@@ -37,7 +37,7 @@ function HomePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-blue-200 p-6 flex flex-col items-center relative">
+    <div className="min-h-screen bg p-6 flex flex-col items-center relative">
       {/* Subtle background pattern */}
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-50 via-white to-indigo-100 opacity-25 pointer-events-none"></div>
 
@@ -54,7 +54,7 @@ function HomePage() {
             } delay-${index * 200}`}
             style={{ transitionDelay: `${index * 200}ms` }} // Smooth staggered animation
           >
-            <div className="bg-white rounded-xl shadow-lg p-10 w-72 h-72 flex flex-col items-center justify-center hover:shadow-2xl hover:-translate-y-4 transition-transform">
+            <div className="bg-gray-300 rounded-xl border border-black  p-10 w-72 h-72 flex flex-col items-center justify-center hover:bg-gray-50 hover:-translate-y-4 transition-transform">
               {feature.icon}
               <h3 className="mt-6 text-2xl font-semibold text-gray-800 text-center">
                 {feature.title}
