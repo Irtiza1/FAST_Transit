@@ -3,7 +3,7 @@ import {Route,createBrowserRouter,createRoutesFromElements,RouterProvider} from 
 import './App.css'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage';
-
+import HomePage from './pages/HomePage'
 function App() {
   
   const router = createBrowserRouter(
@@ -11,6 +11,7 @@ function App() {
       <>
       <Route path="register" element={<RegisterPage/>} />
       <Route path="login" element={<LoginPage/>} />
+      <Route path="home" element={<HomePage/>} />
       </>
     )
   )
