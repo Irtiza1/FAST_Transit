@@ -12,7 +12,7 @@ function Register() {
             FAST
           </p>
           <p className="font-bold text-3xl sm:text-4xl">Transit</p>
-          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-gray-9=200">
+          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-gray-400">
             <span className="whitespace-normal break-words">
               <Typewriter
                 words={["Continue your journey with us"]}

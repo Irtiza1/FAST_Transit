@@ -7,12 +7,12 @@ function Register() {
       {/* <div className="mx-auto flex h-screen w-screen flex-col items-center md:flex-row bg-blue-700"> */}
       <div className="flex h-full flex-col lg:flex-row">
         {/* Left Column - Title and Typewriter */}
-        <div className="bg-blue-400 text-white px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 ">
+        <div className="bg-gray-950 text-white px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 ">
           <p className="my-2 text-5xl font-extrabold tracking-wider sm:text-6xl lg:text-7xl ">
             FAST
           </p>
           <p className="font-bold text-3xl sm:text-4xl">Transit</p>
-          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-blue-900">
+          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-gray-400">
             <span className="whitespace-normal break-words">
               <Typewriter
                 words={["Start your journey with us"]}
@@ -25,7 +25,7 @@ function Register() {
               />
             </span>
           </p>
-          <p className="mt-4 text-blue-900 font-semibold leading-relaxed text-2xl">
+          <p className="mt-4 text-gray-500 font-semibold leading-relaxed text-2xl">
             Join the community that moves forward fast!
           </p>
         </div>
@@ -51,10 +51,10 @@ function Register() {
                 checked
               />
               <label
-                className="peer-checked:border-blue-600 peer-checked:bg-blue-200 absolute inset-0 cursor-pointer rounded-xl border"
+                className="peer-checked:border-gray-600 peer-checked:bg-gray-200 absolute inset-0 cursor-pointer rounded-xl border"
                 htmlFor="radio1"
               ></label>
-              <div className="peer-checked:border-transparent peer-checked:bg-blue-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-blue-600 ring-offset-2"></div>
+              <div className="peer-checked:border-transparent peer-checked:bg-gray-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-gray-600 ring-offset-2"></div>
               <span className="pointer-events-none z-10">Vendor</span>
             </div>
 
@@ -67,10 +67,10 @@ function Register() {
                 checked
               />
               <label
-                className="peer-checked:border-blue-600 peer-checked:bg-blue-200 absolute inset-0 cursor-pointer rounded-xl border"
+                className="peer-checked:border-gray-600 peer-checked:bg-gray-200 absolute inset-0 cursor-pointer rounded-xl border"
                 htmlFor="radio3"
               ></label>
-              <div className="peer-checked:border-transparent peer-checked:bg-blue-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-blue-600 ring-offset-2"></div>
+              <div className="peer-checked:border-transparent peer-checked:bg-gray-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-gray-600 ring-offset-2"></div>
               <span className="pointer-events-none z-10">
                 Student or Faculty
               </span>
@@ -101,7 +101,7 @@ function Register() {
             </div>
           </div>
 
-          <button className="w-full rounded bg-blue-200 hover:bg-blue-400 px-8 py-3 font-bold text-blue-900  transition-all hover:opacity-90 hover:shadow-lg">
+          <button className="w-full rounded bg-gray-300 hover:bg-gray-400 px-8 py-3 font-bold text-gray-900  transition-all hover:opacity-90 hover:shadow-lg">
             Sign Up
           </button>
         </div>
