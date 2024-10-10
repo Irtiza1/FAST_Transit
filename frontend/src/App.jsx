@@ -4,6 +4,7 @@ import './App.css'
 import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage'
+import CreateBusPage from "./pages/CreateBusPage";
 function App() {
   
   const router = createBrowserRouter(
@@ -12,6 +13,7 @@ function App() {
       <Route path="register" element={<RegisterPage/>} />
       <Route path="login" element={<LoginPage/>} />
       <Route path="home" element={<HomePage/>} />
+      <Route path="create-bus" element={<CreateBusPage/>} />
       </>
     )
   )

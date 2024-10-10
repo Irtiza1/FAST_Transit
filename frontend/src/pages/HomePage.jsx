@@ -39,13 +39,13 @@ function HomePage() {
   return (
     <div className="min-h-screen bg p-6 flex flex-col items-center relative">
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-r from-indigo-50 via-white to-indigo-100 opacity-25 pointer-events-none"></div>
+      <div className="absolute inset-0 bg-gray-950 pointer-events-none"></div>
 
-      <h1 className="text-5xl font-extrabold text-gray-800 mb-12 z-10">
+      <h1 className="text-5xl font-extrabold text-gray-50 mb-12 z-10">
         Vendor Dashboard
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 w-full max-w-7xl z-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
         {features.map((feature, index) => (
           <div
             key={feature.id}
