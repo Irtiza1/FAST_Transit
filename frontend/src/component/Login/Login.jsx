@@ -7,12 +7,12 @@ function Register() {
       {/* <div className="mx-auto flex h-screen w-screen flex-col items-center md:flex-row bg-blue-700"> */}
       <div className="flex h-full flex-col lg:flex-row">
         {/* Left Column - Title and Typewriter */}
-        <div className="bg-gray-950 text-white px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 ">
-          <p className="my-2 text-5xl font-extrabold tracking-wider sm:text-6xl lg:text-7xl ">
+        <div className="bg-gray-950 text-gray-200 px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 ">
+          <p className="my-2 text-7xl font-extrabold tracking-wider sm:text-7xl lg:text-7xl ">
             FAST
           </p>
-          <p className="font-bold text-3xl sm:text-4xl">Transit</p>
-          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-gray-400">
+          <p className="font-bold text-5xl sm:text-5xl">Transit</p>
+          <p className="mt-32  font-bold  sm:text-4xl md:text-5xl lg:text-5xl text-yellow-500">
             <span className="whitespace-normal break-words">
               <Typewriter
                 words={["Continue your journey with us"]}
@@ -25,7 +25,7 @@ function Register() {
               />
             </span>
           </p>
-          <p className="mt-4 text-gray-500 font-semibold leading-relaxed text-2xl">
+          <p className="mt-4 text-yellow-700 font-semibold leading-relaxed text-2xl">
             Join the community that moves forward fast!
           </p>
         </div>
