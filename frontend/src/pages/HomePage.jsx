@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaBullhorn, FaBus, FaChartBar, FaClipboardList } from 'react-icons/fa';
+import {Link, NavLink} from 'react-router-dom';
 
 function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,24 +16,28 @@ function HomePage() {
       icon: <FaBullhorn className="text-6xl text-gray-500" />,
       title: 'Make an Announcement',
       description: 'Reach out to your audience with ease.',
+      linkTo:''
     },
     {
       id: 2,
       icon: <FaBus className="text-6xl text-gray-500" />,
       title: 'Register a Bus',
       description: 'Add new buses to your fleet.',
+      linkTo:'create-bus'
     },
     {
       id: 3,
       icon: <FaChartBar className="text-6xl text-gray-500" />,
       title: 'View Stats',
       description: 'Get insights on performance.',
+      linkTo:''
     },
     {
       id: 4,
       icon: <FaClipboardList className="text-6xl text-gray-500" />,
       title: 'View Registrations',
       description: 'Manage bus registrations easily.',
+      linkTo:''
     },
   ];
 
@@ -45,9 +50,10 @@ function HomePage() {
         Vendor Dashboard
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
+      <div  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
         {features.map((feature, index) => (
-          <div
+          <NavLink
+            to={`/${feature.linkTo}`}
             key={feature.id}
             className={`transform transition-transform duration-500 ease-in-out ${
               isLoaded ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -61,7 +67,7 @@ function HomePage() {
               </h3>
               <p className="mt-2 text-gray-600 text-center">{feature.description}</p>
             </div>
-          </div>
+          </NavLink>
         ))}
       </div>
     </div>

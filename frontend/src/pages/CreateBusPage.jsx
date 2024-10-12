@@ -276,32 +276,32 @@ function CreateBusPage() {
         {/* Bus Layout on the right side */}
         <div className="bus-layout p-6 w-full lg:w-1/3 md:w-1/2 sm:w-2/3">
           <div className="text-center text-xs font-bold text-gray-500 mx-auto py-12 w-2/3 bg-yellow-500 border border-yellow-500 rounded-t-[45px]">FRONT</div>
-          <div className="w-3/4 bg-yellow-500 py-4 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[32rem] max-h-full mx-auto">
+          <div className="w-3/4 items-center bg-yellow-500 py-4 px-5 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[32rem] max-h-full mx-auto">
             <div className="flex justify-center my-8">
               <h2 className="text-xl font-bold text-gray-500">Bus Layout</h2>
             </div>
             <div className="flex justify-center items-start space-x-6">
               {/* Left side rows */}
               <div className="left-side">
-                <div className="bg-green-100 rounded-lg p-2 text-center mb-2 text-sm font-medium text-green-600">
+                {/* <div className=" bg-green-100 rounded-lg p-2 text-center mb-2 text-sm font-medium text-green-600">
                   Entrance
-                </div>
+                </div> */}
                 {numberOfLeftRows > 0 && numberOfSeatsInLeftRows > 0 ? (
                   renderRows(numberOfLeftRows, numberOfSeatsInLeftRows)
                 ) : (
-                  <div className="text-gray-500">No rows on left side</div>
+                  <div className=" text-gray-50 p-2 font-semibold rounded-md text-center bg-red-400 border border-red-600 ">No rows on left side</div>
                 )}
               </div>
               {/* Aisle */}
               <div className="aisle flex flex-col justify-center">
-                <div className="aisle-space w-2 h-full bg-white border-l border-r border-gray-300"></div>
+                <div className="aisle-space h-full bg-white border-l border-r border-gray-300"></div>
               </div>
               {/* Right side rows */}
               <div className="right-side">
                 {numberOfRightRows > 0 && numberOfSeatsInRightRows > 0 ? (
                   renderRows(numberOfRightRows, numberOfSeatsInRightRows)
                 ) : (
-                  <div className="text-gray-500">No rows on right side</div>
+                  <div className=" text-gray-50 p-2 font-semibold rounded-md text-center bg-red-400 border border-red-600">No rows on right side</div>
                 )}
               </div>
             </div>
@@ -310,7 +310,7 @@ function CreateBusPage() {
               {numberOfSeatsInLastRows > 0 ? (
                 renderSeats(numberOfSeatsInLastRows)
               ) : (
-                <div className="text-gray-500">No seats in last row</div>
+                <div className=" text-gray-50 p-2 font-semibold rounded-md text-center bg-red-400 border border-red-600 ">No seats in last row</div>
               )}
             </div>
           </div>
