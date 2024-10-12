@@ -7,7 +7,7 @@
 //   const [rightSeats, setRightSeats] = useState([]);
 //   const [lastRowSeats, setLastRowSeats] = useState(0);
 
-//   // Function to handle changes in rows and seat inputs
+//   // Functinpmon to handle changes in rows and seat inputs
 //   const handleRowsChange = (value) => {
 //     setRows(value);
 //     // Reset seats array if rows are adjusted
