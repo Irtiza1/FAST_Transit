@@ -14,7 +14,11 @@ app.use(express.urlencoded({ extended: true }));
 // app.use("/users",userRouter)
 // app.use("/data",dataRouter)
 // app.use("/get/uni",universityRoute)
-
+//testing frontend backend connection
+app.get('/api/data', (req, res) => {
+    console.log('reached backend')
+    return res.json({ message: 'Sending response' });
+  });
 
 
 // ---Sign up API'S---------
