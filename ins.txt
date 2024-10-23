@@ -1,0 +1,5 @@
+for frontend:
+/Downloads/FAST_Transit-1/frontend$ npm run dev
+
+for backend:
+/Downloads/FAST_Transit-1/backend$ npm run dev
