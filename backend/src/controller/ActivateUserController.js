@@ -16,6 +16,7 @@ export const ActivateUser= async (req,res)=>{
         await connection.query(sql,[true,userId])
 
         res.status(200).json({message: 'Your account has been activated successfully!'})
+        // res.redirect('/login')
     }
     catch(error){
         console.error('Activation Failed!', error);

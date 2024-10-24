@@ -21,10 +21,9 @@ app.get('/api/data', (req, res) => {
   });
 
 
-// ---Sign up API'S---------
+/* ----------------------------USER PORTION ---------------------------- */
+
+// ---Sign up API | Login  API---------
 app.use("/user",userRoute)
 
-
-// ---Sign In API'S---------
-// app.use()
 export { app }
