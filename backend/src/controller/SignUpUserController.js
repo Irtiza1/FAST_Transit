@@ -1,10 +1,14 @@
 import connection from "../db/index.js";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
+
+// import bcrypt from 'bcrypt';
+
 export const SignUpUser = async (req, res) => {
     try {
         const { FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location } = req.body;
-
+        // Hash the password before storing it
+        // const hashedPassword = await bcrypt.hash(Password, 10);
         const sql = 'INSERT INTO USERS (FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location) VALUES (?,?,?,?,?,?,?,?,?)';
 
         const [results] = await connection.query(sql, [FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location]);
@@ -13,7 +17,7 @@ export const SignUpUser = async (req, res) => {
 
         const token= jwt.sign({userId},process.env.JWT_SECRET,{expiresIn: '1h'})
 
-        const activationLink=`http://localhost:8000/user/activate/${token}`
+        const activationLink=`http://localhost:8000/user/activate/${token}/${Role}`
 
         const transporter=nodemailer.createTransport({
             service: 'gmail',
