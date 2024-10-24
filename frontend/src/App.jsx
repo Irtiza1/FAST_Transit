@@ -6,6 +6,7 @@ import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage'
 import CreateBusPage from "./pages/CreateBusPage";
 import TestConnection from "./pages/TestConnection";
+import RegisterDriverPage from "./pages/RegisterDriverPage";
 function App() {
   
   const router = createBrowserRouter(
@@ -15,7 +16,7 @@ function App() {
       <Route path="login" element={<LoginPage/>} />
       <Route path="home" element={<HomePage/>} />
       <Route path="create-bus" element={<CreateBusPage/>} />
-      <Route path="test" element={<TestConnection/>} />
+      <Route path="register-driver" element={<RegisterDriverPage/>} />
       </>
     )
   )

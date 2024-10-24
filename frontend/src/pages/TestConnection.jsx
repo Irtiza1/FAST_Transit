@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { RegisterDriver } from '../component/RegisterDriver';
 function TestConnection() {
   const [data, setData] = useState(null);
 
@@ -19,8 +19,9 @@ function TestConnection() {
   }, []);
 
   return (
-    <div >
+    <div className='bg-gray-900'>
       {data}
+      <RegisterDriver/>
     </div>
   );
 }
