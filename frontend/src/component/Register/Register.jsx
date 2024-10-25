@@ -136,15 +136,15 @@ function Register() {
         <div className="mb-6">
           <label className="block text-lg font-semibold text-black mb-1">CNIC</label>
           <InputMask
-            mask="99999-9999999-9"
+            mask="9999999999999"
             value={formData.cnic}
             onChange={handleChange}
             className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
             name="cnic"
-            placeholder="12345-1234567-9"
+            placeholder="1234512345679"
             required
           />
-          <small className="text-gray-400">Format: 12345-1234567-9</small>
+          <small className="text-gray-400">Format: 1234512345679</small>
         </div>
 
         {/* Gender Selection */}
