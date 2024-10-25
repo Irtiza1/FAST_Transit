@@ -4,27 +4,50 @@ import InputMask from "react-input-mask";
 import axios from "axios";
 
 function Register() {
+  const [SubRole, setSubRole] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    cnic: "",
-    password: "",
-    gender: "",
-    role: "Vendor", // Default role set to "Vendor"
+    FirstName: "",
+    LastName: "",
+    Email: "",
+    PhoneNumber: "",
+    CNIC: "",
+    Password: "",
+    Gender: "",
+    Role: "",
+    Location: "",
   });
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
+  const removeDashesFromCNIC = (cnic) => {
+    return cnic.replace(/-/g, ""); // Removes all dashes
+  };
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@nu\.edu\.pk$/;
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!emailPattern.test(formData.Email)) {
+      alert("Please enter a valid email address (e.g., xyz@nu.edu.pk)");
+      return;
+    }
+    if (formData.Password !== ConfirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    if(SubRole !== ""){
+      formData.Role = SubRole
+    }
+    formData.CNIC = removeDashesFromCNIC(formData.CNIC);
+  
     try {
+      console.log(formData); // This will not include SubRole explicitly
       const response = await axios.post("http://localhost:8000/user/signup", formData);
       alert(response.data.message);
     } catch (error) {
@@ -35,179 +58,157 @@ function Register() {
 
   return (
     <div className="flex h-full min-h-screen flex-col lg:flex-row">
-      {/* Left Column - Title and Typewriter */}
-      <div className="bg-gray-950 text-gray-200 px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 ">
-        <p className="my-2 text-7xl font-extrabold tracking-wider sm:text-7xl lg:text-7xl">FAST</p>
-        <p className="font-bold text-5xl sm:text-5xl">Transit</p>
-        <p className="mt-32 font-bold sm:text-4xl md:text-5xl lg:text-5xl text-yellow-500">
-          <span className="whitespace-normal break-words">
-            <Typewriter
-              words={["Start your journey with us"]}
-              loop={false}
-              cursor
-              cursorStyle="_"
-              typeSpeed={200}
-              deleteSpeed={150}
-              delaySpeed={1000}
-            />
-          </span>
+      <div className="bg-gray-950 text-gray-200 px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20">
+        <p className="my-2 text-7xl font-extrabold tracking-wider">FAST</p>
+        <p className="font-bold text-5xl">Transit</p>
+        <p className="mt-32 font-bold text-5xl text-yellow-500">
+          <Typewriter
+            words={["Start your journey with us"]}
+            loop={false}
+            cursor
+            cursorStyle="_"
+            typeSpeed={200}
+            deleteSpeed={150}
+            delaySpeed={1000}
+          />
         </p>
-        <p className="mt-4 text-yellow-700 font-semibold leading-relaxed text-2xl">
-          Join the community that moves forward fast!
-        </p>
+        <p className="mt-4 text-yellow-700 font-semibold text-2xl">Join the community that moves forward fast!</p>
       </div>
 
-      {/* Right Column - Form */}
-      <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-20 m-auto">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto">
         <h2 className="mb-2 text-3xl font-bold">Sign Up</h2>
-        <a href="#" className="mb-16 block font-bold text-gray-400 hover:text-gray-800">
-          Already Have an account?
-        </a>
+        <a href="" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Already have an account?</a>
 
         <p className="mb-2 font-medium text-black">Are you a?</p>
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row">
-          {/* Role Selection */}
-          <div className="relative flex w-full items-center justify-center rounded-xl bg-gray-50 px-4 py-3 font-medium text-gray-700 sm:w-1/2">
-            <input
-              className="peer hidden"
-              type="radio"
-              name="role"
-              value="Vendor"
-              id="roleVendor"
-              checked={formData.role === "Vendor"}
-              onChange={handleChange}
-            />
-            <label
-              className="peer-checked:border-gray-600 peer-checked:bg-gray-200 absolute inset-0 cursor-pointer rounded-xl border"
-              htmlFor="roleVendor"
-            ></label>
-            <div className="peer-checked:border-transparent peer-checked:bg-gray-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-gray-600 ring-offset-2"></div>
-            <span className="pointer-events-none z-10">Vendor</span>
-          </div>
-
-          <div className="relative flex w-full items-center justify-center rounded-xl bg-gray-50 px-4 py-3 font-medium text-gray-700 sm:w-1/2">
-            <input
-              className="peer hidden"
-              type="radio"
-              name="role"
-              value="Student or Faculty"
-              id="roleStudent"
-              checked={formData.role === "Student or Faculty"}
-              onChange={handleChange}
-            />
-            <label
-              className="peer-checked:border-gray-600 peer-checked:bg-gray-200 absolute inset-0 cursor-pointer rounded-xl border"
-              htmlFor="roleStudent"
-            ></label>
-            <div className="peer-checked:border-transparent peer-checked:bg-gray-600 peer-checked:ring-2 absolute left-4 h-5 w-5 rounded-full border-2 border-gray-300 bg-gray-200 ring-gray-600 ring-offset-2"></div>
-            <span className="pointer-events-none z-10">Student or Faculty</span>
-          </div>
-        </div>
-
-        {/* First Name */}
-        <p className="mb-2 font-medium text-black">First Name</p>
-        <div className="mb-6">
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            placeholder="Enter your first name"
-            required
-          />
-        </div>
-
-        {/* Last Name */}
-        <p className="mb-2 font-medium text-black">Last Name</p>
-        <div className="mb-6">
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            placeholder="Enter your last name"
-            required
-          />
-        </div>
-
-        {/* CNIC */}
-        <div className="mb-6">
-          <label className="block text-lg font-semibold text-black mb-1">CNIC</label>
-          <InputMask
-            mask="99999-9999999-9"
-            value={formData.cnic}
-            onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            name="cnic"
-            placeholder="12345-1234567-9"
-            required
-          />
-          <small className="text-gray-400">Format: 12345-1234567-9</small>
-        </div>
-
-        {/* Gender Selection */}
-        <p className="mb-2 font-medium text-black">Gender</p>
-        <div className="mb-6">
+        <div className="mb-2 flex flex-col gap-4 sm:flex-row">
           <select
-            name="gender"
-            value={formData.gender}
+            name="Role"
+            value={formData.Role}
             onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
+            className="w-full px-4 py-2 border-2 rounded-md"
+            required
           >
-            <option value="">Select Gender</option>
+            <option value="">Select Role</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+
+          {formData.Role === "User" && (
+            <select
+              name="SubRole"
+              value={SubRole}
+              onChange={(e) => setSubRole(e.target.value)}
+              className="w-full px-4 py-2 border-2 rounded-md"
+              required
+            >
+              <option value="">Select Sub Role</option>
+              <option value="Student">Student</option>
+              <option value="Faculty">Faculty</option>
+            </select>
+          )}
+        </div>
+
+        {/* First Name, Last Name, and Gender */}
+        <div className="mb-2 flex flex-col sm:flex-row gap-4">
+          <input
+            type="text"
+            name="FirstName"
+            value={formData.FirstName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border-2 rounded-md"
+            placeholder="First Name"
+            required
+          />
+          <input
+            type="text"
+            name="LastName"
+            value={formData.LastName}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border-2 rounded-md"
+            placeholder="Last Name"
+            required
+          />
+          <select
+            name="Gender"
+            value={formData.Gender}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border-2 rounded-md"
+            required
+          >
+            <option value="">Gender</option>
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
         </div>
 
-        {/* Phone Number */}
-        <p className="mb-2 font-medium text-black">Phone Number</p>
-        <div className="mb-6">
+        {/* CNIC and Phone Number */}
+        <div className="mb-2 flex flex-col sm:flex-row gap-4">
+          <InputMask
+            mask="99999-9999999-9"
+            value={formData.CNIC}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border-2 rounded-md"
+            name="CNIC"
+            placeholder="CNIC"
+            required
+          />
           <input
             type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
+            name="PhoneNumber"
+            value={formData.PhoneNumber}
             onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            placeholder="Enter your phone number"
+            className="w-full px-4 py-2 border-2 rounded-md"
+            placeholder="Phone Number"
             required
           />
         </div>
 
-        {/* Email */}
-        <p className="mb-2 font-medium text-black">Email</p>
-        <div className="mb-6">
+        {/* Location */}
+        <div className="mb-2">
           <input
-            type="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            name="Location"
+            value={formData.Location}
             onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            placeholder="Enter your email"
+            className="w-full px-4 py-2 border-2 rounded-md"
+            placeholder="Location"
             required
           />
         </div>
 
-        {/* Password */}
-        <p className="mb-2 font-medium text-black">Password</p>
-        <div className="mb-6">
+        {/* Email, Password, Confirm Password */}
+        <input
+          type="email"
+          name="Email"
+          value={formData.Email}
+          onChange={handleChange}
+          className="w-full px-4 py-2 mb-2 border-2 rounded-md"
+          placeholder="Email"
+          required
+        />
+        <div className="mb-2 flex flex-col sm:flex-row gap-4">
           <input
             type="password"
-            name="password"
-            value={formData.password}
+            name="Password"
+            value={formData.Password}
             onChange={handleChange}
-            className="w-full px-4 py-2 text-base text-gray-700 placeholder-gray-400 focus:outline-none border-2 rounded-md"
-            placeholder="Choose a password (minimum 8 characters)"
+            className="w-full px-4 py-2 mb-2 border-2 rounded-md"
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            name="ConfirmPassword"
+            value={ConfirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="w-full px-4 py-2 mb-2 border-2 rounded-md"
+            placeholder="Confirm Password"
             required
           />
         </div>
 
-        <button className="w-full rounded bg-gray-300 hover:bg-gray-400 px-8 py-3 font-bold text-gray-900 transition-all hover:opacity-90 hover:shadow-lg">
-          Sign Up
-        </button>
+        <button className="w-full px-8 py-3 bg-gray-300 hover:bg-gray-400 rounded font-bold text-gray-900">Sign Up</button>
       </form>
     </div>
   );
