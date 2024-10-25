@@ -9,6 +9,7 @@ export const SignUpUser = async (req, res) => {
         const { FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location } = req.body;
         // Hash the password before storing it
         // const hashedPassword = await bcrypt.hash(Password, 10);
+        console.log(req.body)
         const sql = 'INSERT INTO USERS (FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location) VALUES (?,?,?,?,?,?,?,?,?)';
 
         const [results] = await connection.query(sql, [FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location]);

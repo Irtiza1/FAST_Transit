@@ -8,7 +8,7 @@ import { someFacultyRoute } from "../controller/FacultyController.js";
 import { someStudentRoute } from "../controller/StudentController.js";
 import { someDriverRoute } from "../controller/DriverController.js";
 router.post('/signup',SignUpUser)
-router.get('/activate/:token',ActivateUser)
+router.get('/activate/:token/:role',ActivateUser)
 router.post('/login',LoginUser)
 router.get('/Student', authorizeRole('Student'), someStudentRoute )
 router.get('/Faculty', authorizeRole('Faculty'), someFacultyRoute )
