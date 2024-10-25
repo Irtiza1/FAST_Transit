@@ -5,14 +5,14 @@ import axios from "axios";
 
 function Register() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    cnic: "",
-    password: "",
-    gender: "",
-    role: "Vendor", // Default role set to "Vendor"
+    FirstName: "",
+    LastName: "",
+    Email: "",
+    PhoneNumber: "",
+    CNIC: "",
+    Password: "",
+    Gender: "",
+    Role: "Vendor", // Default role set to "Vendor"
   });
 
   const handleChange = (e) => {
