@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import CreateBusPage from "./pages/CreateBusPage";
 import TestConnection from "./pages/TestConnection";
 import RegisterDriverPage from "./pages/RegisterDriverPage";
+import CreateRoutePage from "./pages/CreateRoutePage";
 function App() {
   
   const router = createBrowserRouter(
@@ -17,6 +18,7 @@ function App() {
       <Route path="home" element={<HomePage/>} />
       <Route path="create-bus" element={<CreateBusPage/>} />
       <Route path="register-driver" element={<RegisterDriverPage/>} />
+      <Route path="create-route" element={<CreateRoutePage/>} />
       </>
     )
   )

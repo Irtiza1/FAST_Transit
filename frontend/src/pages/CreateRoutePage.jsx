@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RouteCreationForm from '../component/RouteCreationForm/RouteCreationForm';
-function TestConnection() {
+function CreateRoutePage() {
   
 
   return (
@@ -10,4 +10,4 @@ function TestConnection() {
   );
 }
 
-export default TestConnection;
+export default CreateRoutePage;
