@@ -1,0 +1,1 @@
+export {default as ViewAllRoutes} from './ViewAllRoutes.jsx'

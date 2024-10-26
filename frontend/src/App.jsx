@@ -19,6 +19,7 @@ function App() {
       <Route path="create-bus" element={<CreateBusPage/>} />
       <Route path="register-driver" element={<RegisterDriverPage/>} />
       <Route path="create-route" element={<CreateRoutePage/>} />
+      <Route path="t" element={<TestConnection/>} />
       </>
     )
   )

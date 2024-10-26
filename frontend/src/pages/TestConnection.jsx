@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import RouteCreationForm from '../component/RouteCreationForm/RouteCreationForm';
+import { AnnouncementForm } from '../component/AnnouncementForm';
+import { ViewAllRoutes } from '../component/ViewAllRoutes';
 function TestConnection() {
   
 
   return (
     <div className='bg-gray-950 py-16 px-8'>
-      <RouteCreationForm/>
+      <ViewAllRoutes/>
     </div>
   );
 }
