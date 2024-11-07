@@ -1,7 +1,7 @@
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
-import universityRoute from './routes/universityRoute.js';
+import adminRoute from './routes/adminRoute.js';
 import userRoute from './routes/userRoute.js';
 const app = express()
 
@@ -23,7 +23,13 @@ app.get('/api/data', (req, res) => {
 
 /* ----------------------------USER PORTION ---------------------------- */
 
-// ---Sign up API | Login  API---------
+// ----------Sign up API With Account Activation | Login API With Tokenization---------
+// ----------Role Based Access--------------------
 app.use("/user",userRoute)
+
+/* ----------------------------ADMIN PORTION ---------------------------- */
+
+app.use("/admin",adminRoute)
+
 
 export { app }

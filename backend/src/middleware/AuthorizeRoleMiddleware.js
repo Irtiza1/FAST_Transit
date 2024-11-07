@@ -12,11 +12,11 @@ export const authorizeRole = (...allowedRoles) => {
                 return res.status(403).json({ message: 'Invalid token' });
             }
             console.log(decoded);
-            // Fix the role check
+            
             if (!allowedRoles.includes(decoded.Role)) {
                 return res.status(403).json({ message: 'Access denied. Insufficient permissions' });
             }
-
+            
             req.user = decoded;
             next();
         });

@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import connection from "../db/index.js";
+import connection from "../../db/index.js";
 
 export const ActivateUser= async (req,res)=>{
     const {token} = req.params

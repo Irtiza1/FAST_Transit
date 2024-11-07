@@ -1,4 +1,4 @@
-import connection from "../db/index.js";
+import connection from "../../db/index.js";
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
@@ -9,7 +9,8 @@ export const SignUpUser = async (req, res) => {
         const { FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location } = req.body;
         // Hash the password before storing it
         // const hashedPassword = await bcrypt.hash(Password, 10);
-        console.log(req.body)
+        // console.log(req.body)
+        
         const sql = 'INSERT INTO USERS (FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location) VALUES (?,?,?,?,?,?,?,?,?)';
 
         const [results] = await connection.query(sql, [FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location]);
