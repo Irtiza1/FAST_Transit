@@ -1,0 +1,16 @@
+for frontend:
+/Downloads/FAST_Transit-1/frontend$ npm run dev
+
+for backend:
+/Downloads/FAST_Transit-1/backend$ npm run dev
+
+
+--------JOBS DONE ----
+
+//BACKEND JOBS:
+1- Sigup api
+2- account activation api based on token 
+3- login api
+4- Role based access
+
+//FRONTEND JOBS:
