@@ -14,3 +14,9 @@ for backend:
 4- Role based access
 
 //FRONTEND JOBS:
+1.login - for student,faculty,vendor,driver
+2.Sigup - for students and faculty of university
+3.Vendor Dashboard
+    a.Driver registration
+    b.Bus registration
+    c.Route creation
