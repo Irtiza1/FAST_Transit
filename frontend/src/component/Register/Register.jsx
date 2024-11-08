@@ -4,7 +4,6 @@ import InputMask from "react-input-mask";
 import axios from "axios";
 
 function Register() {
-  const [SubRole, setSubRole] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [formData, setFormData] = useState({
     FirstName: "",
@@ -27,7 +26,7 @@ function Register() {
   };
 
   const removeDashesFromCNIC = (cnic) => {
-    return cnic.replace(/-/g, ""); // Removes all dashes
+    return cnic.replace(/-/g, ""); 
   };
   const emailPattern = /^[a-zA-Z0-9._%+-]+@nu\.edu\.pk$/;
   
@@ -41,13 +40,10 @@ function Register() {
       alert("Passwords do not match!");
       return;
     }
-    if(SubRole !== ""){
-      formData.Role = SubRole
-    }
     formData.CNIC = removeDashesFromCNIC(formData.CNIC);
   
     try {
-      console.log(formData); // This will not include SubRole explicitly
+      console.log(formData); 
       const response = await axios.post("http://localhost:8000/user/signup", formData);
       alert(response.data.message);
     } catch (error) {
@@ -77,7 +73,7 @@ function Register() {
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto">
         <h2 className="mb-2 text-3xl font-bold">Sign Up</h2>
-        <a href="" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Already have an account?</a>
+        <a href="http://localhost:5173/login" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Already have an account?</a>
 
         <p className="mb-2 font-medium text-black">Are you a?</p>
         <div className="mb-2 flex flex-col gap-4 sm:flex-row">
@@ -88,27 +84,12 @@ function Register() {
             className="w-full px-4 py-2 border-2 rounded-md"
             required
           >
-            <option value="">Select Role</option>
-            <option value="Admin">Admin</option>
-            <option value="User">User</option>
+            <option value="">Please select from dropdown</option>
+            <option value="Student">Student</option>
+            <option value="Faculty">Faculty</option>
           </select>
-
-          {formData.Role === "User" && (
-            <select
-              name="SubRole"
-              value={SubRole}
-              onChange={(e) => setSubRole(e.target.value)}
-              className="w-full px-4 py-2 border-2 rounded-md"
-              required
-            >
-              <option value="">Select Sub Role</option>
-              <option value="Student">Student</option>
-              <option value="Faculty">Faculty</option>
-            </select>
-          )}
         </div>
 
-        {/* First Name, Last Name, and Gender */}
         <div className="mb-2 flex flex-col sm:flex-row gap-4">
           <input
             type="text"
@@ -141,8 +122,6 @@ function Register() {
             <option value="Other">Other</option>
           </select>
         </div>
-
-        {/* CNIC and Phone Number */}
         <div className="mb-2 flex flex-col sm:flex-row gap-4">
           <InputMask
             mask="99999-9999999-9"
@@ -163,8 +142,6 @@ function Register() {
             required
           />
         </div>
-
-        {/* Location */}
         <div className="mb-2">
           <input
             type="text"
@@ -176,15 +153,13 @@ function Register() {
             required
           />
         </div>
-
-        {/* Email, Password, Confirm Password */}
         <input
           type="email"
           name="Email"
           value={formData.Email}
           onChange={handleChange}
           className="w-full px-4 py-2 mb-2 border-2 rounded-md"
-          placeholder="Email"
+          placeholder="Email (e.g., abc@nu.edu.pk)"
           required
         />
         <div className="mb-2 flex flex-col sm:flex-row gap-4">
