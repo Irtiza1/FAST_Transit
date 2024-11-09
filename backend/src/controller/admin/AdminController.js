@@ -1,5 +1,5 @@
 // controllers/universityController.js
-import connection from '../db/index.js';
+import connection from '../../db/index.js';
 
 export const getAllUniversity = async (req, res) => {
   try {
