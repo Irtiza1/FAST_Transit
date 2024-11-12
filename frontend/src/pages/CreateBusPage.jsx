@@ -7,7 +7,7 @@ function CreateBusPage() {
   const [numberOfSeatsInRightRows, setNumberOfSeatsInRightRows] =
     useState(null);
   const [numberOfSeatsInLastRows, setNumberOfSeatsInLastRows] = useState(null);
-  const [numberPlate, setNumberPlate] = useState(null);
+  const [numberPlate, setNumberPlate] = useState("");
 
   // Helper function to create seat layout for a row
   const renderSeats = (numSeats) => {
@@ -30,7 +30,7 @@ function CreateBusPage() {
 
   return (
     <div className="p-8 min-h-screen bg-gray-950">
-      <div className="bg-gray-900 my-10 border rounded border-gray-600 container mx-auto flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-0">
+      <div className="bg-gray-900  border rounded border-gray-600 container flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-0">
         {/* Input Form on the left side */}
         <div className="lg:border border-gray-600 form-container  rounded-lg mt-20 mb-2 px-5 py-2 mx-5 w-full lg:w-1/2">
           <p className="text-3xl font-bold mb-6 text-gray-50">
@@ -149,7 +149,7 @@ function CreateBusPage() {
         {/* Bus Layout on the right side */}
         <div className=" bus-layout min-w-[20rem] ">
           {/* <div className="text-center text-xs font-bold text-gray-500 mx-auto py-12  bg-yellow-500 border border-yellow-500 rounded-t-[45px]">FRONT</div> */}
-          <div className="items-center bg-yellow-500 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[31rem] max-h-full mt-20 mb-2 px-5 py-2 mr-10 ">
+          <div className="items-center bg-yellow-500 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[31rem] max-h-full mt-20 mb-2 px-5 py-2 mx-10 ">
             <div className="flex justify-center m-10 ">
               <h2 className="text-xl font-bold text-gray-500">Front</h2>
             </div>

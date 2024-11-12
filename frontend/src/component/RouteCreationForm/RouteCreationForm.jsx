@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import {
   MapContainer,
@@ -127,7 +126,7 @@ function RouteCreationForm() {
     <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-500 rounded">
       <div className="lg:flex lg:space-x-6 border border-gray-500 rounded px-4 py-8 my-6">
         <div className=" lg:w-2/3">
-          <h2 className="text-4xl font-bold mb-4 lg:text-left text-center">
+          <h2 className="text-4xl font-bold mb-4 ">
             Register New <span className="text-yellow-500">Route</span>
           </h2>
         </div>
@@ -231,9 +230,9 @@ function RouteCreationForm() {
           <span className="text-sm font-normal p-2">
             You may edit stop name by clicking on them
           </span>
-          <ul className="bg-gray-800 mt-2  rounded-lg shadow-lg text-gray-300">
+          <ul className="bg-gray-800 mt-2  rounded text-gray-300">
             {routeData.stops.map((stop, index) => (
-              <li key={index} className="mb-2 p-2  border-b last:border-none">
+              <li key={index} className="mb-2 p-2  border-b  border-gray-600 last:border-none">
                 <div className="flex justify-between">
                   <span>
                     <input
@@ -251,7 +250,7 @@ function RouteCreationForm() {
                   </span>
                   <button
                     onClick={() => removeStop(index)}
-                    className="text-red-400 hover:bg-red-950 rounded-lg p-2"
+                    className="text-red-400 hover:bg-red-950 rounded p-2"
                   >
                     Remove
                   </button>
