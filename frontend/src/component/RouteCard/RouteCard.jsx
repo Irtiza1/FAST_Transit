@@ -52,20 +52,20 @@ function RouteCard({routeStops}) {
                 />
               </MapContainer>
             </div>
-            <div className="lg:1/2 mt-4 lg:mt-0">
+            <div className="lg:w-1/2 mt-4 lg:mt-0">
               <ul className="bg-gray-900  rounded p-4 text-gray-300">
                 {routeStops.map((stop, index) => (
                   <li
                     key={index}
-                    className="mb-2 p-2 border-b border-gray-600 last:border-none"
+                    className="mb-2 p-2 border-b  border-gray-600 last:border-none"
                   >
                     <div className="flex justify-between">
                       <span className="font-semibold">{stop.stopName}</span>
-                      <span>
+                      {/* <span>
                         Lat: {stop.latitude.toFixed(4)}, Lng:{" "}
                         {stop.longitude.toFixed(4)}
-                      </span>
-                      <span>Arrival: {stop.estimatedArrivalTime}</span>
+                      </span> */}
+                      <span className='mx-2'>Arrival: {stop.estimatedArrivalTime}</span>
                     </div>
                   </li>
                 ))}

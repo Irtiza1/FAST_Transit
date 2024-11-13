@@ -4,7 +4,7 @@ function CreateRoutePage() {
   
 
   return (
-    <div className='bg-gray-950 py-16 px-8'>
+    <div className='bg-gray-950 py-8 px-8'>
       <RouteCreationForm/>
     </div>
   );

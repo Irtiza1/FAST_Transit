@@ -48,7 +48,7 @@ const BusesPage = () => {
 
             {/* Add Bus Button */}
             <Link to='/create-bus' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
-              <FaPlus className="mr-2 text-sm" /> Add Bus
+              <FaPlus className="mr-2 text-sm" /> Add New Bus
             </Link>
           </div>
         </div>

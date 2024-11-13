@@ -11,8 +11,8 @@ import CreateRoutePage from "./pages/CreateRoutePage";
 import BusPage from "./pages/BusesPage";
 import DriversPage from "./pages/DriversPage";
 import RoutesPage from "./pages/RoutesPage";
-import BusDetail from "./pages/TestConnection";
 import BusDetailPage from "./pages/BusDetailPage";
+import RouteDetailPage from "./pages/RouteDetailPage";
 function App() {
   
   const router = createBrowserRouter(
@@ -28,6 +28,7 @@ function App() {
       <Route path="drivers" element={<DriversPage/>} />
       <Route path="routes" element={<RoutesPage/>} />
       <Route path="/bus/:id" element={<BusDetailPage />} />
+      <Route path="/route/:id" element={<RouteDetailPage />} />
       <Route path="t" element={<TestConnection/>} />
       </>
     )

@@ -123,8 +123,8 @@ function RouteCreationForm() {
   };
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-500 rounded">
-      <div className="lg:flex lg:space-x-6 border border-gray-500 rounded px-4 py-8 my-6">
+    <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-600 rounded">
+      <div className="lg:flex lg:space-x-6 border border-gray-600 rounded px-4 py-8 my-6">
         <div className=" lg:w-2/3">
           <h2 className="text-4xl font-bold mb-4 ">
             Register New <span className="text-yellow-500">Route</span>
@@ -139,7 +139,7 @@ function RouteCreationForm() {
             onChange={(e) =>
               setRouteData({ ...routeData, routeName: e.target.value })
             }
-            className="text-gray-300 bg-gray-800 border border-gray-500  rounded p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
+            className="text-gray-300 bg-gray-800 border border-gray-600  rounded p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
           />
         </div>
       </div>
@@ -155,7 +155,7 @@ function RouteCreationForm() {
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search for location"
-                className="text-gray-300 bg-gray-800 border border-gray-500 border-r-0  rounded-l p-2 w-full   focus:ring-transparent focus:border-none "
+                className="text-gray-300 bg-gray-800 border border-gray-600 border-r-0  rounded-l p-2 w-full   focus:ring-transparent focus:border-none "
               />
               <button
                 onClick={searchLocation}
@@ -169,7 +169,7 @@ function RouteCreationForm() {
             {searchResults.length > 0 && (
               <ul
                 ref={searchResultsRef}
-                className="absolute top-full  text-gray-300  bg-gray-800 border border-gray-500  max-h-40 overflow-y-auto w-full z-20 "
+                className="absolute top-full  text-gray-300  bg-gray-800 border border-gray-600  max-h-40 overflow-y-auto w-full z-20 "
               >
                 {searchResults.map((result, index) => (
                   <li

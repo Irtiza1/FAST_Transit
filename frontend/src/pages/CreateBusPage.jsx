@@ -141,7 +141,7 @@ function CreateBusPage() {
               />
             </div>
           </div>
-          <button className="w-full rounded bg-yellow-300 hover:bg-yellow-400 px-8 py-3 mt-5 mb-2 font-bold text-gray-700  transition-all hover:opacity-90 hover:shadow-lg">
+          <button className="w-full rounded bg-yellow-500 hover:bg-yellow-400 px-8 py-3 mt-5 mb-2 font-bold text-gray-700  transition-all hover:opacity-90 hover:shadow-lg">
             Register Bus
           </button>
         </div>
@@ -149,7 +149,7 @@ function CreateBusPage() {
         {/* Bus Layout on the right side */}
         <div className=" bus-layout min-w-[20rem] ">
           {/* <div className="text-center text-xs font-bold text-gray-500 mx-auto py-12  bg-yellow-500 border border-yellow-500 rounded-t-[45px]">FRONT</div> */}
-          <div className="items-center bg-yellow-500 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[31rem] max-h-full mt-20 mb-2 px-5 py-2 mx-10 ">
+          <div className="items-center bg-yellow-600 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[31rem] max-h-full mt-20 mb-2 px-5 py-2 mx-10 ">
             <div className="flex justify-center m-10 ">
               <h2 className="text-xl font-bold text-gray-500">Front</h2>
             </div>
