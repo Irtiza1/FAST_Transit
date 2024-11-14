@@ -61,6 +61,7 @@ const RegisterDriver = () => {
               <label className="block text-lg font-semibold text-gray-400 mb-1">
                 CNIC
               </label>
+              
               <InputMask
                 mask="99999-9999999-9"
                 value={driverData.cnic}

@@ -66,7 +66,7 @@ function DriversPage() {
               />
               <FaSearch className="absolute left-3 top-3 text-gray-500" />
             </div>
-            <Link to='/register-driver' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
+            <Link to='/vendor/register-driver' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
               <FaPlus className="mr-2 text-sm" /> Add New Driver
             </Link>
           </div>

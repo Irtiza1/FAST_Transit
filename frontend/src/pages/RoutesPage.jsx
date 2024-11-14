@@ -43,7 +43,7 @@ const RoutesPage = () => {
             </div>
 
             {/* Add Route Button */}
-            <Link to='/create-route' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
+            <Link to='/vendor/create-route' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
               <FaPlus className="mr-2 text-sm" /> Add New Route
             </Link>
           </div>
@@ -59,7 +59,7 @@ const RoutesPage = () => {
                 route.endPoint.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((route) => (
-              <Link to={`/route/${route.id}`}
+              <Link to={`/vendor/route/${route.id}`}
                 key={route.id}
                 className="bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-900 hover:shadow-lg transition-shadow duration-200"
               >

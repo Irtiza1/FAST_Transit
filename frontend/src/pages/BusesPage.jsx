@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
- 
 const BusesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const buses = [
@@ -17,12 +16,11 @@ const BusesPage = () => {
     { id: 3, number: "C789", route: "North - South", driver: "Mike Johnson" },
   ];
 
-  useEffect(()=>{
-    //the url of this page will have id of vendor 
-    //using this id we will query data base and will get all the buses which are registered by this vendor id along detail of its driver  and its route with list of stops as response. This will be saved in store 
+  useEffect(() => {
+    //the url of this page will have id of vendor
+    //using this id we will query data base and will get all the buses which are registered by this vendor id along detail of its driver  and its route with list of stops as response. This will be saved in store
     //const response = axios.get('')
-  },[])
-
+  }, []);
 
   return (
     <div className="bg-gray-950 p-8">
@@ -32,7 +30,7 @@ const BusesPage = () => {
           <h2 className="text-4xl font-bold mb-4">
             Registered <span className="text-yellow-500">Buses</span>
           </h2>
-          
+
           <div className="flex lg:items-center justify-between space-x-2">
             {/* Search Bar */}
             <div className="relative">
@@ -41,18 +39,20 @@ const BusesPage = () => {
                 placeholder="Search buses"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="text-gray-300 bg-gray-800 border border-gray-600 rounded p-2 pl-10 lg:w-64 md:w-64 w-2/3 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
+                className="text-gray-300 z-0 bg-gray-800 border border-gray-600 rounded p-2 pl-10 lg:w-64 md:w-64 w-2/3 focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
               />
               <FaSearch className="absolute left-3 top-3 text-gray-500" />
             </div>
 
             {/* Add Bus Button */}
-            <Link to='/create-bus' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
+            <Link
+              to="/vendor/create-bus"
+              className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm"
+            >
               <FaPlus className="mr-2 text-sm" /> Add New Bus
             </Link>
           </div>
         </div>
-
 
         {/* Bus Cards */}
         {/* clicking any card will direct to new page by taking id of bus in url which will display detail information of a bus */}
@@ -65,7 +65,8 @@ const BusesPage = () => {
                 bus.driver.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((bus) => (
-              <Link to={`/bus/${bus.id}`}
+              <Link
+                to={`/vendor/buses/${bus.id}`}
                 key={bus.id}
                 className="bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-900 hover:shadow-lg transition-shadow duration-200"
                 onClick={() => console.log("Clicked on bus", bus.number)}

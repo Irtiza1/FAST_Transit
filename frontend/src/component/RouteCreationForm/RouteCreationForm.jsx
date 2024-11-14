@@ -244,10 +244,10 @@ function RouteCreationForm() {
                       className="bg-gray-800 text-gray-300 p-2"
                     />
                   </span>
-                  <span className="p-2">
+                  {/* <span className="p-2">
                     Lat: {stop.latitude.toFixed(4)}, Lng:{" "}
                     {stop.longitude.toFixed(4)}
-                  </span>
+                  </span> */}
                   <button
                     onClick={() => removeStop(index)}
                     className="text-red-400 hover:bg-red-950 rounded p-2"

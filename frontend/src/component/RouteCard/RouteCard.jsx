@@ -21,12 +21,12 @@ function RouteCard({routeStops}) {
           <h2 className="text-2xl font-bold mb-4 text-gray-100">Route Stops</h2>
           <div className="lg:flex lg:space-x-6">
             {/* Route Map */}
-            <div className="lg:w-1/2 ">
+            <div className="lg:w-1/2 z-0">
               <MapContainer
                 center={[24.8607, 67.0011]}
                 zoom={13}
                 style={{ height: "400px" }}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg shadow-lg z-0"
               >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
