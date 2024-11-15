@@ -9,6 +9,7 @@ import { someStudentRoute } from "../controller/user/StudentController.js";
 import { someDriverRoute } from "../controller/user/DriverController.js";
 import { someVendorRoute } from "../controller/user/VendorController.js";
 
+//signup /login /activate user
 router.post('/signup',SignUpUser)
 router.get('/activate/:token/:role',ActivateUser)
 router.post('/login',LoginUser)
@@ -16,6 +17,7 @@ router.post('/login',LoginUser)
 //-----Role Based Access-----
 router.get('/Student', authorizeRole('Student'), someStudentRoute )
 router.get('/Faculty', authorizeRole('Faculty'), someFacultyRoute )
-router.get('/Driver', authorizeRole('Driver'), someDriverRoute )
 router.get('/Vendor', authorizeRole('Vendor'), someVendorRoute )
+router.get('/Driver', authorizeRole('Driver'), someDriverRoute )
+
 export default router;
