@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteCard } from "../component/RouteCard";
-
+import { LoadingAnimation } from "../component/LoadingAnimation";
 function RouteDetailPage() {
   const { routeId } = useParams();
   const [routeDetails, setRouteDetails] = useState(null);
@@ -33,7 +33,7 @@ function RouteDetailPage() {
   }, [routeId]);
 
   if (!routeDetails) {
-    return <p className="text-gray-300">Loading route details...</p>;
+    return <> <LoadingAnimation/> </>;
   }
 
   return (

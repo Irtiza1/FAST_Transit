@@ -3,7 +3,7 @@ import BusInfoCard from "../component/BusInfoCard/BusInfoCard";
 import DriverInfoCard from "../component/DriverInfoCard/DriverInfoCard";
 import { BusLayout } from "../component/BusLayout";
 import { RouteCard } from "../component/RouteCard";
-
+import { LoadingAnimation } from "../component/LoadingAnimation";
 
 const BusDetailPage = () => {
   const [busData, setBusData] = useState(null);
@@ -84,7 +84,7 @@ const BusDetailPage = () => {
   }, []);
 
   if (!busData) {
-    return <p>Loading bus data...</p>;
+    return <> <LoadingAnimation/> </>
   }
 
   const { bus, driver } = busData;
