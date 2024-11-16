@@ -213,7 +213,7 @@ export const adminDropDown = async (req, res) => {
                     let id1, id2;
                     // console.log('id1: ',id1)
                     // console.log('id2: ',id2)
-                    // If the ID is in the format of "StopID.RouteID"
+                    // If the ID is in the format of ["StopID.RouteID"]
                     if (id && id.includes('.')) {
                         [id1, id2] = id.split('.');
                     } 
@@ -523,23 +523,59 @@ export const adminDropDown = async (req, res) => {
                 }
                                 
 
-            } else if (user === 'Attendance') { //brainstorm
-                // B
-                    /*
-                        B:
-                    */
-                // U:
-                    /*
-                        B:
-                    */
-                try{
-                    //extract the user id of respective 
-
-                    // if (user)
+            } else if (user === 'Attendance') { 
+                if (id) {
+                    // Split the id into components [USERID:BUSID:DATE:SHIFT] [U1:B1:2024-10-22:Morning]
+                    const [userIdRaw, busIdRaw, date, shift] = id.split(':');
+        
+                    
+                    const userId = userIdRaw && userIdRaw.startsWith('U') ? userIdRaw.slice(1) : null;
+        
+                    
+                    const busId = busIdRaw && busIdRaw.startsWith('B') ? busIdRaw.slice(1) : null;
+        
+                    // Date ('yyyy-mm-dd')
+                    let conditions = [];
+                    let values = [];
+        
+                    if (userId) {
+                        conditions.push('UserID = ?');
+                        values.push(userId);
+                    }
+                    if (busId) {
+                        conditions.push('BusID = ?');
+                        values.push(busId);
+                    }
+                    if (date) {
+                        conditions.push(`DATE_FORMAT(Timestamp,'%Y-%m-%d') = ?`);
+                        values.push(date);
+                    }
+                    if (shift) {
+                        conditions.push('Shift = ?');
+                        values.push(shift);
+                    }
+        
+                    if (conditions.length > 0) {
+                        sql = `SELECT * FROM ATTENDANCE WHERE ${conditions.join(' AND ')}`;
+                        [result] = await connection.query(sql, values);
+                    } else {
+                        return res.status(400).send('Invalid ID format. Please provide at least one filter condition.');
+                    }
+                } else {
+                    
+                    const currentDate = new Date().toISOString().split('T')[0]; 
+                    // const currentDate= '2024-10-22'
+                    sql = `SELECT * FROM ATTENDANCE WHERE DATE_FORMAT(Timestamp,'%Y-%m-%d') = ?`;
+                    [result] = await connection.query(sql, [currentDate]);
                 }
-                catch(error){
-                    console.error('Error fetching Attendance data:', error);
-                    return res.status(500).send('Internal Server Error'); 
+        
+                if (result.length > 0) {
+                    return res.status(200).json({
+                        AttendanceRecords: result,
+                        totalRecords: result.length
+                    });
+                } else {
+                    return res.status(404).send('No attendance records found for the given filters.');
                 }
 
             } else if (user === 'Complaint') {
