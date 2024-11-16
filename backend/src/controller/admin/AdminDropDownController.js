@@ -207,7 +207,7 @@ export const adminDropDown = async (req, res) => {
                     console.error('Error fetching route data:', error);
                     return res.status(500).send('Internal Server Error');
                 }
-            }  else if (user === 'Stop') { //do check faculity quereis 
+            } else if (user === 'Stop') { //do check faculity quereis 
 
                 try {
                     let id1, id2;
@@ -223,7 +223,7 @@ export const adminDropDown = async (req, res) => {
                     }
                     console.log('id1: ',id1)
                     console.log('id2: ',id2)
-                    // Query for Student Data
+                    
                     const sqlStudents = id ? `
                         SELECT 
                             DISTINCT (ST.StudentID),
@@ -276,7 +276,7 @@ export const adminDropDown = async (req, res) => {
                     console.log(sqlStudents)
                     const [studentResults] = await connection.query(sqlStudents, id ? [id1, id2] : []);
                     console.log(studentResults)
-                    // Query for Faculty Data
+                    
                     
                     const sqlFaculties = id ? `
                         SELECT
@@ -325,7 +325,7 @@ export const adminDropDown = async (req, res) => {
                     console.log(facultyResults);
 
             
-                    // Query for Bus and Vendor Info
+                    
                     const sqlBusInfo = id ? `
                         SELECT 
                             DISTINCT (B.BusID),
@@ -388,7 +388,7 @@ export const adminDropDown = async (req, res) => {
                     // });
                     
             
-                    // Send combined response
+                    
                     return res.status(200).json({
                         students: studentResults,
                         faculties: facultyResults,
@@ -398,8 +398,7 @@ export const adminDropDown = async (req, res) => {
                     console.error('Error fetching data:', error);
                     res.status(500).send('Internal Server Error');
                 }
-            }
-             else if (user === 'Bus') {
+            } else if (user === 'Bus') {
                 try {
                     
                     sql = id ? 
@@ -525,6 +524,14 @@ export const adminDropDown = async (req, res) => {
                                 
 
             } else if (user === 'Attendance') { //brainstorm
+                // B
+                    /*
+                        B:
+                    */
+                // U:
+                    /*
+                        B:
+                    */
                 try{
                     //extract the user id of respective 
 
@@ -593,14 +600,14 @@ export const adminDropDown = async (req, res) => {
                     `;
                 
                     [result] = await connection.query(sql, id ? [id] : []);
-                     // Calculate the counts for each status
+                     
                     const statusCounts = result.reduce((counts, complaint) => {
                         const status = complaint.Status.toLowerCase();
                         counts[status] = (counts[status] || 0) + 1;
                         return counts;
                     }, {});
 
-                    // Add counts and complaint list to the response
+                    
                     const response =id? {
                         complaints: result
                     }
@@ -627,14 +634,14 @@ export const adminDropDown = async (req, res) => {
                 try {
                     sql = id ? `
                         SELECT A.AlertID, A.AlertDetails,
-                        DATE(A.Timestamp) AS Date, TIME(A.Timestamp) AS Time,
+                        DATE_FORMAT(A.Timestamp, '%Y-%m-%d') AS Date, TIME(A.Timestamp) AS Time,
                         A.Severity, R.RouteID, R.RouteName
                         FROM TRAFFIC_ALERT A
                         INNER JOIN ROUTE R ON A.RouteID = R.RouteID
                         WHERE A.AlertID = ?
                     ` : `
                         SELECT A.AlertID, A.AlertDetails,
-                        DATE(A.Timestamp) AS Date, TIME(A.Timestamp) AS Time,
+                        DATE_FORMAT(A.Timestamp, '%Y-%m-%d') AS Date, TIME(A.Timestamp) AS Time,
                         A.Severity, R.RouteID, R.RouteName
                         FROM TRAFFIC_ALERT A
                         INNER JOIN ROUTE R ON A.RouteID = R.RouteID
@@ -670,11 +677,12 @@ export const adminDropDown = async (req, res) => {
                 }
                 
 
-            } else if (user === 'Notification') {
+            } else if (user === 'Notification') { 
                 try {
                     if (id) {
+                        
                         sql = `SELECT N.NotificationID, N.NotificationText,
-                                DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
                                 N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
                                 FROM NOTIFICATION N
                                 INNER JOIN USERS U ON N.UserID = U.UserID
@@ -688,38 +696,84 @@ export const adminDropDown = async (req, res) => {
                             return res.status(200).json(response);
                         }
                 
-                        sql = `SELECT N.NotificationID, N.NotificationText,
-                                DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
-                                N.Type, A.UniversityID AS AdminID, A.UniversityName AS AdminName
-                                FROM NOTIFICATION N
-                                INNER JOIN UNIVERSITY A ON N.adminID = A.UniversityID
-                                WHERE N.NotificationID = ?`;
+                        
+                        sql = `SELECT adminID, vendorID FROM NOTIFICATION WHERE NotificationID = ?`;
+                        let [adminVendorCheck] = await connection.query(sql, [id]);
                 
-                        [result] = await connection.query(sql, [id]);
-                        const response = {
-                            Notification: result
-                        };
-                        return res.status(200).json(response);
+                        if (adminVendorCheck.length > 0) {
+                            const { adminID, vendorID } = adminVendorCheck[0];
+                
+                            if (adminID) {
+                                
+                                sql = `SELECT N.NotificationID, N.NotificationText,
+                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
+                                        N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
+                                        FROM NOTIFICATION N
+                                        INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID
+                                        WHERE N.NotificationID = ?`;
+                            } else if (vendorID) {
+                               
+                                sql = `SELECT N.NotificationID, N.NotificationText,
+                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                        N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
+                                        FROM NOTIFICATION N
+                                        INNER JOIN VENDOR V ON N.vendorID = V.VendorID
+                                        WHERE N.NotificationID = ?`;
+                            }
+                
+                            if (sql) {  
+                                [result] = await connection.query(sql, [id]);
+                                const response = {
+                                    Notification: result
+                                };
+                                return res.status(200).json(response);
+                            } else {
+                                throw new Error("SQL query could not be constructed.");
+                            }
+                        }
                     } else {
+                        
                         let sql1 = `SELECT N.NotificationID, N.NotificationText,
-                                    DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                    DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
                                     N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
                                     FROM NOTIFICATION N
                                     INNER JOIN USERS U ON N.UserID = U.UserID`;
                 
                         [result] = await connection.query(sql1);
                 
-                        let sql2 = `SELECT N.NotificationID, N.NotificationText,
-                                    DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
-                                    N.Type, UN.UniversityID, UN.UniversityName
-                                    FROM NOTIFICATION N
-                                    INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID`;
+                        
+                        let sql2 = `SELECT adminID, vendorID, NotificationID FROM NOTIFICATION`;
                 
-                        let result2;
-                        [result2] = await connection.query(sql2);
+                        let adminVendorResults;
+                        [adminVendorResults] = await connection.query(sql2);
                 
-                        // Merge the results and sort by NotificationID
-                        let combinedResults = [...result, ...result2].sort((a, b) => a.NotificationID - b.NotificationID);
+                        let combinedAdminVendorResults = [];
+                        for (let notification of adminVendorResults) {
+                            let sql;
+                            if (notification.adminID) {
+                                sql = `SELECT N.NotificationID, N.NotificationText,
+                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                        N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
+                                        FROM NOTIFICATION N
+                                        INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID
+                                        WHERE N.NotificationID = ?`;
+                            } else if (notification.vendorID) {
+                                sql = `SELECT N.NotificationID, N.NotificationText,
+                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                        N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
+                                        FROM NOTIFICATION N
+                                        INNER JOIN VENDOR V ON N.vendorID = V.VendorID
+                                        WHERE N.NotificationID = ?`;
+                            }
+                
+                            if (sql) {
+                                let [adminVendorResult] = await connection.query(sql, [notification.NotificationID]);
+                                combinedAdminVendorResults.push(...adminVendorResult);
+                            }
+                        }
+                
+                        
+                        let combinedResults = [...result, ...combinedAdminVendorResults].sort((a, b) => a.NotificationID - b.NotificationID);
                 
                         const notificationCounts = combinedResults.reduce((counts, notification) => {
                             const type = notification.Type.toLowerCase();
@@ -742,13 +796,15 @@ export const adminDropDown = async (req, res) => {
                 } catch (error) {
                     console.error('Error fetching Notification data:', error);
                     return res.status(500).send('Internal Server Error');
-                }                      
+                }
+                
+                                      
 
             } else if (user === 'Payment') {
                 try{
                     sql = id ? `
                         SELECT P.PaymentID, P.Amount,
-                            DATE(P.PaymentDate) AS Date, P.PaymentStatus,
+                            DATE_FORMAT(P.PaymentDate, '%Y-%m-%d') AS Date, P.PaymentStatus,
                             U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
                             V.VendorID, V.VendorName
                         FROM PAYMENT P
@@ -758,7 +814,7 @@ export const adminDropDown = async (req, res) => {
 
                     ` : `
                         SELECT P.PaymentID, P.Amount,
-                            DATE(P.PaymentDate) AS Date, P.PaymentStatus,
+                            DATE_FORMAT(P.PaymentDate, '%Y-%m-%d') AS Date, P.PaymentStatus,
                             U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
                             V.VendorID, V.VendorName
                         FROM PAYMENT P
@@ -766,17 +822,17 @@ export const adminDropDown = async (req, res) => {
                         INNER JOIN VENDOR V ON U.VendorID = V.VendorID
                     `;
                 
-                    // Execute the query
+                    
                     [result] = await connection.query(sql, id ? [id] : []);
                 
-                    // Calculate the counts for each notification type
+                    
                     const PaymentCounts = result.reduce((counts, payment) => {
                         const status = payment.PaymentStatus.toLowerCase();
                         counts[status] = (counts[status] || 0) + 1;
                         return counts;
                     }, {});
                 
-                    // Construct the response
+                    
                     const response = id ? {
                         Payment: result
                     } : {
