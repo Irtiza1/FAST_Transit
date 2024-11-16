@@ -528,7 +528,7 @@ export const adminDropDown = async (req, res) => {
                 try{
                     //extract the user id of respective 
 
-                    if (user)
+                    // if (user)
                 }
                 catch(error){
                     console.error('Error fetching Attendance data:', error);
@@ -536,41 +536,260 @@ export const adminDropDown = async (req, res) => {
                 }
 
             } else if (user === 'Complaint') {
-                try{
-                    sql= id ? `
-                    SELECT C.ComplaintID, C.ComplaintText, C.Status, C.DateField, U.UserID, CONCAT(U.FirstName + ' ' + U.LastName) as UserName , V.VendorID, V.VendorName , V.ContactInfo                    
+                try {
+                    sql = id ? 
+                    `
+                    SELECT 
+                        C.ComplaintID, 
+                        C.ComplaintText, 
+                        C.Status, 
+                        DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
+                        B.BusID, 
+                        B.BusNumber, 
+                        U.UserID, 
+                        CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
+                        V.VendorID, 
+                        V.VendorName, 
+                        V.ContactInfo 
+                    FROM
+                        COMPLAINT C
+                    INNER JOIN 
+                        BUS B ON C.BusID = B.BusID
+                    INNER JOIN 
+                        USERS U ON C.UserID = U.UserID
+                    INNER JOIN
+                        VENDOR V ON U.VendorID = V.VendorID
+                    WHERE
+                        C.ComplaintID = ?
+                    GROUP BY
+                        C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
+                        V.VendorID, V.VendorName, V.ContactInfo
                     `
                     :
-                    ``;
+                    `
+                    SELECT 
+                        C.ComplaintID, 
+                        C.ComplaintText, 
+                        C.Status, 
+                        DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
+                        B.BusID, 
+                        B.BusNumber, 
+                        U.UserID, 
+                        CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
+                        V.VendorID, 
+                        V.VendorName, 
+                        V.ContactInfo 
+                    FROM
+                        COMPLAINT C
+                    INNER JOIN 
+                        BUS B ON C.BusID = B.BusID
+                    INNER JOIN 
+                        USERS U ON C.UserID = U.UserID
+                    INNER JOIN
+                        VENDOR V ON U.VendorID = V.VendorID
+                    GROUP BY
+                        C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
+                        V.VendorID, V.VendorName, V.ContactInfo
+                    `;
+                
+                    [result] = await connection.query(sql, id ? [id] : []);
+                     // Calculate the counts for each status
+                    const statusCounts = result.reduce((counts, complaint) => {
+                        const status = complaint.Status.toLowerCase();
+                        counts[status] = (counts[status] || 0) + 1;
+                        return counts;
+                    }, {});
 
+                    // Add counts and complaint list to the response
+                    const response =id? {
+                        complaints: result
+                    }
+                    :
+                    {
+                        totalComplaints: result.length,
+                        statusCounts: {
+                            pending: statusCounts.pending || 0,
+                            resolved: statusCounts.resolved || 0,
+                            inprogress: statusCounts.inprogress || 0
+                        },
+                        complaints: result
+                    }
+                    ;
 
-                }
-                catch(error){
+                    return res.status(200).json(response);
+                
+                } catch (error) {
                     console.error('Error fetching Complaint data:', error);
                     return res.status(500).send('Internal Server Error'); 
-                }                
+                }                                
 
             } else if (user === 'Traffic Alert') {
-                try{
-
-                }
-                catch(error){
+                try {
+                    sql = id ? `
+                        SELECT A.AlertID, A.AlertDetails,
+                        DATE(A.Timestamp) AS Date, TIME(A.Timestamp) AS Time,
+                        A.Severity, R.RouteID, R.RouteName
+                        FROM TRAFFIC_ALERT A
+                        INNER JOIN ROUTE R ON A.RouteID = R.RouteID
+                        WHERE A.AlertID = ?
+                    ` : `
+                        SELECT A.AlertID, A.AlertDetails,
+                        DATE(A.Timestamp) AS Date, TIME(A.Timestamp) AS Time,
+                        A.Severity, R.RouteID, R.RouteName
+                        FROM TRAFFIC_ALERT A
+                        INNER JOIN ROUTE R ON A.RouteID = R.RouteID
+                    `;
+                
+                    
+                    [result] = await connection.query(sql, id ? [id] : []);
+                
+                    
+                    const alertCounts = result.reduce((counts, alert) => {
+                        const severity = alert.Severity.toLowerCase();
+                        counts[severity] = (counts[severity] || 0) + 1;
+                        return counts;
+                    }, {});
+                
+                    
+                    const response = id ? {
+                        traffic_alert: result
+                    } : {
+                        totalAlert: result.length,
+                        AlertSeverityCounts: {
+                            low: alertCounts.low || 0,
+                            medium: alertCounts.medium || 0,
+                            high: alertCounts.high || 0
+                        },
+                        traffic_alert: result
+                    };
+                
+                    return res.status(200).json(response);
+                } catch (error) {
                     console.error('Error fetching Traffic Alert data:', error);
-                    return res.status(500).send('Internal Server Error'); 
+                    return res.status(500).send('Internal Server Error');
                 }
+                
 
             } else if (user === 'Notification') {
-                try{
-
-                }
-                catch(error){
+                try {
+                    if (id) {
+                        sql = `SELECT N.NotificationID, N.NotificationText,
+                                DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
+                                FROM NOTIFICATION N
+                                INNER JOIN USERS U ON N.UserID = U.UserID
+                                WHERE N.NotificationID = ?`;
+                
+                        [result] = await connection.query(sql, [id]);
+                        if (result.length > 0) {
+                            const response = {
+                                Notification: result
+                            };
+                            return res.status(200).json(response);
+                        }
+                
+                        sql = `SELECT N.NotificationID, N.NotificationText,
+                                DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                N.Type, A.UniversityID AS AdminID, A.UniversityName AS AdminName
+                                FROM NOTIFICATION N
+                                INNER JOIN UNIVERSITY A ON N.adminID = A.UniversityID
+                                WHERE N.NotificationID = ?`;
+                
+                        [result] = await connection.query(sql, [id]);
+                        const response = {
+                            Notification: result
+                        };
+                        return res.status(200).json(response);
+                    } else {
+                        let sql1 = `SELECT N.NotificationID, N.NotificationText,
+                                    DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                    N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
+                                    FROM NOTIFICATION N
+                                    INNER JOIN USERS U ON N.UserID = U.UserID`;
+                
+                        [result] = await connection.query(sql1);
+                
+                        let sql2 = `SELECT N.NotificationID, N.NotificationText,
+                                    DATE(N.DateSent) AS Date, TIME(N.DateSent) AS Time,
+                                    N.Type, UN.UniversityID, UN.UniversityName
+                                    FROM NOTIFICATION N
+                                    INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID`;
+                
+                        let result2;
+                        [result2] = await connection.query(sql2);
+                
+                        // Merge the results and sort by NotificationID
+                        let combinedResults = [...result, ...result2].sort((a, b) => a.NotificationID - b.NotificationID);
+                
+                        const notificationCounts = combinedResults.reduce((counts, notification) => {
+                            const type = notification.Type.toLowerCase();
+                            counts[type] = (counts[type] || 0) + 1;
+                            return counts;
+                        }, {});
+                
+                        const response = {
+                            totalNotification: combinedResults.length,
+                            NotificationTypeCounts: {
+                                info: notificationCounts.info || 0,
+                                warning: notificationCounts.warning || 0,
+                                alert: notificationCounts.alert || 0
+                            },
+                            Notification: combinedResults
+                        };
+                
+                        return res.status(200).json(response);
+                    }
+                } catch (error) {
                     console.error('Error fetching Notification data:', error);
-                    return res.status(500).send('Internal Server Error'); 
-                }                
+                    return res.status(500).send('Internal Server Error');
+                }                      
 
             } else if (user === 'Payment') {
                 try{
+                    sql = id ? `
+                        SELECT P.PaymentID, P.Amount,
+                            DATE(P.PaymentDate) AS Date, P.PaymentStatus,
+                            U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
+                            V.VendorID, V.VendorName
+                        FROM PAYMENT P
+                        INNER JOIN USERS U ON P.UserID = U.UserID
+                        INNER JOIN VENDOR V ON U.VendorID = V.VendorID
+                        WHERE P.PaymentID = ?
 
+                    ` : `
+                        SELECT P.PaymentID, P.Amount,
+                            DATE(P.PaymentDate) AS Date, P.PaymentStatus,
+                            U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
+                            V.VendorID, V.VendorName
+                        FROM PAYMENT P
+                        INNER JOIN USERS U ON P.UserID = U.UserID
+                        INNER JOIN VENDOR V ON U.VendorID = V.VendorID
+                    `;
+                
+                    // Execute the query
+                    [result] = await connection.query(sql, id ? [id] : []);
+                
+                    // Calculate the counts for each notification type
+                    const PaymentCounts = result.reduce((counts, payment) => {
+                        const status = payment.PaymentStatus.toLowerCase();
+                        counts[status] = (counts[status] || 0) + 1;
+                        return counts;
+                    }, {});
+                
+                    // Construct the response
+                    const response = id ? {
+                        Payment: result
+                    } : {
+                        totalPayment: result.length,
+                        PaymentStatusCounts: {
+                            pending: PaymentCounts.pending || 0,
+                            warning: PaymentCounts.failed || 0,
+                            alert: PaymentCounts.paid || 0
+                        },
+                        Payment: result
+                    };
+                
+                    return res.status(200).json(response);
                 }
                 catch(error){
                     console.error('Error fetching Payment data:', error);
