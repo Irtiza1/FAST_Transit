@@ -1,6 +1,12 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect } from "react";
+import { BusCreationForm } from "../component/BusCreationForm";
+import RouteCreationForm from "../component/RouteCreationForm/RouteCreationForm";
+import { RegisterDriver } from "../component/RegisterDriver";
+import DriverInfoCard from "../component/DriverInfoCard/DriverInfoCard";
+import RouteCard from "../component/RouteCard/RouteCard";
+import axios from "axios";
 function CreateBusPage() {
+  //states for buses
   const [numberOfLeftRows, setNumberOfLeftRows] = useState(null);
   const [numberOfSeatsInLeftRows, setNumberOfSeatsInLeftRows] = useState(null);
   const [numberOfRightRows, setNumberOfRightRows] = useState(null);
@@ -8,179 +14,190 @@ function CreateBusPage() {
     useState(null);
   const [numberOfSeatsInLastRows, setNumberOfSeatsInLastRows] = useState(null);
   const [numberPlate, setNumberPlate] = useState("");
+//state for route incase of new route
+  const [routeData, setRouteData] = useState({
+    routeName: "",
+    startPoint: null,
+    endPoint: null,
+    stops: [],
+  });
+  //states of driver incase of new driver
+  const [driverData, setDriverData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    licenseNumber: "",
+    cnic: "",
+    password: "",
+  });
 
-  // Helper function to create seat layout for a row
-  const renderSeats = (numSeats) => {
-    return Array.from({ length: numSeats }, (_, i) => (
-      <div
-        key={i}
-        className="seat bg-gray-300 rounded w-5 h-5 mr-1 mb-1 shadow-md"
-      ></div>
-    ));
+  const handleChange = (e) => {
+    setDriverData({ ...driverData, [e.target.name]: e.target.value });
   };
 
-  // Helper function to render rows on one side
-  const renderRows = (numRows, numSeatsInRow) => {
-    return Array.from({ length: numRows }, (_, i) => (
-      <div key={i} className="row flex mb-6">
-        {renderSeats(numSeatsInRow)}
-      </div>
-    ));
+  //states for route incase of existing route selection
+  const [showRouteCreationForm, setShowRouteCreationForm] = useState(false);
+  const [showSelectedRouteInfo , setShowSelectedRouteInfo] =useState(false );
+  const [selectedRoute, setSelectedRoute] = useState({});
+  const [existingRoutes, setExistingRoutes] = useState([]);
+  //states for driver incase of existing driver selection
+  const [showDriverForm, setShowDrivernForm] = useState(false);
+  const [showSelectedDriverInfo, setShowSelectedDrivernInfo] = useState(false);
+  const [selectedDriver, setSelectedDriver] = useState({});
+  const [existingDrivers, setExistingDrivers] = useState([]);
+
+  useEffect(() => {
+    //fetching existing drivers and routes 
+    axios
+      .get("/api/routes")
+      .then((response) => {
+        if (Array.isArray(response.data)) {
+          setExistingRoutes(response.data);
+        } else {
+          console.error("Unexpected response format:", response.data);
+          setExistingRoutes([]); // Fallback to an empty array
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching routes:", error);
+        setExistingRoutes([]); // Handle errors by setting an empty array
+      });
+  }, []);
+
+  const handleRouteSelect = (routeId) => {
+    const route = existingRoutes.find((r) => r.id === routeId);
+    setSelectedRoute(route);
+    setShowSelectedRouteInfo(true);
+    setShowRouteCreationForm(false);
+  };
+
+  const handleDriverSelect = (driverId) => {
+    const driver = existingDrivers.find((d) => d.id === driverId);
+    setSelectedDriver(driver);
+    setShowDrivernForm(false);
+    setShowSelectedDrivernInfo(true);
   };
 
   return (
     <div className="p-8 min-h-screen bg-gray-950">
-      <div className="bg-gray-900  border rounded border-gray-600 container flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-0">
-        {/* Input Form on the left side */}
-        <div className="lg:border border-gray-600 form-container  rounded-lg mt-20 mb-2 px-5 py-2 mx-5 w-full lg:w-1/2">
-          <p className="text-3xl font-bold mb-6 text-gray-50">
-            Configure <span className="text-yellow-500">Bus</span> Layout
-          </p>
-          <label className="block text-lg font-semibold text-gray-400 mb-1">
-            Enter official plate number
-          </label>
-          <input
-            type="text"
-            placeholder="e.g., AB1234"
-            value={numberPlate}
-            onChange={(e) => setNumberPlate(e.target.value)}
-            className="text-gray-300 bg-gray-800 border border-gray-500  rounded p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200 mb-4"
+      <div className="bg-gray-900  border rounded border-gray-600">
+        <div className=" container flex flex-col lg:flex-row items-center lg:items-start justify-between space-y-8 lg:space-y-0 lg:space-x-0">
+          <BusCreationForm
+            numberPlate={numberPlate}
+            setNumberPlate={setNumberPlate}
+            numberOfLeftRows={numberOfLeftRows}
+            setNumberOfLeftRows={setNumberOfLeftRows}
+            numberOfSeatsInLeftRows={numberOfSeatsInLeftRows}
+            setNumberOfSeatsInLeftRows={setNumberOfSeatsInLeftRows}
+            numberOfRightRows={numberOfRightRows}
+            setNumberOfRightRows={setNumberOfRightRows}
+            numberOfSeatsInRightRows={numberOfSeatsInRightRows}
+            setNumberOfSeatsInRightRows={setNumberOfSeatsInRightRows}
+            numberOfSeatsInLastRows={numberOfSeatsInLastRows}
+            setNumberOfSeatsInLastRows={setNumberOfSeatsInLastRows}
           />
-          <div className="mb-4 ">
-            <div className="flex items-center gap-4">
-              {/* Left side input for number of rows */}
-              <div className="w-1/2">
-                <label className="block text-lg font-semibold text-gray-400 mb-1">
-                  Number of rows on left side
-                </label>
-                <input
-                  type="number"
-                  placeholder="Enter rows"
-                  min={1}
-                  max={15}
-                  value={numberOfLeftRows || ""}
-                  onChange={(e) => setNumberOfLeftRows(e.target.value)}
-                  onKeyDown={(e) => e.preventDefault()} // Disables typing
-                  onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-                  className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-                />
-              </div>
-
-              {/* Right side input for number of seats */}
-              <div className="w-1/2">
-                <label className="block text-lg font-semibold text-gray-400 mb-1">
-                  Number of seats in each row
-                </label>
-                <input
-                  type="number"
-                  placeholder="Enter seats"
-                  min={1}
-                  max={5}
-                  value={numberOfSeatsInLeftRows || ""}
-                  onChange={(e) => setNumberOfSeatsInLeftRows(e.target.value)}
-                  onKeyDown={(e) => e.preventDefault()} // Disables typing
-                  onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-                  className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-4  ">
-            <div className="flex items-center gap-4">
-              <div className="w-1/2">
-                <label className="block text-lg font-semibold text-gray-400 mb-1">
-                  Number of rows on right side
-                </label>
-                <input
-                  type="number"
-                  placeholder="Enter rows"
-                  min={1}
-                  max={15}
-                  value={numberOfRightRows || ""}
-                  onChange={(e) => setNumberOfRightRows(e.target.value)}
-                  onKeyDown={(e) => e.preventDefault()} // Disables typing
-                  onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-                  className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-                />
-              </div>
-              {/* {numberOfRightRows > 0 && ( */}
-              <div className="w-1/2">
-                <label className="block text-lg font-semibold text-gray-400 mb-1">
-                  Number of seats in each row
-                </label>
-                <input
-                  type="number"
-                  placeholder="Enter seats"
-                  min={1}
-                  max={5}
-                  value={numberOfSeatsInRightRows || ""}
-                  onChange={(e) => setNumberOfSeatsInRightRows(e.target.value)}
-                  onKeyDown={(e) => e.preventDefault()} // Disables typing
-                  onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-                  className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full  focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-                />
-                {/* )} */}
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-lg font-semibold text-gray-400 mb-1 mt-2">
-                Number of seats in last row
-              </label>
-              <input
-                type="number"
-                placeholder="Enter seats"
-                min={0}
-                max={8}
-                value={numberOfSeatsInLastRows || ""}
-                onChange={(e) => setNumberOfSeatsInLastRows(e.target.value)}
-                onKeyDown={(e) => e.preventDefault()} // Disables typing
-                  onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-                className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-              />
-            </div>
-          </div>
-          <button className="w-full rounded bg-yellow-500 hover:bg-yellow-400 px-8 py-3 mt-5 mb-2 font-bold text-gray-700  transition-all hover:opacity-90 hover:shadow-lg">
-            Register Bus
-          </button>
         </div>
 
-        {/* Bus Layout on the right side */}
-        <div className=" bus-layout min-w-[20rem] ">
-          {/* <div className="text-center text-xs font-bold text-gray-500 mx-auto py-12  bg-yellow-500 border border-yellow-500 rounded-t-[45px]">FRONT</div> */}
-          <div className="items-center bg-yellow-600 border border-yellow-500 rounded-t-[26px] rounded-b-md  min-h-[31rem] max-h-full mt-20 mb-2 px-5 py-2 mx-10 ">
-            <div className="flex justify-center m-10 ">
-              <h2 className="text-xl font-bold text-gray-500">Front</h2>
-            </div>
-            <div className="flex  space-x-6">
-              {/* Left side rows */}
-              <div className="left-side">
-                {/* <div className=" bg-green-100 rounded-lg p-2 text-center mb-2 text-sm font-medium text-green-600">
-                  Entrance
-                </div> */}
-                { 
-                  renderRows(numberOfLeftRows, numberOfSeatsInLeftRows)
-                }
+        <div className="p-8">
+          <div className="w-full ">
+            <p className="text-3xl font-bold mb-6 text-gray-50">
+              Assign <span className="text-yellow-500">Route</span>
+            </p>
+            <div className="flex flex-col sm:flex-row md:items-center md:justify-between">
+              <select
+                className="w-full md:w-3/4 p-2 bg-gray-800 border border-gray-600 rounded text-gray-300 m-1"
+                onChange={(e) => handleRouteSelect(e.target.value)}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select an existing route
+                </option>
+                {existingRoutes.map((route) => (
+                  <option key={route.id} value={route.id}>
+                    {route.routeName}
+                  </option>
+                ))}
+              </select>
+
+              {/* <div className="w-1/3"> */}
+              <div
+                className="w-full md:w-1/3 bg-yellow-500 hover:bg-yellow-400 hover:cursor-pointer text-center text-gray-700 font-bold p-2 m-1 rounded"
+                onClick={() => {
+                  setShowRouteCreationForm(true);
+                  setSelectedRoute(null); // Reset selected route
+                  setShowSelectedDrivernInfo(false)
+                }}
+              >
+                Assign New Route
               </div>
-              {/* Aisle */}
-              <div className="aisle flex flex-col justify-center">
-                <div className="aisle-space h-full bg-white border-l border-r border-gray-300"></div>
-              </div>
-              {/* Right side rows */}
-              <div className="right-side">
-                {
-                  renderRows(numberOfRightRows, numberOfSeatsInRightRows)
-                }
-              </div>
-            </div>
-            {/* Last row seats */}
-            <div className="last-row flex justify-center mt-6">
-              {
-                renderSeats(numberOfSeatsInLastRows)
-              }
+              {/* </div> */}
             </div>
           </div>
+          {showRouteCreationForm && (
+            <RouteCreationForm
+              routeData={routeData}
+              setRouteData={setRouteData}
+              existingRoute={selectedRoute}
+            />
+          )}
+
+          {/* remember ismay data pass hoga bus stops ka */}
+          {showSelectedRouteInfo && (
+            <div className="p-1">
+              <RouteCard />
+            </div>
+          )
+
+          }
+
+          <div className="w-full my-8 ">
+            <p className="text-3xl font-bold mb-6 text-gray-50">
+              Assign <span className="text-yellow-500">Driver</span>
+            </p>
+            <div className="flex flex-col sm:flex-row md:items-center md:justify-between">
+              <select
+                className="w-full md:w-3/4 p-2 bg-gray-800 border border-gray-600 rounded text-gray-300 m-1"
+                onChange={(e) => handleDriverSelect(e.target.value)}
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select an existing driver
+                </option>
+                {existingDrivers.map((driver) => (
+                  <option key={driver.id} value={driver.id}>
+                    {driver.firstName} {driver.lastName}
+                  </option>
+                ))}
+              </select>
+
+              {/* <div className="w-1/3"> */}
+              <div
+                className="w-full md:w-1/3 bg-yellow-500 hover:bg-yellow-400 hover:cursor-pointer text-center text-gray-700 font-bold p-2 m-1 rounded"
+                onClick={() => {
+                  setShowDrivernForm(true);
+                  setSelectedDriver(null)
+                  setShowSelectedDrivernInfo(false); // Reset selected route
+                }}
+              >
+                Assign New Driver
+              </div>
+              {/* </div> */}
+
+
+            </div>
+          </div>
+          {
+            showDriverForm && (
+              <RegisterDriver 
+              driverData={driverData} setDriverData={setDriverData} handleChange={handleChange} />
+            )
+          }
+          {
+            showSelectedDriverInfo && (
+              <DriverInfoCard driver={selectedDriver}/>
+            )
+          }
         </div>
       </div>
     </div>

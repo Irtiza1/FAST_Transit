@@ -13,7 +13,6 @@ import L from "leaflet";
 import axios from "axios";
 import "tailwindcss/tailwind.css";
 
-// Custom marker icon setup
 const icon = new L.Icon({
   iconUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
@@ -21,13 +20,7 @@ const icon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-function RouteCreationForm() {
-  const [routeData, setRouteData] = useState({
-    routeName: "",
-    startPoint: null,
-    endPoint: null,
-    stops: [],
-  });
+function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState(null);
@@ -121,12 +114,21 @@ function RouteCreationForm() {
       return { ...prevData, stops: updatedStops };
     });
   };
-
+  useEffect(() => {
+    if (existingRoute) {
+      setRouteData({
+        routeName: existingRoute.routeName,
+        startPoint: existingRoute.startPoint,
+        endPoint: existingRoute.endPoint,
+        stops: existingRoute.stops,
+      });
+    }
+  }, [existingRoute]);
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-600 rounded">
+    <>
       <div className="lg:flex lg:space-x-6 border border-gray-600 rounded px-4 py-8 my-6">
         <div className=" lg:w-2/3">
-          <h2 className="text-4xl font-bold mb-4 ">
+          <h2 className="text-4xl font-bold mb-4 text-gray-100">
             Register New <span className="text-yellow-500">Route</span>
           </h2>
         </div>
@@ -225,14 +227,17 @@ function RouteCreationForm() {
         </div>
 
         {/* Right Column: Stops Information */}
-        <div className="lg:w-1/2 mt-6 lg:mt-0">
-          <h4 className="text-3xl font-bold mb-4">Stops </h4>
-          <span className="text-sm font-normal p-2">
+        <div className="lg:w-1/2 mt-6 lg:mt-0 ">
+          <h4 className="text-3xl font-bold mb-4 text-gray-100">Stops </h4>
+          <span className="text-sm font-normal p-2 text-gray-100">
             You may edit stop name by clicking on them
           </span>
-          <ul className="bg-gray-800 mt-2  rounded text-gray-300">
+          <ul className="bg-gray-800 mt-2  rounded text-gray-300 md:max-h-[375px] md:overflow-y-auto">
             {routeData.stops.map((stop, index) => (
-              <li key={index} className="mb-2 p-2  border-b  border-gray-600 last:border-none">
+              <li
+                key={index}
+                className="mb-2 p-2  border-b  border-gray-600 last:border-none"
+              >
                 <div className="flex justify-between">
                   <span>
                     <input
@@ -260,7 +265,7 @@ function RouteCreationForm() {
           </ul>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

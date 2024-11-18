@@ -30,7 +30,7 @@ function RouteCard({routeStops}) {
               >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-                {routeStops.map((stop, index) => (
+                {(routeStops|| []).map((stop, index) => (
                   <Marker
                     key={index}
                     position={[stop.latitude, stop.longitude]}
@@ -44,7 +44,7 @@ function RouteCard({routeStops}) {
                 ))}
 
                 <Polyline
-                  positions={routeStops.map((stop) => [
+                  positions={(routeStops || []).map((stop) => [
                     stop.latitude,
                     stop.longitude,
                   ])}
@@ -54,7 +54,7 @@ function RouteCard({routeStops}) {
             </div>
             <div className="lg:w-1/2 mt-4 lg:mt-0">
               <ul className="bg-gray-900  rounded p-4 text-gray-300">
-                {routeStops.map((stop, index) => (
+                {(routeStops|| []).map((stop, index) => (
                   <li
                     key={index}
                     className="mb-2 p-2 border-b  border-gray-600 last:border-none"

@@ -9,6 +9,10 @@ export default {
       animation: {
         "spin-slow": "spin 2s linear infinite",
       },
+      fontFamily: {
+        electrolize: ['Electrolize', 'sans-serif'], 
+        zendot: ['"Zen Dot"', 'sans-serif'],
+      },
     },
   },
   plugins: [],
