@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
-import axios, { formToJSON } from "axios";
 import useApi from "../../hooks/useApi";
+import { useDispatch } from "react-redux";
+import { setAdminData } from "../../features/adminSlice";
 
 function Login() {
+  const dispatch = useDispatch();
   const { response, loading, error, sendData } = useApi();
   const [formData, setFormData] = useState({
     Email: "",
@@ -33,8 +35,14 @@ function Login() {
     };
     if (formData.Role === "Admin") {
       await sendData("http://localhost:8000/admin/login", "POST", data);
-      if (response?.token) {
-        localStorage.setItem("token", response.token);
+      if (response?.token && response?.adminData) {
+        // Dispatch admin data and token to Redux
+        dispatch(
+          setAdminData({
+            adminData: response.adminData,
+            token: response.token,
+          })
+        );
         alert("Login Successful");
       } else if (error) {
         alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
