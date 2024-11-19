@@ -54,7 +54,7 @@ function Register() {
 
   return (
     <div className="flex h-full min-h-screen flex-col lg:flex-row">
-      <div className="bg-gray-950 text-gray-200 px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20">
+      <div className="bg-gray-950 text-gray-200 px-6 py-12 w-full lg:w-1/2 lg:px-10 lg:py-20 font-electrolize">
         <p className="my-2 text-7xl font-extrabold tracking-wider">FAST</p>
         <p className="font-bold text-5xl">Transit</p>
         <p className="mt-32 font-bold text-5xl text-yellow-500">
@@ -71,7 +71,7 @@ function Register() {
         <p className="mt-4 text-yellow-700 font-semibold text-2xl">Join the community that moves forward fast!</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto">
+      <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto font-zendot">
         <h2 className="mb-2 text-3xl font-bold">Sign Up</h2>
         <a href="http://localhost:5173/login" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Already have an account?</a>
 

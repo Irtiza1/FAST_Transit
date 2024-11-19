@@ -39,14 +39,14 @@ function VendorDashboard() {
       >
         <div className="h-full max-h-screen overflow-y-auto flex flex-col px-2 py-4">
           <div className="p-3">
-            <p className="text-yellow-600 text-4xl font-electrolize">FAST</p>
-            <p className="text-gray-100 text-xl  font-electrolize">Transit</p>
+            <p className="text-yellow-600 md:text-6xl text-4xl font-electrolize">FAST</p>
+            <p className="text-gray-100 md:text-4xl text-xl  font-electrolize">Transit</p>
           </div>
           <ul className="text-gray-300 px-2 pb-10 mb-6 transition-all ease-in-out">
             <li>
               <Link
                 to="buses"
-                className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
+                className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
               >
                 Buses
               </Link>
@@ -54,7 +54,7 @@ function VendorDashboard() {
             <li>
               <Link
                 to="routes"
-                className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
+                className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
               >
                 Routes
               </Link>
@@ -62,23 +62,23 @@ function VendorDashboard() {
             <li>
               <Link
                 to="drivers"
-                className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
+                className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out"
               >
                 Drivers
               </Link>
             </li>
             <li>
-              <Link className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
+              <Link className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
                 Profile
               </Link>
             </li>
             <li>
-              <Link className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
+              <Link className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
                 Complains
               </Link>
             </li>
             <li>
-              <Link className="block w-full px-2 py-1 font-bold rounded text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
+              <Link className="block w-full px-2 py-1 font-bold rounded md:text-base text-xs hover:bg-yellow-500 hover:bg-opacity-50 hover:text-sm hover:transition-all duration-500 ease-in-out">
                 Maintenance
               </Link>
             </li>
