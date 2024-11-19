@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import axios, { formToJSON } from "axios";
-import useFetch from "../../hooks/useFetch";
+import useApi from "../../hooks/useApi";
 
 function Login() {
+  const { response, loading, error, sendData } = useApi();
   const [formData, setFormData] = useState({
     Email: "",
     Password: "",
@@ -18,25 +19,26 @@ function Login() {
     });
   };
   const emailPattern = /^[a-zA-Z0-9._%+-]+@nu\.edu\.pk$/;
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData);
     if (!emailPattern.test(formData.Email)) {
       alert("Please enter a valid email address (e.g., xyz@nu.edu.pk)");
       return;
     }
-    
-    if(formData.Role === 'Admin'){
-      const {data,loading,error} = useFetch("http://localhost:8000/user/login")
-    }
-
-    try {
-      console.log(formData); 
-      const response = await axios.post("http://localhost:8000/user/login", formData);
-      alert(response.data.message);
-    } catch (error) {
-      console.error("Error during Login:", error);
-      alert("Login failed. Please try again.");
+    const data = {
+      Email: formData.Email,
+      Password: formData.Password,
+    };
+    if (formData.Role === "Admin") {
+      await sendData("http://localhost:8000/admin/login", "POST", data);
+      if (response?.token) {
+        localStorage.setItem("token", response.token);
+        alert("Login Successful");
+      } else if (error) {
+        alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
+      }
     }
   };
 
@@ -56,12 +58,22 @@ function Login() {
             delaySpeed={1000}
           />
         </p>
-        <p className="mt-4 text-yellow-700 font-semibold text-2xl">Join the community that moves forward fast!</p>
+        <p className="mt-4 text-yellow-700 font-semibold text-2xl">
+          Join the community that moves forward fast!
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto font-zendot" >
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto font-zendot"
+      >
         <h2 className="mb-2 text-3xl font-bold">Sign In</h2>
-        <a href="http://localhost:5173/register" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Don't have an account?</a>
+        <a
+          href="http://localhost:5173/register"
+          className="mb-4 block font-bold text-gray-400 hover:text-gray-800"
+        >
+          Don't have an account?
+        </a>
 
         <p className="mb-2 font-medium text-black">Are you a?</p>
         <div className="mb-2 flex flex-col gap-4 sm:flex-row">
@@ -89,22 +101,28 @@ function Login() {
           placeholder="Email (e.g., abc@nu.edu.pk)"
           required
         />
-          <input
-            type="password"
-            name="Password"
-            value={formData.Password}
-            onChange={handleChange}
-            className="w-full px-4 py-2 mb-2 border-2 rounded-md"
-            placeholder="Password"
-            required
-          />
-         
+        <input
+          type="password"
+          name="Password"
+          value={formData.Password}
+          onChange={handleChange}
+          className="w-full px-4 py-2 mb-2 border-2 rounded-md"
+          placeholder="Password"
+          required
+        />
 
-        <button className="w-full px-8 py-3 bg-gray-300 hover:bg-gray-400 rounded font-bold text-gray-900">Sign Up</button>
+        <button
+          type="submit"
+          className={`w-full px-8 py-3 ${
+            loading ? "bg-gray-400" : "bg-gray-300 hover:bg-gray-400"
+          } rounded font-bold text-gray-900`}
+          disabled={loading}
+        >
+          {loading ? "Logging In..." : "Sign Up"}
+        </button>
       </form>
     </div>
   );
 }
 
 export default Login;
-

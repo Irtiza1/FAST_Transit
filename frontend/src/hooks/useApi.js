@@ -1,26 +1,30 @@
 import axios from "axios";
 import { useState } from "react";
 
-const useApi = () =>{
-    const [response,setResponse] = useState(null);
-    const [loading,setLoading] = useState(true)
-    const [error,setError] = useState(null)
+const useApi = () => {
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const sendData = async (url,method,data)=>{
-        setLoading(true)
-        setError(null)
-        try {
-            const res = axios({method,url,data:data})
-            setResponse(response)
-        } catch (error) {
-            setError(error)
-        } finally{
-            setLoading(false)
-        }
+  const sendData = async (url, method, data = null) => {
+    setLoading(true);
+    setError(null);
+    setResponse(null); 
+    try {
+      const res = await axios({ method, url, data });
+      setResponse(res.data);
+    } catch (err) {
+      setError(err.response?.data || { message: "An error occurred" });
+    } finally {
+      setLoading(false);
     }
-    return {response,loading,error}
-}
-export default useApi
+  };
+
+  return { response, loading, error, sendData };
+};
+
+export default useApi;
+
 
 //ussage
 // import React, { useState } from 'react';
