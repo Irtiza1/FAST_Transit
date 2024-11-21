@@ -1,11 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import useApi from "../../hooks/useApi";
 import { useDispatch } from "react-redux";
 import { setAdminData } from "../../features/adminSlice";
+import { useSelector } from "react-redux";
 
 function Login() {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const adminData = useSelector((state)=>state.admin)
+  console.log(adminData)
+  
   const { response, loading, error, sendData } = useApi();
   const [formData, setFormData] = useState({
     Email: "",
@@ -35,6 +41,7 @@ function Login() {
     };
     if (formData.Role === "Admin") {
       await sendData("http://localhost:8000/admin/login", "POST", data);
+      console.log('response: ',response)
       if (response?.token && response?.adminData) {
         // Dispatch admin data and token to Redux
         dispatch(
@@ -44,6 +51,7 @@ function Login() {
           })
         );
         alert("Login Successful");
+        navigate('/admin')
       } else if (error) {
         alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
       }
@@ -126,7 +134,7 @@ function Login() {
           } rounded font-bold text-gray-900`}
           disabled={loading}
         >
-          {loading ? "Logging In..." : "Sign Up"}
+          {loading ? "Logging In..." : "Sign In"}
         </button>
       </form>
     </div>

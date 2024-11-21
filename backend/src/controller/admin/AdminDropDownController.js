@@ -79,6 +79,7 @@ export const adminDropDown = async (req, res) => {
                         Email: vendor.Email,
                         ContactInfo: vendor.ContactInfo,
                     }));
+                    console.log('yaha')
                     return res.status(200).json({ vendors });
                 } catch (error) {
                     console.error('Error fetching vendor data:', error);
