@@ -9,7 +9,42 @@ export const adminDropDown = async (req, res) => {
     try {
         let sql = '';
         let result;
-        if (operations === 'Update') {
+
+        if (operations === 'Add') {
+            if (user === 'Vendor') {
+                // Add logic for Vendor
+                // You can implement SQL insert statements to add vendor here
+            } else if (user === 'Student') {
+                // Add logic for Student
+            } else if (user === 'Faculty') {
+                // Add logic for Faculty
+            } else if (user === 'Contract') {
+                // Add logic for Contract
+            } else if (user === 'Route') {
+                // Add logic for Route
+            } else if (user === 'Stop') {
+                // Add logic for Stop
+            } else if (user === 'Notification') {
+                // Add logic for Notification
+            }
+
+        } else if (operations === 'Delete') {
+            if (user === 'Vendor') {
+                // Delete logic for Vendor
+                // Implement delete operation for Vendor
+            } else if (user === 'Student') {
+                // Delete logic for Student
+            } else if (user === 'Faculty') {
+                // Delete logic for Faculty
+            } else if (user === 'Contract') {
+                // Delete logic for Contract
+            } else if (user === 'Route') {
+                // Delete logic for Route
+            } else if (user === 'Stop') {
+                // Delete logic for Stop
+            }
+
+        } else if (operations === 'Update') {
             if (user === 'Vendor') {
                 // Update logic for Vendor
                 // You can implement SQL update statements for Vendor here
@@ -29,7 +64,7 @@ export const adminDropDown = async (req, res) => {
                 // Update logic for Alert
             }
 
-        } else if (operations === 'View') { //all done only need to review the stop
+        } else if (operations === 'View') {
             if (user === 'Vendor') {
                 try {
                     sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
@@ -435,60 +470,57 @@ export const adminDropDown = async (req, res) => {
 
             } else if (user === 'Driver') { 
                 try {
-                    console.log('id:', id);
+                    console.log('id: ', id)
+                    sql = id ? 
+                    `
+                    SELECT 
+                        BD.DriverID, 
+                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
+                        U.PhoneNumber,
+                        U.BusID,
+                        U.VendorID, 
+                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        B.BusID, 
+                        B.BusNumber
+                    FROM
+                        BUS_DRIVER BD
+                    INNER JOIN
+                        USERS U ON BD.UserID = U.UserID
+                    INNER JOIN
+                        BUS B ON U.BusID = B.BusID
+                    WHERE
+                        BD.DriverID = ?
+                    GROUP BY
+                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                    `
+                    :
+                    `
+                    SELECT 
+                        BD.DriverID, 
+                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
+                        U.PhoneNumber,
+                        U.BusID,
+                        U.VendorID, 
+                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        B.BusID, 
+                        B.BusNumber
+                    FROM
+                        BUS_DRIVER BD
+                    INNER JOIN
+                        USERS U ON BD.UserID = U.UserID
+                    INNER JOIN
+                        BUS B ON U.BusID = B.BusID
+                    GROUP BY
+                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                    `;
                 
-                    sql = id
-                        ? `
-                        SELECT 
-                            BD.DriverID, 
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
-                            U.PhoneNumber,
-                            U.BusID,
-                            U.VendorID, 
-                            BD.LicenseNumber,  
-                            B.BusID, 
-                            B.BusNumber
-                        FROM
-                            BUS_DRIVER BD
-                        INNER JOIN
-                            USERS U ON BD.UserID = U.UserID
-                        INNER JOIN
-                            BUS B ON U.BusID = B.BusID
-                        WHERE
-                            BD.DriverID = ?
-                        `
-                        : `
-                        SELECT 
-                            BD.DriverID, 
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
-                            U.PhoneNumber,
-                            U.BusID,
-                            U.VendorID, 
-                            BD.LicenseNumber,  
-                            B.BusID, 
-                            B.BusNumber
-                        FROM
-                            BUS_DRIVER BD
-                        INNER JOIN
-                            USERS U ON BD.UserID = U.UserID
-                        INNER JOIN
-                            BUS B ON U.BusID = B.BusID
-                        `;
-                
-                    const [result] = await connection.query(sql, id ? [id] : []);
-                    console.log('Query Result:', result);
-                
-                    if (!result || result.length === 0) {
-                        return res.status(404).json({ error: 'No driver found.' });
-                    }
-                
+                    [result] = await connection.query(sql, id ? [id] : []);
                     return res.status(200).json(result);
                 
                 } catch (error) {
-                    console.error('Error fetching Driver data:', error.message, error.stack);
-                    return res.status(500).send('Internal Server Error');
+                    console.error('Error fetching Driver data:', error);
+                    return res.status(500).send('Internal Server Error'); 
                 }
-                
                                 
 
             } else if (user === 'Attendance') { 
