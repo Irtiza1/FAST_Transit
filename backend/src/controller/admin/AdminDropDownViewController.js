@@ -1,6 +1,6 @@
 import connection from "../../db/index.js";
 
-export const adminDropDown = async (req, res) => {
+export const adminDropDownView = async (req, res) => {
     const { operations, user, id } = req.params;
     console.log('Operation:', operations);
     console.log('User:', user);
