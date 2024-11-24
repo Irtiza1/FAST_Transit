@@ -62,7 +62,8 @@ function RouteDetailPage() {
         </div>
 
         {/* Route Stops with Map */}
-        <RouteCard routeStops={routeDetails.stops} />
+        {/* <RouteCard routeStops={routeDetails.stops} /> */}
+        <RouteCard />
       </div>
     </div>
   );

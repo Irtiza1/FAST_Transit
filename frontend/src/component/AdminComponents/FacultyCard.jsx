@@ -3,9 +3,9 @@ import React from "react";
 const FacultyCard = ({ faculty }) => {
   return (
     <div className="bg-gray-800 text-gray-200 p-6 rounded text-sm transition-shadow duration-300">
-      <h4 className="text-xl font-semibold mb-2">
+      <h2 className="text-xl font-semibold mb-2">
         {faculty.FirstName} {faculty.LastName}
-      </h4>
+      </h2>
       <p className="text-gray-400">
         <strong>Role:</strong> {faculty.Role}
       </p>
