@@ -31,7 +31,6 @@ router.get('/profile',viewProfile)
 
 //admin dropdown
 router.get("/dropdown/:operations/:user/:id?", adminDropDown);
-
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
 

@@ -10,7 +10,7 @@ export const adminDropDown = async (req, res) => {
         let sql = '';
         let result;
 
-        if (operations === 'Update') {
+        /*if (operations === 'Update') {
             if (user === 'Vendor') {
                 // Update logic for Vendor
                 // You can implement SQL update statements for Vendor here
@@ -30,7 +30,8 @@ export const adminDropDown = async (req, res) => {
                 // Update logic for Alert
             }
 
-        } else if (operations === 'View') {
+        } else */
+        if (operations === 'View') {
             if (user === 'Vendor') {
                 try {
                     sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
@@ -148,32 +149,41 @@ export const adminDropDown = async (req, res) => {
                 try {
                     sql = id ? 
                         'SELECT R.RouteID, R.RouteName, R.StartPoint, R.EndPoint, COUNT(S.StopID) AS NumberOfStops, ' +
-                        'GROUP_CONCAT(CONCAT(S.StopID, ".", R.RouteID, ":", S.StopName) ORDER BY S.StopID) AS StopNames ' +
+                        'GROUP_CONCAT(CONCAT(S.StopID, ":", R.RouteID, ":", S.StopName, ":", S.Latitude, ":", S.Longitude) ORDER BY S.StopID) AS StopDetails ' +
                         'FROM ROUTE R JOIN STOP S ON R.RouteID = S.RouteID ' +
                         'WHERE R.RouteID = ? ' +
                         'GROUP BY R.RouteID, R.RouteName, R.StartPoint, R.EndPoint' :
                         'SELECT R.RouteID, R.RouteName, R.StartPoint, R.EndPoint, COUNT(S.StopID) AS NumberOfStops, ' +
-                        'GROUP_CONCAT(CONCAT(S.StopID, ".", R.RouteID, ":", S.StopName) ORDER BY S.StopID) AS StopNames ' +
+                        'GROUP_CONCAT(CONCAT(S.StopID, ":", R.RouteID, ":", S.StopName, ":", S.Latitude, ":", S.Longitude) ORDER BY S.StopID) AS StopDetails ' +
                         'FROM ROUTE R JOIN STOP S ON R.RouteID = S.RouteID ' +
                         'GROUP BY R.RouteID, R.RouteName, R.StartPoint, R.EndPoint';
+                
                     console.log('SQL Query:', sql);
+                
                     [result] = await connection.query(sql, id ? [id] : []);
+                    
                     if (result.length === 0) {
                         return res.status(404).send('Route not found');
                     }
+                
                     const routes = result.map(route => ({
                         RouteID: route.RouteID,
                         RouteName: route.RouteName,
                         RouteStartPoint: route.StartPoint,
                         RouteEndPoint: route.EndPoint,
                         NumberOfStops: route.NumberOfStops,
-                        StopNames: route.StopNames ? route.StopNames.split(',') : [],
+                        StopDetails: route.StopDetails ? route.StopDetails.split(',').map(detail => {
+                            const [StopID, RouteID, StopName, Latitude, Longitude] = detail.split(':');
+                            return { StopID, RouteID, StopName, Latitude, Longitude };
+                        }) : [],
                     }));
+                
                     return res.status(200).json({ routes });
                 } catch (error) {
                     console.error('Error fetching route data:', error);
                     return res.status(500).send('Internal Server Error');
                 }
+                
             } else if (user === 'Stop') { //do check faculity quereis 
 
                 try {
