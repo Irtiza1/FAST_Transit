@@ -10,41 +10,7 @@ export const adminDropDown = async (req, res) => {
         let sql = '';
         let result;
 
-        if (operations === 'Add') {
-            if (user === 'Vendor') {
-                // Add logic for Vendor
-                // You can implement SQL insert statements to add vendor here
-            } else if (user === 'Student') {
-                // Add logic for Student
-            } else if (user === 'Faculty') {
-                // Add logic for Faculty
-            } else if (user === 'Contract') {
-                // Add logic for Contract
-            } else if (user === 'Route') {
-                // Add logic for Route
-            } else if (user === 'Stop') {
-                // Add logic for Stop
-            } else if (user === 'Notification') {
-                // Add logic for Notification
-            }
-
-        } else if (operations === 'Delete') {
-            if (user === 'Vendor') {
-                // Delete logic for Vendor
-                // Implement delete operation for Vendor
-            } else if (user === 'Student') {
-                // Delete logic for Student
-            } else if (user === 'Faculty') {
-                // Delete logic for Faculty
-            } else if (user === 'Contract') {
-                // Delete logic for Contract
-            } else if (user === 'Route') {
-                // Delete logic for Route
-            } else if (user === 'Stop') {
-                // Delete logic for Stop
-            }
-
-        } else if (operations === 'Update') {
+        if (operations === 'Update') {
             if (user === 'Vendor') {
                 // Update logic for Vendor
                 // You can implement SQL update statements for Vendor here

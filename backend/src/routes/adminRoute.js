@@ -9,6 +9,9 @@ import {ActivateUser} from '../controller/user/ActivateUserController.js'
 // import { LoginUser } from "../controller/user/userLoginUserController.js";
 import { viewProfile } from '../controller/admin/ViewProfileController.js';
 import { adminDropDown } from '../controller/admin/AdminDropDownController.js';
+import { adminDropDownCreate } from '../controller/admin/AdminDropDownCreateController.js';
+import { adminDropDownDelete } from '../controller/admin/AdminDropDownDeleteController.js';
+
 // router.get('/',getAllUniversity)
 // router.get('/University', someAdminRoute )
 
@@ -29,6 +32,8 @@ router.get('/profile',viewProfile)
 //admin dropdown
 router.get("/dropdown/:operations/:user/:id?", adminDropDown);
 
+router.post("/dropdown/:operations/:user",adminDropDownCreate)
+router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
 
 //add vendor  
 
