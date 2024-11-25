@@ -10,25 +10,25 @@ const AttendanceCard = ({ data }) => {
   }
 
   return (
-    <div className="w-full p-6 bg-gray-800 border border-gray-600 rounded  text-gray-200 min-h-screen mt-6">
-            <h1 className="text-3xl font-bold text-gray-200 m-2">Attendance</h1>
-
-      {/* Header Section */}
-      <div className="mb-6 flex justify-center items-center bg-gray-800  text-white p-5 ">
-        {/* <h1 className="text-2xl font-bold">Attendance Information</h1> */}
-        <div className="flex space-x-4">
-          <div className="px-4 py-2 bg-green-600 bg-opacity-60 rounded-full md:text-sm text-xs font-medium shadow-sm">
-            Total Records: {data.totalRecords}
+    <div className="w-full  bg-gray-900 shadow-lg rounded-lg">
+      {/* Overview Section */}
+      <h2 className="text-3xl font-bold text-gray-200 mb-6">Attendance</h2>
+      <div className="flex flex-col md:flex-row justify-center items-center mb-8">
+        <div className="flex flex-wrap justify-center items-center gap-4 mt-4 md:mt-0">
+          <div className="bg-gray-500 p-4 rounded">
+            <h2 className="text-xl  text-gray-200">
+              Total Records: {data.totalRecords}
+            </h2>
           </div>
         </div>
       </div>
 
       {/* Attendance Records */}
-      <div className="grid gap-6">
+      <div className="w-full my-2">
         {data.AttendanceRecords.map((record) => (
           <div
             key={record.AttendanceID}
-            className={`p-6 rounded bg-gray-900 border-l-8 hover:shadow-lg transition-shadow duration-300
+            className={`border-l-8 shadow-lg rounded-lg p-6 bg-gray-800 hover:shadow-xl transition-shadow mb-2 
               ${
                 record.Status === "Present"
                   ? "border-green-500"
@@ -37,19 +37,27 @@ const AttendanceCard = ({ data }) => {
                   : "border-yellow-500"
               }`}
           >
-            <div className="flex justify-between items-center">
-              <div className="text-lg font-semibold text-gray-900">
-                Status: {record.Status}
+            <div className="flex justify-between items-center mb-2">
+              <div className="text-xl font-semibold  text-gray-200">
+                {record.Status}
               </div>
-              <span className="text-xs text-gray-200 font-semibold">
-                {new Date(record.Timestamp).toLocaleString()}
-              </span>
             </div>
 
-            <div className="mt-2 text-gray-200">
-              <p>User ID: <strong className="">{record.UserID}</strong></p>
-              <p>Bus ID: <strong className="">{record.BusID}</strong></p>
-              <p>Shift: <strong className="capitalize">{record.Shift}</strong></p>
+            <div className="text-sm text-gray-200">
+              <p>
+                <span className="font-medium">User ID:</span> {record.UserID}
+              </p>
+              <p>
+                <span className="font-medium">Bus ID:</span> {record.BusID}
+              </p>
+              <p>
+                <span className="font-medium">Shift:</span> {record.Shift}
+              </p>
+              <p className="mt-4">
+                <span className="text-xs text-gray-200 font-semibold">
+                  {new Date(record.Timestamp).toLocaleString()}
+                </span>
+              </p>
             </div>
           </div>
         ))}

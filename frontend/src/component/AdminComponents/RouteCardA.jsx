@@ -3,7 +3,7 @@ import RouteCard from "../RouteCard/RouteCard.jsx";
 
 function RouteCardA({ route }) {
   return (
-    <div className="bg-gray-800 text-gray-100 rounded-lg shadow-lg p-6 mb-6">
+    <div className="bg-gray-800 text-gray-300 border border-gray-600 rounded p-6 mb-6 my-2">
       {/* Route Information */}
       <div className="mb-4">
         <h2 className="text-xl font-bold mb-2">{route.RouteName}</h2>

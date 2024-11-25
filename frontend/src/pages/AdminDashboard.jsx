@@ -12,6 +12,8 @@ import PaymentCard from "../component/AdminComponents/PaymentCard";
 import RouteCardA from "../component/AdminComponents/RouteCardA";
 import NotificationCard from "../component/AdminComponents/NotificationCard";
 import AttendanceCard from "../component/AdminComponents/AttendanceCard";
+import ComplaintCard from "../component/AdminComponents/ComplaintCard";
+import TrafficAlertCard from "../component/AdminComponents/TrafficAlertCard";
 
 const AdminDashboard = () => {
   const [formState, setFormState] = useState({
@@ -27,9 +29,9 @@ const AdminDashboard = () => {
   const operations = ["Add", "Update", "Delete", "View"];
   const categories = {
     Add: ["Vendor", "Student", "Faculty", "Contract", "Route"],
-    Update: ["Vendor", "Student", "Faculty", "Contract", "Route", "Notification", "Complain", "Alert"],
+    Update: ["Vendor", "Student", "Faculty", "Contract", "Route", "Notification", "Complaint", "Alert"],
     Delete: ["Vendor", "Student", "Faculty", "Contract", "Route"],
-    View: ["Vendor", "Student", "Faculty", "Contract", "Payment", "Route", "Stop", "Notification", "Complain", "Alert", "Bus", "Driver", "Attendance"],
+    View: ["Vendor", "Student", "Faculty", "Driver", "Contract", "Payment", "Route", "Stop", "Notification", "Complaint", "Traffic Alert", "Bus", "Attendance"],
   };
 
   const handleChange = (field, value) => {
@@ -109,6 +111,8 @@ const AdminDashboard = () => {
           </button>
         </form>
         
+          <hr className="my-8 mx-4 bg-gray-600 border border-gray-500"/>
+
         {/* loading */}
         {loading && <LoadingAnimation />}
 
@@ -119,7 +123,9 @@ const AdminDashboard = () => {
         {data ? (
           <div>
             {data?.vendors?.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div className="w-full mt-6">
+                <h1 className="text-gray-200 text-2xl  font-bold">Vendors</h1>
                 {data.vendors.map((vendor) => (
                   <VendorCard key={vendor.VendorID} vendor={vendor} />
                 ))}
@@ -127,50 +133,68 @@ const AdminDashboard = () => {
             )}
 
             {data?.students?.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Students</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {data.students.map((student) => (
                   <StudentCard key={student.studentID} student={student} />
                 ))}
               </div>
+              </div>
             )}
 
             {data?.faculties?.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Faculties</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {data.faculties.map((faculty) => (
                   <FacultyCard key={faculty.facultyID} faculty={faculty} />
                 ))}
               </div>
+              </div>
             )}
 
             {data?.contracts?.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Contracts</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {data.contracts.map((contract) => (
                   <ContractCard key={contract.contractID} contract={contract} />
                 ))}
               </div>
+              </div>
             )}
 
             {data?.length > 0 && formState.selectedCategory == 'Driver' && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Drivers</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {data.map((driver) => (
                   <DriverCard key={driver.driverID} driver={driver} />
                 ))}
               </div>
+              </div>
             )}
 
             {data?.Payment?.length > 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Payments</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
                 {data.Payment.map((Pay) => (
                   <PaymentCard key={Pay.PaymentID} payment={Pay} />
                 ))}
               </div>
+              </div>
             )}
 
             {data?.routes?.length > 0 && (
-              <div className="w-full mt-6">
+              <div>
+              <h1 className="text-gray-200 text-2xl font-bold">Routes</h1>
+              <div className="w-full ">
                 {data.routes.map((route) => (
                   <RouteCardA key={route.routeID} route={route} />
                 ))}
+              </div>
               </div>
             )}
 
@@ -184,6 +208,16 @@ const AdminDashboard = () => {
             {data?.AttendanceRecords?.length > 0 && (
               <AttendanceCard  data={data}/>
              )}
+
+             {data?.complaints?.length > 0 && (
+              <ComplaintCard data = {data}/>
+             )}
+
+             {data?.traffic_alert?.length > 0 && (
+              <TrafficAlertCard data= {data}/>
+             )
+
+             }
           </div>
         ) : (
           !loading && !error && <p className="text-gray-400 mt-16 text-center font-bold">Nothing to show</p>

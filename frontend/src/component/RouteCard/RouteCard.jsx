@@ -56,11 +56,11 @@ function RouteCard({ routeStops }) {
           </MapContainer>
         </div>
         <div className="lg:w-1/2 mt-4 lg:mt-0">
-          <ul className="bg-gray-900 rounded p-4 text-gray-300">
+          <ul className="bg-gray-900 rounded p-4 text-gray-300 border border-gray-600">
             {(routeStops || []).map((stop, index) => (
               <li
                 key={index}
-                className="mb-2 p-2 border-b border-gray-600 last:border-none"
+                className="m-1 p-2 border-b border-gray-600 last:border-none"
               >
                 <div className="flex justify-between">
                   <span className="font-semibold">{stop.StopName}</span>

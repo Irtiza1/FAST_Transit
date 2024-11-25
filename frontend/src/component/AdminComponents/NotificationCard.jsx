@@ -6,32 +6,32 @@ const NotificationDisplay = ({ data }) => {
   }
 
   return (
-    <div className="w-full p-6 bg-gray-800 border border-gray-600 rounded  text-gray-200 min-h-screen ">
+    <div className="w-full  bg-gray-900 shadow-lg rounded-lg ">
       {/* Header Section */}
-      <h1 className="text-3xl font-bold text-gray-200 m-2">Notifications</h1>
-      <div className="mb-6 flex justify-center items-center bg-gray-800  text-white p-5 ">
-        <div className="flex md:space-x-4 space-x-1">
-          <div className="px-4 py-2 bg-blue-600 bg-opacity-60 rounded-full md:text-sm text-xs font-medium shadow-sm">
-            Total: {data.totalNotification}
+      <h2 className="text-3xl font-bold text-gray-200 mb-6">Notifications</h2>
+      <div className="flex flex-col md:flex-row justify-center items-center mb-8">
+      <div className="flex flex-wrap justify-center items-center gap-4 mt-4 md:mt-0">
+          <div className="bg-gray-500 text-gray-200 bg-opacity-60  px-4 py-2 rounded">
+            Total Notifications: {data.totalNotification}
           </div>
-          <div className="px-4 py-2 bg-green-600 bg-opacity-60 rounded-full md:text-sm text-xs font-medium shadow-sm">
+          <div className="bg-green-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded">
             Info: {data.NotificationTypeCounts.info}
           </div>
-          <div className="px-4 py-2 bg-yellow-600 bg-opacity-60 rounded-full md:text-sm text-xs font-medium shadow-sm">
+          <div className="bg-yellow-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded">
             Warning: {data.NotificationTypeCounts.warning}
           </div>
-          <div className="px-4 py-2 bg-red-600 bg-opacity-60 rounded-full md:text-sm text-xs font-medium shadow-sm">
+          <div className="bg-red-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded">
             Alert: {data.NotificationTypeCounts.alert}
           </div>
         </div>
       </div>
 
       {/* Notification List */}
-      <div className="grid gap-6">
+      <div className="w-full my-2">
         {data.Notification.map((notification) => (
           <div
             key={notification.NotificationID}
-            className="p-6 rounded bg-gray-900 border-l-8 hover:shadow-lg transition-shadow duration-300"
+            className="border-l-8 shadow-lg rounded-lg p-6 bg-gray-800 hover:shadow-xl transition-shadow mb-2"
             style={{
               borderColor:
                 notification.Type === "Info"
@@ -41,14 +41,14 @@ const NotificationDisplay = ({ data }) => {
                   : "#ef4444",
             }}
           >
-            <div className="flex justify-between items-center">
-              <div className="text-lg font-medium  text-gray-200">
+            <div className="flex justify-between items-center mb-2">
+              <div className="text-xl font-semibold  text-gray-200">
                 {notification.NotificationText}
               </div>
               <span className="text-xs text-gray-200 font-semibold">{notification.Date}</span>
             </div>
 
-            <div className="mt-2 text-gray-400">
+            <div className="mt-2 text-gray-200">
               {notification.UserID ? (
                 <span>
                   From: <strong className="text-gray-200">{notification.UserName}</strong>
@@ -60,7 +60,7 @@ const NotificationDisplay = ({ data }) => {
               )}
             </div>
 
-            <div className="mt-3 text-sm text-gray-400">
+            <div className="mt-3 text-sm text-gray-200">
               Type: <span className="font-semibold capitalize">{notification.Type}</span>
             </div>
           </div>
