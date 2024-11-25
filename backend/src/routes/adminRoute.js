@@ -33,7 +33,7 @@ router.get('/profile',viewProfile)
 router.get("/dropdown/:operations/:user/:id?", adminDropDownView);
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
-router.patch("/dropdown/:operations/:user/:id?",adminDropDownUpdate)
+router.patch("/dropdown/:operations/:user",adminDropDownUpdate)
 //add vendor  
 
 export default router;
