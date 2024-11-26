@@ -1,6 +1,6 @@
 import connection from "../../db/index.js";
 
-export const adminDropDownView = async (req, res) => {
+export const driverDropDownView = async (req, res) => {
     const { operations, user, id } = req.params;
     console.log('Operation:', operations);
     console.log('User:', user);
@@ -11,7 +11,7 @@ export const adminDropDownView = async (req, res) => {
         let result;
 
 
-        if (operations === 'View') {
+        /*if (operations === 'View') {
             if (user === 'Vendor') {
                 try {
                     sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
@@ -482,7 +482,6 @@ export const adminDropDownView = async (req, res) => {
 
             } else if (user === 'Attendance') { 
                 if (id) {
-                    console.log('hel')
                     // Split the id into components [USERID:BUSID:DATE:SHIFT] [U1:B1:2024-10-22:Morning]
                     const [userIdRaw, busIdRaw, date, shift] = id.split(':');
         
@@ -514,11 +513,9 @@ export const adminDropDownView = async (req, res) => {
                     }
         
                     if (conditions.length > 0) {
-                        console.log('hel1')
                         sql = `SELECT * FROM ATTENDANCE WHERE ${conditions.join(' AND ')}`;
                         [result] = await connection.query(sql, values);
                     } else {
-                        
                         return res.status(400).send('Invalid ID format. Please provide at least one filter condition.');
                     }
                 } else {
@@ -851,7 +848,7 @@ export const adminDropDownView = async (req, res) => {
             } else {
                 res.status(400).send('Invalid user type for view operation');
             }
-        }
+        }*/
     } catch (error) {
         console.error('Error occurred:', error);
         res.status(500).send('Internal server error');
