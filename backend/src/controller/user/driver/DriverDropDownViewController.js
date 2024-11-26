@@ -1,6 +1,6 @@
 import connection from "../../db/index.js";
 
-export const adminDropDownView = async (req, res) => {
+export const driverDropDownView = async (req, res) => {
     const { operations, user, id } = req.params;
     console.log('Operation:', operations);
     console.log('User:', user);
@@ -11,7 +11,7 @@ export const adminDropDownView = async (req, res) => {
         let result;
 
 
-        if (operations === 'View') {
+        /*if (operations === 'View') {
             if (user === 'Vendor') {
                 try {
                     sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
@@ -848,7 +848,7 @@ export const adminDropDownView = async (req, res) => {
             } else {
                 res.status(400).send('Invalid user type for view operation');
             }
-        }
+        }*/
     } catch (error) {
         console.error('Error occurred:', error);
         res.status(500).send('Internal server error');

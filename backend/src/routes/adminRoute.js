@@ -12,6 +12,8 @@ import { adminDropDownView } from '../controller/admin/AdminDropDownViewControll
 import { adminDropDownCreate } from '../controller/admin/AdminDropDownCreateController.js';
 import { adminDropDownDelete } from '../controller/admin/AdminDropDownDeleteController.js';
 import { adminDropDownUpdate } from '../controller/admin/AdminDropDownUpdateController.js';
+import { viewStats } from '../controller/admin/StatsController.js';
+import { viewProfile } from '../controller/admin/ViewProfileController.js';
 // router.get('/',getAllUniversity)
 // router.get('/University', someAdminRoute )
 
@@ -34,6 +36,8 @@ router.get("/dropdown/:operations/:user/:id?", adminDropDownView);
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
 router.patch("/dropdown/:operations/:user",adminDropDownUpdate)
+router.get("/viewStats", viewStats );//add in view controller
+router.get("/viewProfile", viewProfile );//add in view controller
 //add vendor  
 
 export default router;
