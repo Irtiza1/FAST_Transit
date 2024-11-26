@@ -12,8 +12,8 @@ import { adminDropDownView } from '../controller/admin/AdminDropDownViewControll
 import { adminDropDownCreate } from '../controller/admin/AdminDropDownCreateController.js';
 import { adminDropDownDelete } from '../controller/admin/AdminDropDownDeleteController.js';
 import { adminDropDownUpdate } from '../controller/admin/AdminDropDownUpdateController.js';
-import { viewStats } from '../controller/admin/StatsController.js';
-import { viewProfile } from '../controller/admin/ViewProfileController.js';
+// import { viewStats } from '../controller/admin/StatsController.js';
+// import { viewProfile } from '../controller/admin/ViewProfileController.js';
 // router.get('/',getAllUniversity)
 // router.get('/University', someAdminRoute )
 
