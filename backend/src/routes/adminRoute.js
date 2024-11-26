@@ -8,10 +8,10 @@ import {SignUpUser} from '../controller/user/SignUpUserController.js'
 import {ActivateUser} from '../controller/user/ActivateUserController.js'
 // import { LoginUser } from "../controller/user/userLoginUserController.js";
 import { viewProfile } from '../controller/admin/ViewProfileController.js';
-import { adminDropDown } from '../controller/admin/AdminDropDownController.js';
+import { adminDropDownView } from '../controller/admin/AdminDropDownViewController.js';
 import { adminDropDownCreate } from '../controller/admin/AdminDropDownCreateController.js';
 import { adminDropDownDelete } from '../controller/admin/AdminDropDownDeleteController.js';
-
+import { adminDropDownUpdate } from '../controller/admin/AdminDropDownUpdateController.js';
 // router.get('/',getAllUniversity)
 // router.get('/University', someAdminRoute )
 
@@ -30,10 +30,10 @@ router.get('/activate/:token/:role',ActivateUser)
 router.get('/profile',viewProfile)
 
 //admin dropdown
-router.get("/dropdown/:operations/:user/:id?", adminDropDown);
+router.get("/dropdown/:operations/:user/:id?", adminDropDownView);
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
-
+router.patch("/dropdown/:operations/:user",adminDropDownUpdate)
 //add vendor  
 
 export default router;
