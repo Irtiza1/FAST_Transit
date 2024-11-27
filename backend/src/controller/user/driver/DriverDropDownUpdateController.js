@@ -1,4 +1,4 @@
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 export const driverDropDownUpdate = async (req, res) => {
     const updateData = req.body; // Get the whole update data from the request body
     const { operations, user } = req.params;

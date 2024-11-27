@@ -1,4 +1,4 @@
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 
 export const driverDropDownCreate = async (req, res) => {
     const { operations, user } = req.params;
@@ -16,13 +16,13 @@ export const driverDropDownCreate = async (req, res) => {
             let sql = '';
             let result;
             if (user === 'Notification') {
-                const { adminID, NotificationText, Type } = req.body;
+                const {UserID, NotificationText, Type } = req.body;
                 sql = `
-                    INSERT INTO NOTIFICATION (adminID, NotificationText, Type) 
+                    INSERT INTO NOTIFICATION (UserID, NotificationText, Type) 
                     VALUES (?, ?, ?);
                 `;
                 [result] = await transactionConnection.query(sql, [
-                    adminID, NotificationText, Type,
+                    UserID, NotificationText, Type,
                 ]);
                 if (result.affectedRows === 0) {
                     throw new Error('Notification not added');
@@ -34,7 +34,23 @@ export const driverDropDownCreate = async (req, res) => {
                 });
             }
             else if (user === 'Attendance'){
-                //added logic
+                
+                const {UserID,BusID,Status,Shift } = req.body;
+                sql = `
+                    INSERT INTO ATTENDANCE (UserID, BusID, Status, Shift) 
+                    VALUES (?, ?, ?, ?);
+                `;
+                [result] = await transactionConnection.query(sql, [
+                    UserID,BusID,Status,Shift,
+                ]);
+                if (result.affectedRows === 0) {
+                    throw new Error('Attendance not added');
+                }
+                console.log('Attendance added successfully');
+                res.status(200).json({
+                    message: 'Attendance added successfully!',
+                    AttendanceID: result.insertId,
+                });
             }
         }
 

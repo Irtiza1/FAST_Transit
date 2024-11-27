@@ -1,4 +1,4 @@
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 
 export const driverDropDownView = async (req, res) => {
     const { operations, user, id } = req.params;

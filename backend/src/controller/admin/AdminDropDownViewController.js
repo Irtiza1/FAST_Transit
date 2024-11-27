@@ -10,7 +10,7 @@ export const adminDropDownView = async (req, res) => {
         let sql = '';
         let result;
 
-
+        
         if (operations === 'View') {
             if (user === 'Vendor') {
                 try {
