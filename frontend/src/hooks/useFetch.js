@@ -11,6 +11,7 @@ const useFetch = (url) => {
       const fetchData = async () => {
         setLoading(true);
         setError(null);
+        setData(null)
         try {
           const response = await axios.get(url);
           setData(response.data);
@@ -26,7 +27,7 @@ const useFetch = (url) => {
       fetchData();
     }, [url]);
   
-    return { data, loading, error };
+    return { data, loading, error,setError,setLoading,setData };
   };
 export default useFetch;
 // import { useState, useEffect } from "react";

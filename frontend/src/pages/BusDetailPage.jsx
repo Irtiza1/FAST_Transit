@@ -120,7 +120,7 @@ const BusDetailPage = () => {
           <BusLayout bus={bus} />
         </div>
         
-        <RouteCard routeStops={routeStops}/>
+        <RouteCard />
 
       </div>
     </div>
