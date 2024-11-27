@@ -8,29 +8,44 @@ export const driverDropDownUpdate = async (req, res) => {
     console.log("Update Data:", updateData);
 
     let transactionConnection;
-
+    /*
+    1- update attendance
+    2- update bus location
+    */
     try {
         if (operations !== "Update") {
             return res.status(400).send("Invalid operation specified");
         }
 
         const tableMap = {
-            /*Vendor: "VENDOR",
-            Student: "STUDENT",
+            
+            Bus : "BUS",
+            Attendance: "ATTENDANCE",
+            Vendor: "VENDOR",
+            Route: "ROUTE",
+            Driver: "BUS_DRIVER",
+
+            /*Student: "STUDENT",
             Faculty: "FACULTY",
             Contract: "CONTRACT",
-            Route: "ROUTE",
             Stop: "STOP",
             Complaint: "COMPLAINT",
             Alert: "ALERT",*/
+            
         };
 
         const idFieldMap = {
-           /* Vendor: "VendorID",
-            Student: "StudentID",
+           
+            Bus : "BusID",
+            Attendance: "AttendanceID",
+            Vendor: "VendorID",
+            Route: "RouteID",
+            Driver: "DriverID",
+
+    
+            /*Student: "StudentID",
             Faculty: "FacultyID",
             Contract: "ContractID",
-            Route: "RouteID",
             Stop: "StopID",
             Complaint: "ComplaintID",
             Alert: "AlertID",*/

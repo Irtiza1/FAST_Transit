@@ -11,32 +11,12 @@ export const driverDropDownView = async (req, res) => {
         let result;
 
 
-        /*if (operations === 'View') {
-            if (user === 'Vendor') {
-                try {
-                    sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
-                    console.log('SQL Query:', sql);
-                    [result] = await connection.query(sql, id ? [id] : []);
-                    if (result.length === 0) {
-                        return res.status(404).send('Vendor not found');
-                    }
-                    const vendors = result.map(vendor => ({
-                        VendorID: vendor.VendorID,
-                        VendorName: vendor.VendorName,
-                        Email: vendor.Email,
-                        ContactInfo: vendor.ContactInfo,
-                    }));
-                    console.log('yaha')
-                    return res.status(200).json({ vendors });
-                } catch (error) {
-                    console.error('Error fetching vendor data:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
-            } else if (user === 'Student') {
+        if (operations === 'View') {
+            if (user === 'Student') {
                 try {
                     sql = id ? 
-                        'SELECT * FROM STUDENT S INNER JOIN USERS U ON S.UserID = U.UserID INNER JOIN Department D ON S.DepartmentID = D.DepartmentID WHERE StudentID = ?' :
-                        'SELECT * FROM STUDENT S INNER JOIN USERS U ON S.UserID = U.UserID INNER JOIN Department D ON S.DepartmentID = D.DepartmentID';
+                        'SELECT * FROM STUDENT S INNER JOIN USERS U ON S.UserID = U.UserID WHERE StudentID = ?' :
+                        'SELECT * FROM STUDENT S INNER JOIN USERS U ON S.UserID = U.UserID';
                     console.log('SQL Query:', sql);
                     [result] = await connection.query(sql, id ? [id] : []);
                     if (result.length === 0) {
@@ -44,22 +24,12 @@ export const driverDropDownView = async (req, res) => {
                     }
                     const students = result.map(student => ({
                         StudentID: student.StudentID,
-                        FirstName: student.FirstName,
-                        LastName: student.LastName,
-                        DepartmentName: student.DepartmentName,
-                        Batch: student.Batch,
-                        Semester: student.Semester,
-                        Email: student.Email,
+                        StudentName: student.FirstName +" " + student.LastName,
                         ContactInfo: student.PhoneNumber,
-                        Gender: student.Gender,
-                        CNIC: student.CNIC,
-                        Role: student.Role,
                         Location: student.Location,
                         BusID: student.BusID,
                         SeatID: student.SeatID,
                         VendorID: student.VendorID,
-                        AccountActivated: student.isActive,
-                        RegisterationStatus: student.status,
                     }));
                     return res.status(200).json({ students });
                 } catch (error) {
@@ -69,8 +39,8 @@ export const driverDropDownView = async (req, res) => {
             } else if (user === 'Faculty') {
                 try {
                     sql = id ? 
-                        'SELECT * FROM FACULTY F INNER JOIN USERS U ON F.UserID = U.UserID INNER JOIN Department D ON F.DepartmentID = D.DepartmentID WHERE FacultyID = ?' :
-                        'SELECT * FROM FACULTY F INNER JOIN USERS U ON F.UserID = U.UserID INNER JOIN Department D ON F.DepartmentID = D.DepartmentID';
+                        'SELECT * FROM FACULTY F INNER JOIN USERS U ON F.UserID = U.UserID WHERE FacultyID = ?' :
+                        'SELECT * FROM FACULTY F INNER JOIN USERS U ON F.UserID = U.UserID';
                     console.log('SQL Query:', sql);
                     [result] = await connection.query(sql, id ? [id] : []);
                     if (result.length === 0) {
@@ -78,51 +48,16 @@ export const driverDropDownView = async (req, res) => {
                     }
                     const faculties = result.map(faculty => ({
                         FacultyID: faculty.FacultyID,
-                        FirstName: faculty.FirstName,
-                        LastName: faculty.LastName,
-                        DepartmentName: faculty.DepartmentName,
-                        Email: faculty.Email,
+                        FacultyName: faculty.FirstName + ' '+ faculty.LastName,
                         ContactInfo: faculty.PhoneNumber,
-                        Gender: faculty.Gender,
-                        CNIC: faculty.CNIC,
-                        Role: faculty.Role,
                         Location: faculty.Location,
                         BusID: faculty.BusID,
                         SeatID: faculty.SeatID,
                         VendorID: faculty.VendorID,
-                        AccountActivated: faculty.isActive,
                     }));
                     return res.status(200).json({ faculties });
                 } catch (error) {
                     console.error('Error fetching faculty data:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
-            } else if (user === 'Contract') {
-                try {
-                    sql = id ? 
-                        'SELECT * FROM CONTRACT C INNER JOIN UNIVERSITY U ON C.UniversityID = U.UniversityID INNER JOIN VENDOR V ON C.VendorID = V.VendorID WHERE ContractID = ?' :
-                        'SELECT * FROM CONTRACT C INNER JOIN UNIVERSITY U ON C.UniversityID = U.UniversityID INNER JOIN VENDOR V ON C.VendorID = V.VendorID';
-                    console.log('SQL Query:', sql);
-                    [result] = await connection.query(sql, id ? [id] : []);
-                    if (result.length === 0) {
-                        return res.status(404).send('Contract not found');
-                    }
-                    const contracts = result.map(contract => ({
-                        ContractID: contract.ContractID,
-                        UniversityID: contract.UniversityID,
-                        UniversityName: contract.UniversityName,
-                        VendorID: contract.VendorID,
-                        VendorName: contract.VendorName,
-                        ContractDetails: contract.ContractDetails,
-                        ContractStatus: contract.Status,
-                        StartDate: contract.StartDate.toISOString().split('T')[0],
-                        EndDate: contract.EndDate.toISOString().split('T')[0],
-                        VendorContactInfo: contract.ContactInfo,
-                        UniversityEmail: contract.Email,
-                    }));
-                    return res.status(200).json({ contracts });
-                } catch (error) {
-                    console.error('Error fetching contract data:', error);
                     return res.status(500).send('Internal Server Error');
                 }
             } else if (user === 'Route') {
@@ -417,6 +352,7 @@ export const driverDropDownView = async (req, res) => {
                     `;
                 
                     [result] = await connection.query(sql, id ? [id] : []);
+                    console.log(result)
                     return res.status(200).json(result);
                 
                 } catch (error) {
@@ -436,7 +372,7 @@ export const driverDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber,  
                         B.BusID, 
                         B.BusNumber
                     FROM
@@ -458,7 +394,7 @@ export const driverDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber,  
                         B.BusID, 
                         B.BusNumber
                     FROM
@@ -535,95 +471,98 @@ export const driverDropDownView = async (req, res) => {
                     return res.status(404).send('No attendance records found for the given filters.');
                 }
 
-            } else if (user === 'Complaint') {
-                try {
-                    sql = id ? 
-                    `
-                    SELECT 
-                        C.ComplaintID, 
-                        C.ComplaintText, 
-                        C.Status, 
-                        DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
-                        B.BusID, 
-                        B.BusNumber, 
-                        U.UserID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo 
-                    FROM
-                        COMPLAINT C
-                    INNER JOIN 
-                        BUS B ON C.BusID = B.BusID
-                    INNER JOIN 
-                        USERS U ON C.UserID = U.UserID
-                    INNER JOIN
-                        VENDOR V ON U.VendorID = V.VendorID
-                    WHERE
-                        C.ComplaintID = ?
-                    GROUP BY
-                        C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
-                        V.VendorID, V.VendorName, V.ContactInfo
-                    `
-                    :
-                    `
-                    SELECT 
-                        C.ComplaintID, 
-                        C.ComplaintText, 
-                        C.Status, 
-                        DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
-                        B.BusID, 
-                        B.BusNumber, 
-                        U.UserID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo 
-                    FROM
-                        COMPLAINT C
-                    INNER JOIN 
-                        BUS B ON C.BusID = B.BusID
-                    INNER JOIN 
-                        USERS U ON C.UserID = U.UserID
-                    INNER JOIN
-                        VENDOR V ON U.VendorID = V.VendorID
-                    GROUP BY
-                        C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
-                        V.VendorID, V.VendorName, V.ContactInfo
-                    `;
+            } 
+            // else if (user === 'Complaint') {
+            //     try {
+            //         sql = id ? 
+            //         `
+            //         SELECT 
+            //             C.ComplaintID, 
+            //             C.ComplaintText, 
+            //             C.Status, 
+            //             DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
+            //             B.BusID, 
+            //             B.BusNumber, 
+            //             U.UserID, 
+            //             CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
+            //             V.VendorID, 
+            //             V.VendorName, 
+            //             V.ContactInfo 
+            //         FROM
+            //             COMPLAINT C
+            //         INNER JOIN 
+            //             BUS B ON C.BusID = B.BusID
+            //         INNER JOIN 
+            //             USERS U ON C.UserID = U.UserID
+            //         INNER JOIN
+            //             VENDOR V ON U.VendorID = V.VendorID
+            //         WHERE
+            //             C.ComplaintID = ?
+            //         GROUP BY
+            //             C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
+            //             V.VendorID, V.VendorName, V.ContactInfo
+            //         `
+            //         :
+            //         `
+            //         SELECT 
+            //             C.ComplaintID, 
+            //             C.ComplaintText, 
+            //             C.Status, 
+            //             DATE_FORMAT(C.DateField, '%Y-%m-%d') AS DateField, 
+            //             B.BusID, 
+            //             B.BusNumber, 
+            //             U.UserID, 
+            //             CONCAT(U.FirstName, ' ', U.LastName) AS UserName, 
+            //             V.VendorID, 
+            //             V.VendorName, 
+            //             V.ContactInfo 
+            //         FROM
+            //             COMPLAINT C
+            //         INNER JOIN 
+            //             BUS B ON C.BusID = B.BusID
+            //         INNER JOIN 
+            //             USERS U ON C.UserID = U.UserID
+            //         INNER JOIN
+            //             VENDOR V ON U.VendorID = V.VendorID
+            //         GROUP BY
+            //             C.ComplaintID, C.ComplaintText, C.Status, C.DateField, B.BusID, B.BusNumber, U.UserID, U.FirstName, U.LastName, 
+            //             V.VendorID, V.VendorName, V.ContactInfo
+            //         `;
                 
-                    [result] = await connection.query(sql, id ? [id] : []);
+            //         [result] = await connection.query(sql, id ? [id] : []);
                      
-                    const statusCounts = result.reduce((counts, complaint) => {
-                        const status = complaint.Status.toLowerCase();
-                        counts[status] = (counts[status] || 0) + 1;
-                        return counts;
-                    }, {});
+            //         const statusCounts = result.reduce((counts, complaint) => {
+            //             const status = complaint.Status.toLowerCase();
+            //             counts[status] = (counts[status] || 0) + 1;
+            //             return counts;
+            //         }, {});
 
                     
-                    const response =id? {
-                        complaints: result
-                    }
-                    :
-                    {
-                        totalComplaints: result.length,
-                        statusCounts: {
-                            pending: statusCounts.pending || 0,
-                            resolved: statusCounts.resolved || 0,
-                            inprogress: statusCounts.inprogress || 0
-                        },
-                        complaints: result
-                    }
-                    ;
+            //         const response =id? {
+            //             complaints: result
+            //         }
+            //         :
+            //         {
+            //             totalComplaints: result.length,
+            //             statusCounts: {
+            //                 pending: statusCounts.pending || 0,
+            //                 resolved: statusCounts.resolved || 0,
+            //                 inprogress: statusCounts.inprogress || 0
+            //             },
+            //             complaints: result
+            //         }
+            //         ;
 
-                    return res.status(200).json(response);
+            //         return res.status(200).json(response);
                 
-                } catch (error) {
-                    console.error('Error fetching Complaint data:', error);
-                    return res.status(500).send('Internal Server Error'); 
-                }                                
+            //     } catch (error) {
+            //         console.error('Error fetching Complaint data:', error);
+            //         return res.status(500).send('Internal Server Error'); 
+            //     }                                
 
-            } else if (user === 'Traffic Alert') {
+            // } 
+            
+            else if (user === 'Traffic Alert') {
                 try {
                     sql = id ? `
                         SELECT A.AlertID, A.AlertDetails,
@@ -634,10 +573,12 @@ export const driverDropDownView = async (req, res) => {
                         WHERE A.AlertID = ?
                     ` : `
                         SELECT A.AlertID, A.AlertDetails,
-                        DATE_FORMAT(A.Timestamp, '%Y-%m-%d') AS Date, TIME(A.Timestamp) AS Time,
+                        DATE_FORMAT(A.Timestamp, '%Y-%m-%d') AS Date,
+                        TIME(A.Timestamp) AS Time,
                         A.Severity, R.RouteID, R.RouteName
                         FROM TRAFFIC_ALERT A
                         INNER JOIN ROUTE R ON A.RouteID = R.RouteID
+                        WHERE DATE(A.Timestamp) = CURDATE();
                     `;
                 
                     
@@ -673,47 +614,46 @@ export const driverDropDownView = async (req, res) => {
             } else if (user === 'Notification') { 
                 try {
                     if (id) {
-                        
+                        // View specific notification by ID
                         sql = `SELECT N.NotificationID, N.NotificationText,
-                                DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
-                                N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
+                                    DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
+                                    N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
                                 FROM NOTIFICATION N
                                 INNER JOIN USERS U ON N.UserID = U.UserID
                                 WHERE N.NotificationID = ?`;
-                
+                        
                         [result] = await connection.query(sql, [id]);
+                        
                         if (result.length > 0) {
                             const response = {
                                 Notification: result
                             };
                             return res.status(200).json(response);
                         }
-                
-                        
+            
+                        // If no specific notification found, check for admin/vendor info
                         sql = `SELECT adminID, vendorID FROM NOTIFICATION WHERE NotificationID = ?`;
                         let [adminVendorCheck] = await connection.query(sql, [id]);
-                
+            
                         if (adminVendorCheck.length > 0) {
                             const { adminID, vendorID } = adminVendorCheck[0];
-                
+            
                             if (adminID) {
-                                
                                 sql = `SELECT N.NotificationID, N.NotificationText,
-                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
-                                        N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
+                                           DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
+                                           N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
                                         FROM NOTIFICATION N
                                         INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID
                                         WHERE N.NotificationID = ?`;
                             } else if (vendorID) {
-                               
                                 sql = `SELECT N.NotificationID, N.NotificationText,
-                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
-                                        N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
+                                           DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                           N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
                                         FROM NOTIFICATION N
                                         INNER JOIN VENDOR V ON N.vendorID = V.VendorID
                                         WHERE N.NotificationID = ?`;
                             }
-                
+            
                             if (sql) {  
                                 [result] = await connection.query(sql, [id]);
                                 const response = {
@@ -725,55 +665,53 @@ export const driverDropDownView = async (req, res) => {
                             }
                         }
                     } else {
-                        
+                        // View all notifications for the current date
                         let sql1 = `SELECT N.NotificationID, N.NotificationText,
                                     DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date,
                                     N.Type, U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName
                                     FROM NOTIFICATION N
-                                    INNER JOIN USERS U ON N.UserID = U.UserID`;
-                
+                                    INNER JOIN USERS U ON N.UserID = U.UserID
+                                    WHERE DATE(N.DateSent) = CURDATE();`;  // Current date check
+            
                         [result] = await connection.query(sql1);
-                
-                        
-                        let sql2 = `SELECT adminID, vendorID, NotificationID FROM NOTIFICATION`;
-                
+            
+                        let sql2 = `SELECT adminID, vendorID, NotificationID FROM NOTIFICATION WHERE DATE(DateSent) = CURDATE()`;
                         let adminVendorResults;
                         [adminVendorResults] = await connection.query(sql2);
-                
+            
                         let combinedAdminVendorResults = [];
                         for (let notification of adminVendorResults) {
                             let sql;
                             if (notification.adminID) {
                                 sql = `SELECT N.NotificationID, N.NotificationText,
-                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
-                                        N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
+                                           DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                           N.Type, UN.UniversityID AS AdminID, UN.UniversityName AS AdminName
                                         FROM NOTIFICATION N
                                         INNER JOIN UNIVERSITY UN ON N.adminID = UN.UniversityID
-                                        WHERE N.NotificationID = ?`;
+                                        WHERE N.NotificationID = ? AND DATE(N.DateSent) = CURDATE()`;
                             } else if (notification.vendorID) {
                                 sql = `SELECT N.NotificationID, N.NotificationText,
-                                        DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
-                                        N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
+                                           DATE_FORMAT(N.DateSent, '%Y-%m-%d') AS Date, 
+                                           N.Type, V.VendorID AS VendorID, V.VendorName AS VendorName
                                         FROM NOTIFICATION N
                                         INNER JOIN VENDOR V ON N.vendorID = V.VendorID
-                                        WHERE N.NotificationID = ?`;
+                                        WHERE N.NotificationID = ? AND DATE(N.DateSent) = CURDATE()`;
                             }
-                
+            
                             if (sql) {
                                 let [adminVendorResult] = await connection.query(sql, [notification.NotificationID]);
                                 combinedAdminVendorResults.push(...adminVendorResult);
                             }
                         }
-                
-                        
+            
                         let combinedResults = [...result, ...combinedAdminVendorResults].sort((a, b) => a.NotificationID - b.NotificationID);
-                
+            
                         const notificationCounts = combinedResults.reduce((counts, notification) => {
                             const type = notification.Type.toLowerCase();
                             counts[type] = (counts[type] || 0) + 1;
                             return counts;
                         }, {});
-                
+            
                         const response = {
                             totalNotification: combinedResults.length,
                             NotificationTypeCounts: {
@@ -783,72 +721,18 @@ export const driverDropDownView = async (req, res) => {
                             },
                             Notification: combinedResults
                         };
-                
+            
                         return res.status(200).json(response);
                     }
                 } catch (error) {
                     console.error('Error fetching Notification data:', error);
                     return res.status(500).send('Internal Server Error');
-                }
-                
-                                      
-
-            } else if (user === 'Payment') {
-                try{
-                    sql = id ? `
-                        SELECT P.PaymentID, P.Amount,
-                            DATE_FORMAT(P.PaymentDate, '%Y-%m-%d') AS Date, P.PaymentStatus,
-                            U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
-                            V.VendorID, V.VendorName
-                        FROM PAYMENT P
-                        INNER JOIN USERS U ON P.UserID = U.UserID
-                        INNER JOIN VENDOR V ON U.VendorID = V.VendorID
-                        WHERE P.PaymentID = ?
-
-                    ` : `
-                        SELECT P.PaymentID, P.Amount,
-                            DATE_FORMAT(P.PaymentDate, '%Y-%m-%d') AS Date, P.PaymentStatus,
-                            U.UserID, CONCAT(U.FirstName, ' ', U.LastName) AS UserName,
-                            V.VendorID, V.VendorName
-                        FROM PAYMENT P
-                        INNER JOIN USERS U ON P.UserID = U.UserID
-                        INNER JOIN VENDOR V ON U.VendorID = V.VendorID
-                    `;
-                
-                    
-                    [result] = await connection.query(sql, id ? [id] : []);
-                
-                    
-                    const PaymentCounts = result.reduce((counts, payment) => {
-                        const status = payment.PaymentStatus.toLowerCase();
-                        counts[status] = (counts[status] || 0) + 1;
-                        return counts;
-                    }, {});
-                
-                    
-                    const response = id ? {
-                        Payment: result
-                    } : {
-                        totalPayment: result.length,
-                        PaymentStatusCounts: {
-                            pending: PaymentCounts.pending || 0,
-                            warning: PaymentCounts.failed || 0,
-                            alert: PaymentCounts.paid || 0
-                        },
-                        Payment: result
-                    };
-                
-                    return res.status(200).json(response);
-                }
-                catch(error){
-                    console.error('Error fetching Payment data:', error);
-                    return res.status(500).send('Internal Server Error'); 
-                }
+                }                                      
 
             } else {
                 res.status(400).send('Invalid user type for view operation');
             }
-        }*/
+        }
     } catch (error) {
         console.error('Error occurred:', error);
         res.status(500).send('Internal server error');

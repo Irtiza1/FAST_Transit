@@ -12,7 +12,29 @@ export const adminDropDownView = async (req, res) => {
 
         
         if (operations === 'View') {
-            if (user === 'Vendor') {
+           if (user === 'User'){
+                try {
+                    let status = 'non-registered'
+                    sql = id ? 'SELECT * FROM USERS WHERE UserID = ? AND Status= ?' : 'SELECT * FROM USERS WHERE Status= ?';
+                    console.log('SQL Query:', sql);
+                    
+                    [result] = await connection.query(sql, id ? [id,status] : [status]);
+                    if (result.length === 0) {
+                        return res.status(404).send('User not found');
+                    }
+                    const users = result.map(user => ({
+                        UserID: user.UserID,
+                        UserName: user.FirstName + " " + user.LastName,
+                        Email: user.Email,
+                        ContactInfo: user.PhoneNumber,
+                    }));
+                    // console.log('yaha')
+                    return res.status(200).json({ users });
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+            } else if (user === 'Vendor') {
                 try {
                     sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
                     console.log('SQL Query:', sql);
@@ -436,7 +458,7 @@ export const adminDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber, 
                         B.BusID, 
                         B.BusNumber
                     FROM
@@ -458,7 +480,7 @@ export const adminDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber,  
                         B.BusID, 
                         B.BusNumber
                     FROM

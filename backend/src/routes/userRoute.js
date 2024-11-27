@@ -33,6 +33,6 @@ router.get('/Faculty', authorizeRole('Faculty'),  facultyDropDownView)
 //  authorizeRole('Driver'), 
 router.post('/Driver/dropdown/:operations/:user', /*authorizeRole('Driver'),*/ driverDropDownCreate)
 router.patch('/Driver/dropdown/:operations/:user', /*authorizeRole('Driver'),*/ driverDropDownUpdate)
-router.get('/Driver/dropdown/:operations/:user', /*authorizeRole('Driver'),*/  driverDropDownView)
+router.get('/Driver/dropdown/:operations/:user/:id?', /*authorizeRole('Driver'),*/  driverDropDownView)
 
 export default router;
