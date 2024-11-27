@@ -53,8 +53,8 @@ const AttendanceCard = ({ data }) => {
               <p>
                 <span className="font-medium">Shift:</span> {record.Shift}
               </p>
-              <p className="mt-4">
-                <span className="text-xs text-gray-200 font-semibold">
+              <p className="mt-6">
+                <span className="text-base text-gray-200 font-semibold">
                   {new Date(record.Timestamp).toLocaleString()}
                 </span>
               </p>

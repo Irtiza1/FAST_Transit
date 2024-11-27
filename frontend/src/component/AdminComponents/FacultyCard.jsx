@@ -1,6 +1,6 @@
 import React from "react";
-
-const FacultyCard = ({ faculty }) => {
+import DeleteDialogueBox from "../DeleteDialogueBox/DeleteDialogueBox";
+const FacultyCard = ({ faculty,handleCancelDelete,handleConfirmDelete,showDeleteModal,openDeleteModal }) => {
   return (
     <div className="my-2 bg-gray-800 text-gray-200 p-6 border border-gray-600 rounded transition-shadow duration-300 text-base">
       <h2 className="text-2xl font-semibold mb-4 text-gray-400">
@@ -47,6 +47,10 @@ const FacultyCard = ({ faculty }) => {
         <strong>Account Activated:</strong>{" "}
         {faculty.AccountActivated ? "Yes" : "No"}
       </p>
+      <button onClick={()=> openDeleteModal(faculty.FacultyID)} className="w-20 bg-red-800 bg-opacity-75  border border-red-800 hover:bg-red-900 hover:bg-opacity-75 rounded-lg bg- px-4 py-2 mt-4">
+        Delete
+      </button>
+      <DeleteDialogueBox handleCancelDelete = {handleCancelDelete} handleConfirmDelete={handleConfirmDelete} showDeleteModal={showDeleteModal}/>
     </div>
   );
 };

@@ -8,7 +8,7 @@ const TrafficAlert = ({ data }) => {
       {/* Overview Section */}
       <h2 className="text-3xl font-bold text-gray-200 mb-6">Traffic Alerts</h2>
       <div className="flex flex-col md:flex-row md:justify-end justify-center items-center m-1 mb-8">
-      <div className="flex flex-wrap md:justify-end justify-center  gap-4 mt-4 md:mt-0">
+      {data?.totalAlert > 1 && <div className="flex flex-wrap md:justify-end justify-center  gap-4 mt-4 md:mt-0">
         <div className="bg-gray-500 text-gray-200 bg-opacity-60  px-4 py-2 rounded-xl">
           Total Alerts: {totalAlert}
         </div> 
@@ -21,7 +21,7 @@ const TrafficAlert = ({ data }) => {
         <div className="bg-red-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded-xl">
           High Severity: {AlertSeverityCounts.high}
         </div>
-      </div>
+      </div>}
       </div>
 
       {/* Alert Details Section */}
@@ -44,7 +44,7 @@ const TrafficAlert = ({ data }) => {
                 {alert.RouteName}
               </div>
               <span
-                className={`bg-red-600 bg-opacity-60 text-gray-200 md:px-10 px-4 py-2 rounded-xl  ${
+                className={`bg-opacity-60 text-gray-200 md:px-10 md:py-2 md:text-base px-2 py-1 text-xs rounded-xl  ${
                   alert.Severity === "High"
                     ? "bg-red-600"
                     : alert.Severity === "Medium"
@@ -55,9 +55,9 @@ const TrafficAlert = ({ data }) => {
                 {alert.Severity}
               </span>
             </div>
-            <div className="flex justify-between mt-6">
+            <div className="md:flex md:justify-between mt-6">
             <p className="text-gray-400 mb-2">{alert.AlertDetails}</p>
-            <div className="text-medium text-gray-200">
+            <div className="text-base text-gray-200">
               <span className="font-medium">Date:</span> {alert.Date} |{" "}
               <span className="font-medium">Time:</span> {alert.Time}
             </div>

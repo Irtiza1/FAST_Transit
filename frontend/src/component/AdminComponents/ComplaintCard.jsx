@@ -19,23 +19,23 @@ const ComplaintCard = ({ data }) => {
       <h2 className="text-3xl font-bold text-gray-200 mb-6">
         Complaints Overview
       </h2>
-      <div className="flex flex-col md:flex-row justify-center items-center mb-8">
-        <div className="flex flex-wrap justify-center items-center gap-4 mt-4 md:mt-0">
-        <div className="bg-gray-500 text-gray-200 bg-opacity-60  px-4 py-2 rounded">
+      <div className="flex flex-col md:flex-row md:justify-end justify-center items-center m-1 mb-8">
+      {data?.totalComplaints > 1 && <div className="flex flex-wrap md:justify-end justify-center  gap-4 mt-4 md:mt-0">
+        <div className="bg-gray-500 text-gray-200 bg-opacity-60  px-4 py-2 rounded-xl">
             Total Complaints:{" "}
             <span className="text-gray-200">{totalComplaints}</span>
           </div>
-          <div className="bg-yellow-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded ">
+          <div className="bg-yellow-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded-xl ">
             Pending: {statusCounts.pending}
           </div>
-          <div className="bg-green-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded ">
+          <div className="bg-green-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded-xl ">
             Resolved: {statusCounts.resolved}
           </div>
-          <div className="bg-blue-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded">
+          <div className="bg-blue-600 bg-opacity-60 text-gray-200 px-4 py-2 rounded-xl">
             In Progress: {statusCounts.inprogress}
           </div>
           
-        </div>
+        </div>}
       </div>
 
       {/* Total Complaints */}
@@ -55,7 +55,7 @@ const ComplaintCard = ({ data }) => {
                 {complaint.UserName}
               </h3>
               <span
-                className={`text-sm font-medium px-3 py-1 rounded-md 
+                className={`bg-opacity-60 text-gray-200 md:px-10 md:py-2 md:text-base px-2 py-1 text-xs rounded-xl
                   ${
                     complaint.Status === "Pending"
                       ? "bg-yellow-600 bg-opacity-60 text-gray-200"
@@ -85,7 +85,7 @@ const ComplaintCard = ({ data }) => {
                 <strong className="text-gray-200">Vendor:</strong>{" "}
                 {complaint.VendorName} ({complaint.ContactInfo})
               </p>
-              <p>
+              <p className="mt-6">
                 <strong className="text-gray-200">Date:</strong>{" "}
                 {new Date(complaint.DateField).toLocaleDateString()}
               </p>

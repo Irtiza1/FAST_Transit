@@ -1,4 +1,5 @@
-const StudentCard = ({ student })=> {
+import DeleteDialogueBox from "../DeleteDialogueBox/DeleteDialogueBox";
+const StudentCard = ({ student,handleCancelDelete,handleConfirmDelete,showDeleteModal,openDeleteModal })=> {
   return (
     <div className=" my-2 bg-gray-800 text-gray-200 p-6 border border-gray-600 rounded transition-shadow duration-300 text-base">
       
@@ -56,6 +57,10 @@ const StudentCard = ({ student })=> {
         <strong>Registration Status:</strong>{" "}
         {student.RegisterationStatus || "N/A"}
       </p>
+      <button onClick={()=> openDeleteModal(student.StudentID)} className="w-20 bg-red-800 bg-opacity-75  border border-red-800 hover:bg-red-900 hover:bg-opacity-75 rounded-lg bg- px-4 py-2 mt-4">
+        Delete
+      </button>
+      <DeleteDialogueBox handleCancelDelete = {handleCancelDelete} handleConfirmDelete={handleConfirmDelete} showDeleteModal={showDeleteModal}/>
     </div>
   );
 }
