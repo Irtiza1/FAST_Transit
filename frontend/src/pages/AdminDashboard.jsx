@@ -17,6 +17,10 @@ import TrafficAlertCard from "../component/AdminComponents/TrafficAlertCard";
 import NotificationAddForm from "../component/AdminComponents/NotificationAddForm";
 import ContractAddForm from "../component/AdminComponents/ContractAddForm";
 import VendorAddForm from "../component/AdminComponents/VendorAddForm";
+import UserCard from "../component/AdminComponents/UserCard";
+import RouteCreationForm from "../component/RouteCreationForm/RouteCreationForm";
+import CreateRoutePage from "./CreateRoutePage";
+import axios from "axios";
 
 const AdminDashboard = () => {
   //admin data was stored in local storage on login
@@ -38,7 +42,7 @@ const AdminDashboard = () => {
   //operations and categories
   const operations = ["Add", "Update", "View"];
   const categories = {
-    Add: ["Vendor", "Contract", "Notification"],
+    Add: ["Vendor", "Contract", "Notification","Route"],
     Update: [
       "Vendor",
       "Student",
@@ -51,6 +55,7 @@ const AdminDashboard = () => {
     ],
     // Delete: ["Vendor", "Student", "Faculty", "Contract", "Route"],
     View: [
+      "User",
       "Vendor",
       "Student",
       "Faculty",
@@ -105,34 +110,81 @@ const AdminDashboard = () => {
       alert("Please provide an ID for this operation.");
       return;
     }
-
-    if (selectedOperation === "Add") {
+    //handle add for vendor contract and notification
+    if (selectedOperation === "Add" && (selectedCategory === "Vendor" || selectedCategory === "Contract" || selectedCategory === "Notificaton")) {
       if (!addOperationFormData) {
         alert("Please fill in all required fields.");
         return;
       }
       try {
-        const response = await fetch(
+        const response = await axios.post(
           `http://localhost:8000/admin/dropdown/Add/${selectedCategory}`,
+          addOperationFormData, // Data goes here
           {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(addOperationFormData),
+            headers: { "Content-Type": "application/json" }, // Headers go here
           }
         );
-        const result = await response.json();
-        console.log(result);
+        console.log(response.data);
         alert(`Successfully added new ${selectedCategory}!`);
+        // const response = await fetch(
+        //   `http://localhost:8000/admin/dropdown/Add/${selectedCategory}`,
+        //   {
+        //     method: "POST",
+        //     headers: { "Content-Type": "application/json" },
+        //     body: JSON.stringify(addOperationFormData),
+        //   }
+        // );
+        // const result = await response.json();
+        // console.log(result);
+        // alert(`Successfully added new ${selectedCategory}!`);
       } catch (error) {
         console.error("Error adding entity:", error);
       }
     }
-    // console.log(data)
+    //handle add for route and stops, it separates route and stops data and sends them to their respective apis 
+    if(selectedCategory === "Route" && selectedOperation === "Add"){
+      if (!addOperationFormData) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+      console.log(addOperationFormData)
+      try {
+        const routeData = {
+          RouteName :addOperationFormData.routeName , 
+          StartPoint:addOperationFormData.startPoint.StopName, 
+          EndPoint:addOperationFormData.endPoint.StopName
+        }
+        const response = await axios.post(`http://localhost:8000/admin/dropdown/Add/Route`,routeData)
+        const newRouteID =response.data.routeID
+        console.log(newRouteID)
+        try {
+          const routeStops = addOperationFormData.stops.map((stop)=>({
+            ...stop,
+            RouteID:newRouteID
+          }))
+          console.log(routeStops)
+          const responseFromStopApi = await axios.post(`http://localhost:8000/admin/dropdown/Add/Stop`,routeStops)
+          console.log(responseFromStopApi.data)
+          alert('Successfully added new Route')
+
+        } catch (error) {
+          console.log(error.message || error)
+        }
+        
+      } catch (error) {
+        console.log(error.message || error)
+      }
+    }
   };
 
   //this will render forms for add operations
   const renderAddForm = () => {
     switch (formState.selectedCategory) {
+      case "Route":
+        return(
+          <CreateRoutePage setAddFormData={setAddOperationFormData}
+          handleSubmitFromAdmin={handleSubmit} addFormData={addOperationFormData}/>
+        )
       case "Vendor":
         return (
           <VendorAddForm
@@ -209,6 +261,17 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
               {data.vendors.map((vendor) => (
                 <VendorCard key={vendor.VendorID} vendor={vendor} handleCancelDelete={handleCancelDelete} handleConfirmDelete={handleConfirmDelete} showDeleteModal={showDeleteModal} openDeleteModal={openDeleteModal}/>
+              ))}
+            </div>
+          </div>
+        )}
+        {data?.users?.length > 0 && (
+          // <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+          <div className=" mt-6">
+            <h1 className="text-gray-200 text-2xl  font-bold">Vendors</h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
+              {data.users.map((user) => (
+                <UserCard key={user.UserID} user={user} handleCancelDelete={handleCancelDelete} handleConfirmDelete={handleConfirmDelete} showDeleteModal={showDeleteModal} openDeleteModal={openDeleteModal}/>
               ))}
             </div>
           </div>

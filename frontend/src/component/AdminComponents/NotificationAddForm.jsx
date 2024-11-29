@@ -80,13 +80,13 @@ const NotificationAddForm = ({ setAddFormData,handleSubmit }) => {
             <option value="Alert">Alert</option>
           </select>
         </div>
-        <button
+        <div className="flex justify-center"><button
             type="submit"
             onClick={handleSubmit}
-            className="bg-yellow-600 w-full my-2 text-gray-900 p-3 rounded font-bold hover:bg-yellow-500 transition duration-300"
+            className="items-center bg-yellow-600 w-40 my-2 text-gray-900 p-3 rounded font-bold hover:bg-yellow-500 transition duration-300"
           >
             Submit
-          </button>
+          </button></div>
       </div>
     </div>
   );

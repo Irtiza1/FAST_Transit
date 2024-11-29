@@ -1,17 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  Polyline,
-  useMap,
-  useMapEvents,
-} from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import {MapContainer,TileLayer,Marker,Popup,Polyline,useMap,useMapEvents,} from "react-leaflet";import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import axios from "axios";
-import "tailwindcss/tailwind.css";
+import "tailwindcss/tailwind.css";//isko dekh bhai
 
 const icon = new L.Icon({
   iconUrl:
@@ -20,7 +11,8 @@ const icon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
-function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
+function RouteCreationForm({ routeData, setRouteData, existingRoute=null, setAddFormData}) {
+  //for the searching input, the results in return of search
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchedLocation, setSearchedLocation] = useState(null);
@@ -52,10 +44,13 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
   const addStop = (lat, lng, name = `Stop ${routeData.stops.length + 1}`) => {
     setSearchedLocation(null);
     const newStop = {
-      stopName: name,
-      latitude: lat,
-      longitude: lng,
-      estimatedArrivalTime: null,
+      RouteID:null,
+      StopName: name,
+      Latitude: lat,
+      Longitude: lng,
+      Address:" ",
+      EstimatedArrivalTime: " ",
+
     };
     setRouteData((prevData) => {
       const stops = [...prevData.stops, newStop];
@@ -74,6 +69,7 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
     });
   };
 
+  //currently for seaching places we are using a free api which gives reponse as latitude and longitude
   const searchLocation = async () => {
     if (searchInput.trim() === "") return;
     const response = await axios.get(
@@ -107,7 +103,7 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
     setRouteData((prevData) => {
       const updatedStops = prevData.stops.map((stop, i) => {
         if (i === index) {
-          return { ...stop, stopName: newName };
+          return { ...stop, StopName: newName };
         }
         return stop;
       });
@@ -124,6 +120,18 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
       });
     }
   }, [existingRoute]);
+
+  //this is done to utilize this component with admin panel of university as well,it will be used to update the state of addFormData which is send as prop from admin panel
+   useEffect(() => {
+    if (setAddFormData) {
+      setAddFormData((prevData) => ({
+        ...prevData,
+        ...routeData,
+      }));
+    }
+  }, [routeData, setAddFormData]);
+
+
   return (
     <>
       <div className="lg:flex lg:space-x-6 border border-gray-600 rounded px-4 py-8 my-6">
@@ -199,11 +207,11 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
             {routeData.stops.map((stop, index) => (
               <Marker
                 key={index}
-                position={[stop.latitude, stop.longitude]}
+                position={[stop.Latitude, stop.Longitude]}
                 icon={icon}
               >
                 <Popup>
-                  {stop.stopName}
+                  {stop.StopName}
                   <button
                     onClick={() => removeStop(index)}
                     className="bg-red-500 text-white px-2 py-1 rounded mt-2 block text-center w-full"
@@ -217,8 +225,8 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
             {routeData.stops.length > 1 && (
               <Polyline
                 positions={routeData.stops.map((stop) => [
-                  stop.latitude,
-                  stop.longitude,
+                  stop.Latitude,
+                  stop.Longitude,
                 ])}
                 color="blue"
               />
@@ -242,7 +250,7 @@ function RouteCreationForm({ routeData, setRouteData, existingRoute }) {
                   <span>
                     <input
                       type="text"
-                      value={stop.stopName}
+                      value={stop.StopName}
                       onChange={(e) =>
                         handleStopNameChange(index, e.target.value)
                       }
