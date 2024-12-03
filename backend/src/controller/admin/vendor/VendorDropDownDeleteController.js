@@ -1,6 +1,6 @@
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 
-export const adminDropDownDelete = async (req, res) => {
+export const vendorDropDownDelete = async (req, res) => {
     const { operations, user, id } = req.params;
     console.log("Operation:", operations);
     console.log("User:", user);
@@ -19,43 +19,14 @@ export const adminDropDownDelete = async (req, res) => {
 
         let sql = "";
         let params = [];
-
-        if (user === "Vendor") {
-            sql = id 
-                ? `DELETE FROM VENDOR WHERE VendorID = ?;` 
-                : `DELETE FROM VENDOR;`;
-            params = id ? [id] : [];
-        } else if (user === "User") {
-            sql = id 
-                ? `DELETE FROM USERS WHERE UserID = ?;` 
-                : `DELETE FROM USERS;`;
-            params = id ? [id] : [];
-        } else if (user === "Student") {
-            sql = id 
-                ? `DELETE FROM STUDENT WHERE StudentID = ?;` 
-                : `DELETE FROM STUDENT;`;
-            params = id ? [id] : [];
-        } else if (user === "Faculty") {
-            sql = id 
-                ? `DELETE FROM FACULTY WHERE FacultyID = ?;` 
-                : `DELETE FROM FACULTY;`;
-            params = id ? [id] : [];
-        } else if (user === "Contract") {
-            sql = id 
-                ? `DELETE FROM CONTRACT WHERE ContractID = ?;` 
-                : `DELETE FROM CONTRACT;`;
-            params = id ? [id] : [];
-        } else if (user === "Route") {
-            sql = id 
-                ? `DELETE FROM ROUTE WHERE RouteID = ?;` 
-                : `DELETE FROM ROUTE;`;
-            params = id ? [id] : [];
-        } else if (user === "Stop") {
-            sql = id 
-                ? `DELETE FROM STOP WHERE StopID = ?;` 
-                : `DELETE FROM STOP;`;
-            params = id ? [id] : [];
-        } else if (user === "Notification") {
+        /*
+            traffic alert
+            notification
+            bus
+            driver
+            
+        */
+        if (user === "Notification") {
             sql = id 
                 ? `DELETE FROM NOTIFICATION WHERE NotificationID = ?;` 
                 : `DELETE FROM NOTIFICATION;`;

@@ -1,6 +1,6 @@
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 
-export const adminDropDownView = async (req, res) => {
+export const vendorDropDownView = async (req, res) => {
     const { operations, user, id } = req.params;
     console.log('Operation:', operations);
     console.log('User:', user);
@@ -12,27 +12,7 @@ export const adminDropDownView = async (req, res) => {
 
 
         if (operations === 'View') {
-            if (user === 'Vendor') {
-                try {
-                    sql = id ? 'SELECT * FROM VENDOR WHERE VendorID = ?' : 'SELECT * FROM VENDOR';
-                    console.log('SQL Query:', sql);
-                    [result] = await connection.query(sql, id ? [id] : []);
-                    if (result.length === 0) {
-                        return res.status(404).send('Vendor not found');
-                    }
-                    const vendors = result.map(vendor => ({
-                        VendorID: vendor.VendorID,
-                        VendorName: vendor.VendorName,
-                        Email: vendor.Email,
-                        ContactInfo: vendor.ContactInfo,
-                    }));
-                    console.log('yaha')
-                    return res.status(200).json({ vendors });
-                } catch (error) {
-                    console.error('Error fetching vendor data:', error);
-                    return res.status(500).send('Internal Server Error');
-                }
-            } else if (user === 'Student') {
+            if (user === 'Student') {
                 try {
                     sql = id ? 
                         'SELECT * FROM STUDENT S INNER JOIN USERS U ON S.UserID = U.UserID INNER JOIN Department D ON S.DepartmentID = D.DepartmentID WHERE StudentID = ?' :
@@ -845,7 +825,15 @@ export const adminDropDownView = async (req, res) => {
                     return res.status(500).send('Internal Server Error'); 
                 }
 
-            } else {
+            } 
+            else if(user === 'Maintenance'){
+
+            }
+            else if (user === 'Point Card'){
+
+            }
+            
+            else {
                 res.status(400).send('Invalid user type for view operation');
             }
         }

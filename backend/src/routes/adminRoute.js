@@ -15,7 +15,10 @@ import { adminDropDownUpdate } from '../controller/admin/AdminDropDownUpdateCont
 // router.get('/',getAllUniversity)
 // router.get('/University', someAdminRoute )
 
-
+import { vendorDropDownCreate } from '../controller/admin/vendor/VendorDropDownCreateController.js';
+import { vendorDropDownUpdate } from '../controller/admin/vendor/VendorDropDownUpdateController.js';
+import { vendorDropDownView } from '../controller/admin/vendor/VendorDropDownViewController.js';
+import { vendorDropDownDelete } from '../controller/admin/vendor/VendorDropDownDeleteController.js';
 //login admin
 router.post('/login',LoginAdmin)
 //post notification
@@ -29,11 +32,15 @@ router.get('/activate/:token/:role',ActivateUser)
 //view profile
 router.get('/profile',viewProfile)
 
-//admin dropdown
+//Univeristy admin dropdown
 router.get("/dropdown/:operations/:user/:id?", adminDropDownView);
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
-router.patch("/dropdown/:operations/:user",adminDropDownUpdate)
-//add vendor  
+router.patch("/dropdown/:operations/:user",vendorDropDownUpdate)
 
+//Vendor admin dropdown
+router.get("/Vendor/dropdown/:operations/:user/:id?", vendorDropDownView);
+router.post("/Vendor/dropdown/:operations/:user",vendorDropDownCreate)
+router.delete("/Vendor/dropdown/:operations/:user/:id?",vendorDropDownDelete)
+router.patch("/Vendor/dropdown/:operations/:user",vendorDropDownUpdate)
 export default router;

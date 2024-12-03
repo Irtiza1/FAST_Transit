@@ -181,9 +181,9 @@
 //     }
 // };
 
-import connection from "../../db/index.js";
+import connection from "../../../db/index.js";
 
-export const adminDropDownUpdate = async (req, res) => {
+export const vendorDropDownUpdate = async (req, res) => {
     const updateData = req.body; // Get the whole update data from the request body
     const { operations, user } = req.params;
 
@@ -202,22 +202,31 @@ export const adminDropDownUpdate = async (req, res) => {
             Vendor: "VENDOR",
             Student: "STUDENT",
             Faculty: "FACULTY",
-            Contract: "CONTRACT",
-            Route: "ROUTE",
-            Stop: "STOP",
+            // Contract: "CONTRACT",
+            // Route: "ROUTE",
+            // Stop: "STOP",
             Complaint: "COMPLAINT",
-            Alert: "ALERT",
+            // Alert: "ALERT",
+            Bus: "BUS",
+            Driver : "DRIVER",
+            Payment: "PAYMENT",
+            Seat : "SEAT",
+            Card: "POINT_CARD",
+            Maintenance: "MAINTENANCE",
+
         };
 
         const idFieldMap = {
             Vendor: "VendorID",
             Student: "StudentID",
             Faculty: "FacultyID",
-            Contract: "ContractID",
-            Route: "RouteID",
-            Stop: "StopID",
             Complaint: "ComplaintID",
-            Alert: "AlertID",
+            Bus: "BusID",
+            DriverID: "DriverID",
+            Payment: "PaymentID",
+            Seat: "SeatID",
+            Card: "CardID",
+            Maintenance: "MaintenanceID",
         };
 
         if (!tableMap[user] || !idFieldMap[user]) {
