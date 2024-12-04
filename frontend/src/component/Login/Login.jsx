@@ -56,6 +56,23 @@ function Login() {
         alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
       }
     }
+    if (formData.Role === "Vendor") {
+      await sendData("http://localhost:8000/vendor/login", "POST", data);
+      console.log('response: ',response)
+      if (response?.token && response?.adminData) {
+        // Dispatch admin data and token to Redux
+        dispatch(
+          setAdminData({
+            adminData: response.adminData,
+            token: response.token,
+          })
+        );
+        alert("Login Successful");
+        navigate('/vendor')
+      } else if (error) {
+        alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
+      }
+    }
   };
 
   return (
