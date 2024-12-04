@@ -99,7 +99,7 @@ export const driverDropDownView = async (req, res) => {
                     return res.status(500).send('Internal Server Error');
                 }
                 
-            } else if (user === 'Stop') { //do check faculity quereis 
+            } else if (user === 'Stop') { //updated and working correctly!
 
                 try {
                     let id1, id2;
@@ -116,251 +116,75 @@ export const driverDropDownView = async (req, res) => {
                     console.log('id1: ',id1)
                     console.log('id2: ',id2)
                     
-                    const sqlStudents = id ? `
-                        SELECT 
-                            DISTINCT (ST.StudentID),
-                            CONCAT(S.StopID, '.', S.RouteID) AS StopID,
-                            S.StopName,
-                            S.Address,
-                            S.EstimatedArrivalTime AS PointArrivalTime,
-                            R.RouteName,
-                            COUNT(ST.StudentID) AS StudentCount,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS StudentName,
-                            U.PhoneNumber AS StudentContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            STUDENT ST ON U.UserID = ST.UserID
-                        WHERE 
-                            S.StopID = ? AND R.RouteID= ?
-                        GROUP BY 
-                            ST.StudentID
+                    const stop= id ? `
+                    SELECT S.StopID, S.RouteID, R.RouteName, S.StopName,S.Latitude,S.Longitude,S.Address,S.EstimatedArrivalTime FROM STOP S INNER JOIN ROUTE R ON S.RouteID = R.RouteID WHERE S.StopID = ? AND S.RouteID= ?;
                     ` : `
-                        SELECT 
-                            DISTINCT (ST.StudentID),
-                            CONCAT(S.StopID, '.', S.RouteID) AS StopID,
-                            S.StopName,
-                            S.Address,
-                            S.EstimatedArrivalTime AS PointArrivalTime,
-                            R.RouteName,
-                            COUNT(ST.StudentID) AS StudentCount,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS StudentName,
-                            U.PhoneNumber AS StudentContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            STUDENT ST ON U.UserID = ST.UserID
-                        GROUP BY 
-                            ST.StudentID
+                    SELECT S.StopID, S.RouteID, R.RouteName, S.StopName,S.Latitude,S.Longitude,S.Address,S.EstimatedArrivalTime FROM STOP S INNER JOIN ROUTE R ON S.RouteID = R.RouteID;
                     `;
-                    console.log(sqlStudents)
-                    const [studentResults] = await connection.query(sqlStudents, id ? [id1, id2] : []);
-                    console.log(studentResults)
-                    
-                    
-                    const sqlFaculties = id ? `
-                        SELECT
-                            F.FacultyID,  
-                            COUNT(DISTINCT F.FacultyID) AS FacultyCount,  
-                            CONCAT(U.FirstName, ' ', U.LastName) AS FacultyName,
-                            U.PhoneNumber AS FacultyContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID 
-                        JOIN 
-                            FACULTY F ON U.UserID = F.UserID 
-                        WHERE 
-                            U.Role = 'Faculty' AND S.StopID = ? AND R.RouteID = ?
-                        GROUP BY 
-                            F.FacultyID, U.FirstName, U.LastName, U.PhoneNumber  
-                        ` : `
-                        SELECT 
-                            F.FacultyID,  
-                            COUNT(DISTINCT F.FacultyID) AS FacultyCount,  
-                            CONCAT(U.FirstName, ' ', U.LastName) AS FacultyName,
-                            U.PhoneNumber AS FacultyContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            FACULTY F ON U.UserID = F.UserID
-                        WHERE 
-                            U.Role = 'Faculty'  
-                        GROUP BY 
-                            F.FacultyID, U.FirstName, U.LastName, U.PhoneNumber  
-                        `;
 
-                    console.log(sqlFaculties);
-                    const [facultyResults] = await connection.query(sqlFaculties, id ? [id1, id2] : []);
-                    console.log(facultyResults);
-
-            
-                    
-                    const sqlBusInfo = id ? `
-                        SELECT 
-                            DISTINCT (B.BusID),
-                            BV.VendorName,
-                            BV.ContactInfo AS BusVendorContactInfo,
-                            BD.DriverID,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName,
-                            U.PhoneNumber AS DriverContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            VENDOR BV ON B.VendorID = BV.VendorID
-                        JOIN 
-                            BUS_DRIVER BD ON B.BusID = BD.BusID
-                        JOIN 
-                            USERS U ON BD.DriverID = U.UserID
-                        WHERE 
-                            S.StopID = ? AND R.RouteID= ?
-                        GROUP BY 
-                            B.BusID
-                    ` : `
-                        SELECT 
-                            DISTINCT (B.BusID),
-                            BV.VendorName,
-                            BV.ContactInfo AS BusVendorContactInfo,
-                            BD.DriverID,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName,
-                            U.PhoneNumber AS DriverContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            VENDOR BV ON B.VendorID = BV.VendorID
-                        JOIN 
-                            BUS_DRIVER BD ON B.BusID = BD.BusID
-                        JOIN 
-                            USERS U ON BD.DriverID = U.UserID
-                        GROUP BY 
-                            B.BusID
-                    `;
-                    console.log(sqlBusInfo)
-                    const [busResults] = await connection.query(sqlBusInfo, id ? [id1, id2] : []);
-                    console.log(busResults)
-                    // Combine results into response object
-                    // const filteredFacultyData = facultyResults.map(faculty => {
-                    //     const { StopID, ...rest } = faculty; // Removes StopID from each faculty entry
-                    //     return rest;
-                    // });
-                    
-                    // const filteredBusData = busResults.map(bus => {
-                    //     const { StopID, ...rest } = bus; // Removes StopID from each bus entry
-                    //     return rest;
-                    // });
-                    
-            
-                    
-                    return res.status(200).json({
-                        students: studentResults,
-                        faculties: facultyResults,
-                        busInfo: busResults});
-            
+                    console.log(stop)
+                    const [stopResults] = await connection.query(stop, id ? [id1, id2] : []);
+                    console.log(stopResults)
+                    return res.status(200).json({Stops: stopResults});            
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     res.status(500).send('Internal Server Error');
                 }
-            } else if (user === 'Bus') {
+            } else if (user === 'Bus') { // updated the api and working perfectly
                 try {
-                    
-                    sql = id ? 
-                    `SELECT 
-                        B.BusID, 
-                        B.BusNumber, 
-                        B.DepartureTime, 
-                        B.ArrivalTime, 
-                        B.Status, 
-                        R.RouteID, 
-                        R.RouteName,
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo, 
-                        BD.DriverID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName
-                    FROM
-                        BUS B
-                    INNER JOIN 
-                        ROUTE R ON B.RouteID = R.RouteID
-                    INNER JOIN
-                        VENDOR V ON B.VendorID = V.VendorID
-                    INNER JOIN
-                        BUS_DRIVER BD ON B.DriverID = BD.DriverID
-                    INNER JOIN 
-                        USERS U ON BD.DriverID = U.UserID  
-                    WHERE 
-                        B.BusID = ?
-                    GROUP BY 
-                        B.BusID, B.BusNumber, B.DepartureTime, B.ArrivalTime, B.Status, R.RouteID, R.RouteName,
-                        V.VendorID, V.VendorName, V.ContactInfo, BD.DriverID, U.FirstName, U.LastName
-                    ` : 
-                    `SELECT 
-                        B.BusID, 
-                        B.BusNumber, 
-                        B.DepartureTime, 
-                        B.ArrivalTime, 
-                        B.Status, 
-                        R.RouteID, 
-                        R.RouteName,
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo, 
-                        BD.DriverID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName
-                    FROM
-                        BUS B
-                    INNER JOIN 
-                        ROUTE R ON B.RouteID = R.RouteID
-                    INNER JOIN
-                        VENDOR V ON B.VendorID = V.VendorID
-                    INNER JOIN
-                        BUS_DRIVER BD ON B.DriverID = BD.DriverID
-                    INNER JOIN 
-                        USERS U ON BD.DriverID = U.UserID 
-                    GROUP BY 
-                        B.BusID, B.BusNumber, B.DepartureTime, B.ArrivalTime, B.Status, R.RouteID, R.RouteName,
-                        V.VendorID, V.VendorName, V.ContactInfo, BD.DriverID, U.FirstName, U.LastName
-                    `;
-                
-                    [result] = await connection.query(sql, id ? [id] : []);
-                    console.log(result)
+                    sql = id
+                        ? `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                R.RouteName,
+                                B.VendorID, 
+                                V.VendorName,
+                                B.DriverID,
+                                U.FirstName
+                            FROM BUS B 
+                            INNER JOIN ROUTE R ON B.RouteID = R.RouteID
+                            INNER JOIN VENDOR V ON B.VendorID = V.VendorID
+                            INNER JOIN USERS U ON B.BusID = U.BusID
+                            WHERE B.BusID = ? AND U.Role= 'Driver';
+
+                        `
+                        : `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                R.RouteName,
+                                B.VendorID, 
+                                V.VendorName,
+                                B.DriverID,
+                                U.FirstName
+                            FROM BUS B 
+                            INNER JOIN ROUTE R ON B.RouteID = R.RouteID
+                            INNER JOIN VENDOR V ON B.VendorID = V.VendorID
+                            INNER JOIN USERS U ON B.BusID = U.BusID
+                            WHERE U.Role= 'Driver';
+                        `;
+            
+                    console.log('Executing SQL:', sql, id ? [id] : []);
+                    const [result] = await connection.query(sql, id ? [id] : []);
+            
+                    if (result.length === 0) {
+                        return res.status(404).send('No Bus data found.');
+                    }
+            
                     return res.status(200).json(result);
-                
                 } catch (error) {
                     console.error('Error fetching Bus data:', error);
-                    return res.status(500).send('Internal Server Error'); 
+                    return res.status(500).send('Internal Server Error');
                 }
-                 
-
             } else if (user === 'Driver') { 
                 try {
                     console.log('id: ', id)

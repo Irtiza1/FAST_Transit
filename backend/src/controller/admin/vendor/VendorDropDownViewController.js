@@ -1,3 +1,4 @@
+//job done
 import connection from "../../../db/index.js";
 
 export const vendorDropDownView = async (req, res) => {
@@ -26,20 +27,20 @@ export const vendorDropDownView = async (req, res) => {
                         StudentID: student.StudentID,
                         FirstName: student.FirstName,
                         LastName: student.LastName,
-                        DepartmentName: student.DepartmentName,
+                        /*DepartmentName: student.DepartmentName,
                         Batch: student.Batch,
-                        Semester: student.Semester,
+                        Semester: student.Semester,*/
                         Email: student.Email,
                         ContactInfo: student.PhoneNumber,
                         Gender: student.Gender,
-                        CNIC: student.CNIC,
-                        Role: student.Role,
+                        // CNIC: student.CNIC,
+                        // Role: student.Role,
                         Location: student.Location,
                         BusID: student.BusID,
                         SeatID: student.SeatID,
                         VendorID: student.VendorID,
-                        AccountActivated: student.isActive,
-                        RegisterationStatus: student.status,
+                        // AccountActivated: student.isActive,
+                        // RegisterationStatus: student.status,
                     }));
                     return res.status(200).json({ students });
                 } catch (error) {
@@ -60,17 +61,17 @@ export const vendorDropDownView = async (req, res) => {
                         FacultyID: faculty.FacultyID,
                         FirstName: faculty.FirstName,
                         LastName: faculty.LastName,
-                        DepartmentName: faculty.DepartmentName,
+                        // DepartmentName: faculty.DepartmentName,
                         Email: faculty.Email,
                         ContactInfo: faculty.PhoneNumber,
                         Gender: faculty.Gender,
-                        CNIC: faculty.CNIC,
-                        Role: faculty.Role,
+                        /*CNIC: faculty.CNIC,
+                        Role: faculty.Role,*/
                         Location: faculty.Location,
                         BusID: faculty.BusID,
                         SeatID: faculty.SeatID,
                         VendorID: faculty.VendorID,
-                        AccountActivated: faculty.isActive,
+                        // AccountActivated: faculty.isActive,
                     }));
                     return res.status(200).json({ faculties });
                 } catch (error) {
@@ -144,7 +145,7 @@ export const vendorDropDownView = async (req, res) => {
                     return res.status(500).send('Internal Server Error');
                 }
                 
-            } else if (user === 'Stop') { //do check faculity quereis 
+            } else if (user === 'Stop') { //updated and working correctly!
 
                 try {
                     let id1, id2;
@@ -161,250 +162,75 @@ export const vendorDropDownView = async (req, res) => {
                     console.log('id1: ',id1)
                     console.log('id2: ',id2)
                     
-                    const sqlStudents = id ? `
-                        SELECT 
-                            DISTINCT (ST.StudentID),
-                            CONCAT(S.StopID, '.', S.RouteID) AS StopID,
-                            S.StopName,
-                            S.Address,
-                            S.EstimatedArrivalTime AS PointArrivalTime,
-                            R.RouteName,
-                            COUNT(ST.StudentID) AS StudentCount,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS StudentName,
-                            U.PhoneNumber AS StudentContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            STUDENT ST ON U.UserID = ST.UserID
-                        WHERE 
-                            S.StopID = ? AND R.RouteID= ?
-                        GROUP BY 
-                            ST.StudentID
+                    const stop= id ? `
+                    SELECT S.StopID, S.RouteID, R.RouteName, S.StopName,S.Latitude,S.Longitude,S.Address,S.EstimatedArrivalTime FROM STOP S INNER JOIN ROUTE R ON S.RouteID = R.RouteID WHERE S.StopID = ? AND S.RouteID= ?;
                     ` : `
-                        SELECT 
-                            DISTINCT (ST.StudentID),
-                            CONCAT(S.StopID, '.', S.RouteID) AS StopID,
-                            S.StopName,
-                            S.Address,
-                            S.EstimatedArrivalTime AS PointArrivalTime,
-                            R.RouteName,
-                            COUNT(ST.StudentID) AS StudentCount,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS StudentName,
-                            U.PhoneNumber AS StudentContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            STUDENT ST ON U.UserID = ST.UserID
-                        GROUP BY 
-                            ST.StudentID
+                    SELECT S.StopID, S.RouteID, R.RouteName, S.StopName,S.Latitude,S.Longitude,S.Address,S.EstimatedArrivalTime FROM STOP S INNER JOIN ROUTE R ON S.RouteID = R.RouteID;
                     `;
-                    console.log(sqlStudents)
-                    const [studentResults] = await connection.query(sqlStudents, id ? [id1, id2] : []);
-                    console.log(studentResults)
-                    
-                    
-                    const sqlFaculties = id ? `
-                        SELECT
-                            F.FacultyID,  
-                            COUNT(DISTINCT F.FacultyID) AS FacultyCount,  
-                            CONCAT(U.FirstName, ' ', U.LastName) AS FacultyName,
-                            U.PhoneNumber AS FacultyContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID 
-                        JOIN 
-                            FACULTY F ON U.UserID = F.UserID 
-                        WHERE 
-                            U.Role = 'Faculty' AND S.StopID = ? AND R.RouteID = ?
-                        GROUP BY 
-                            F.FacultyID, U.FirstName, U.LastName, U.PhoneNumber  
-                        ` : `
-                        SELECT 
-                            F.FacultyID,  
-                            COUNT(DISTINCT F.FacultyID) AS FacultyCount,  
-                            CONCAT(U.FirstName, ' ', U.LastName) AS FacultyName,
-                            U.PhoneNumber AS FacultyContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            USERS U ON B.BusID = U.UserID
-                        JOIN 
-                            FACULTY F ON U.UserID = F.UserID
-                        WHERE 
-                            U.Role = 'Faculty'  
-                        GROUP BY 
-                            F.FacultyID, U.FirstName, U.LastName, U.PhoneNumber  
-                        `;
 
-                    console.log(sqlFaculties);
-                    const [facultyResults] = await connection.query(sqlFaculties, id ? [id1, id2] : []);
-                    console.log(facultyResults);
-
-            
-                    
-                    const sqlBusInfo = id ? `
-                        SELECT 
-                            DISTINCT (B.BusID),
-                            BV.VendorName,
-                            BV.ContactInfo AS BusVendorContactInfo,
-                            BD.DriverID,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName,
-                            U.PhoneNumber AS DriverContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            VENDOR BV ON B.VendorID = BV.VendorID
-                        JOIN 
-                            BUS_DRIVER BD ON B.BusID = BD.BusID
-                        JOIN 
-                            USERS U ON BD.DriverID = U.UserID
-                        WHERE 
-                            S.StopID = ? AND R.RouteID= ?
-                        GROUP BY 
-                            B.BusID
-                    ` : `
-                        SELECT 
-                            DISTINCT (B.BusID),
-                            BV.VendorName,
-                            BV.ContactInfo AS BusVendorContactInfo,
-                            BD.DriverID,
-                            CONCAT(U.FirstName, ' ', U.LastName) AS DriverName,
-                            U.PhoneNumber AS DriverContactInfo
-                        FROM 
-                            STOP S
-                        JOIN 
-                            ROUTE R ON S.RouteID = R.RouteID
-                        JOIN 
-                            BUS B ON R.RouteID = B.RouteID
-                        JOIN 
-                            VENDOR BV ON B.VendorID = BV.VendorID
-                        JOIN 
-                            BUS_DRIVER BD ON B.BusID = BD.BusID
-                        JOIN 
-                            USERS U ON BD.DriverID = U.UserID
-                        GROUP BY 
-                            B.BusID
-                    `;
-                    console.log(sqlBusInfo)
-                    const [busResults] = await connection.query(sqlBusInfo, id ? [id1, id2] : []);
-                    console.log(busResults)
-                    // Combine results into response object
-                    // const filteredFacultyData = facultyResults.map(faculty => {
-                    //     const { StopID, ...rest } = faculty; // Removes StopID from each faculty entry
-                    //     return rest;
-                    // });
-                    
-                    // const filteredBusData = busResults.map(bus => {
-                    //     const { StopID, ...rest } = bus; // Removes StopID from each bus entry
-                    //     return rest;
-                    // });
-                    
-            
-                    
-                    return res.status(200).json({
-                        students: studentResults,
-                        faculties: facultyResults,
-                        busInfo: busResults});
-            
+                    console.log(stop)
+                    const [stopResults] = await connection.query(stop, id ? [id1, id2] : []);
+                    console.log(stopResults)
+                    return res.status(200).json({Stops: stopResults});                 
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     res.status(500).send('Internal Server Error');
                 }
-            } else if (user === 'Bus') {
+            } else if (user === 'Bus') { // updated the api and working perfectly
                 try {
-                    
-                    sql = id ? 
-                    `SELECT 
-                        B.BusID, 
-                        B.BusNumber, 
-                        B.DepartureTime, 
-                        B.ArrivalTime, 
-                        B.Status, 
-                        R.RouteID, 
-                        R.RouteName,
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo, 
-                        BD.DriverID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName
-                    FROM
-                        BUS B
-                    INNER JOIN 
-                        ROUTE R ON B.RouteID = R.RouteID
-                    INNER JOIN
-                        VENDOR V ON B.VendorID = V.VendorID
-                    INNER JOIN
-                        BUS_DRIVER BD ON B.DriverID = BD.DriverID
-                    INNER JOIN 
-                        USERS U ON BD.DriverID = U.UserID  
-                    WHERE 
-                        B.BusID = ?
-                    GROUP BY 
-                        B.BusID, B.BusNumber, B.DepartureTime, B.ArrivalTime, B.Status, R.RouteID, R.RouteName,
-                        V.VendorID, V.VendorName, V.ContactInfo, BD.DriverID, U.FirstName, U.LastName
-                    ` : 
-                    `SELECT 
-                        B.BusID, 
-                        B.BusNumber, 
-                        B.DepartureTime, 
-                        B.ArrivalTime, 
-                        B.Status, 
-                        R.RouteID, 
-                        R.RouteName,
-                        V.VendorID, 
-                        V.VendorName, 
-                        V.ContactInfo, 
-                        BD.DriverID, 
-                        CONCAT(U.FirstName, ' ', U.LastName) AS DriverName
-                    FROM
-                        BUS B
-                    INNER JOIN 
-                        ROUTE R ON B.RouteID = R.RouteID
-                    INNER JOIN
-                        VENDOR V ON B.VendorID = V.VendorID
-                    INNER JOIN
-                        BUS_DRIVER BD ON B.DriverID = BD.DriverID
-                    INNER JOIN 
-                        USERS U ON BD.DriverID = U.UserID 
-                    GROUP BY 
-                        B.BusID, B.BusNumber, B.DepartureTime, B.ArrivalTime, B.Status, R.RouteID, R.RouteName,
-                        V.VendorID, V.VendorName, V.ContactInfo, BD.DriverID, U.FirstName, U.LastName
-                    `;
-                
-                    [result] = await connection.query(sql, id ? [id] : []);
+                    sql = id
+                        ? `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                R.RouteName,
+                                B.VendorID, 
+                                V.VendorName,
+                                B.DriverID,
+                                U.FirstName
+                            FROM BUS B 
+                            INNER JOIN ROUTE R ON B.RouteID = R.RouteID
+                            INNER JOIN VENDOR V ON B.VendorID = V.VendorID
+                            INNER JOIN USERS U ON B.BusID = U.BusID
+                            WHERE B.BusID = ? AND U.Role= 'Driver';
+
+                        `
+                        : `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                R.RouteName,
+                                B.VendorID, 
+                                V.VendorName,
+                                B.DriverID,
+                                U.FirstName
+                            FROM BUS B 
+                            INNER JOIN ROUTE R ON B.RouteID = R.RouteID
+                            INNER JOIN VENDOR V ON B.VendorID = V.VendorID
+                            INNER JOIN USERS U ON B.BusID = U.BusID
+                            WHERE U.Role= 'Driver';
+                        `;
+            
+                    console.log('Executing SQL:', sql, id ? [id] : []);
+                    const [result] = await connection.query(sql, id ? [id] : []);
+            
+                    if (result.length === 0) {
+                        return res.status(404).send('No Bus data found.');
+                    }
+            
                     return res.status(200).json(result);
-                
                 } catch (error) {
                     console.error('Error fetching Bus data:', error);
-                    return res.status(500).send('Internal Server Error'); 
+                    return res.status(500).send('Internal Server Error');
                 }
-                 
-
             } else if (user === 'Driver') { 
                 try {
                     console.log('id: ', id)
@@ -416,7 +242,7 @@ export const vendorDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber, 
                         B.BusID, 
                         B.BusNumber
                     FROM
@@ -438,7 +264,7 @@ export const vendorDropDownView = async (req, res) => {
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  -- Ensure 'LicenseNumber' is a column in BUS_DRIVER or adjust if necessary
+                        BD.LicenseNumber,  
                         B.BusID, 
                         B.BusNumber
                     FROM
@@ -516,6 +342,8 @@ export const vendorDropDownView = async (req, res) => {
                 }
 
             } else if (user === 'Complaint') {
+                //here id is of the vendor who is viewing complaints
+                
                 try {
                     sql = id ? 
                     `
@@ -774,6 +602,7 @@ export const vendorDropDownView = async (req, res) => {
                                       
 
             } else if (user === 'Payment') {
+               //id should be of the vendor that is accessing it
                 try{
                     sql = id ? `
                         SELECT P.PaymentID, P.Amount,
@@ -825,15 +654,67 @@ export const vendorDropDownView = async (req, res) => {
                     return res.status(500).send('Internal Server Error'); 
                 }
 
-            } 
-            else if(user === 'Maintenance'){
-
-            }
-            else if (user === 'Point Card'){
-
-            }
+            } else if (user === 'Maintenance') {
+                try {
+                    sql = id
+                        ? `
+                            SELECT 
+                                M.MaintenanceID,
+                                M.IssueDetails,
+                                M.Status,
+                                DATE_FORMAT(M.MaintenanceDate, '%Y-%m-%d') AS MaintenanceDate,
+                                B.BusID, B.BusNumber,
+                                V.VendorID, V.VendorName
+                            FROM MAINTENANCE M
+                            INNER JOIN BUS B ON M.BusID = B.BusID
+                            INNER JOIN VENDOR V ON M.VendorID = V.VendorID
+                            WHERE M.MaintenanceID = ?
+                        `
+                        : `
+                            SELECT 
+                                M.MaintenanceID,
+                                M.IssueDetails,
+                                M.Status,
+                                DATE_FORMAT(M.MaintenanceDate, '%Y-%m-%d') AS MaintenanceDate,
+                                B.BusID, B.BusNumber,
+                                V.VendorID, V.VendorName
+                            FROM MAINTENANCE M
+                            INNER JOIN BUS B ON M.BusID = B.BusID
+                            INNER JOIN VENDOR V ON M.VendorID = V.VendorID
+                        `;
             
-            else {
+                    // Execute SQL query with or without ID filter
+                    const [result] = await connection.query(sql, id ? [id] : []);
+            
+                    // Count Maintenance records based on their status
+                    const MaintenanceCounts = result.reduce((counts, maintenance) => {
+                        const status = maintenance.Status.toLowerCase();
+                        counts[status] = (counts[status] || 0) + 1;
+                        return counts;
+                    }, {});
+            
+                    // Prepare response object
+                    const response = id
+                        ? {
+                            Maintenance: result
+                        }
+                        : {
+                            totalMaintenance: result.length,
+                            MaintenanceStatusCounts: {
+                                pending: MaintenanceCounts.pending || 0,
+                                in_progress: MaintenanceCounts['in progress'] || 0,
+                                completed: MaintenanceCounts.completed || 0
+                            },
+                            Maintenance: result
+                        };
+            
+                    // Return response
+                    return res.status(200).json(response);
+                } catch (error) {
+                    console.error('Error fetching Maintenance data:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+            } else {
                 res.status(400).send('Invalid user type for view operation');
             }
         }

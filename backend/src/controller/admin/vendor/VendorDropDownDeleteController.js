@@ -1,3 +1,4 @@
+//done job
 import connection from "../../../db/index.js";
 
 export const vendorDropDownDelete = async (req, res) => {
@@ -19,20 +20,38 @@ export const vendorDropDownDelete = async (req, res) => {
 
         let sql = "";
         let params = [];
-        /*
-            traffic alert
-            notification
-            bus
-            driver
-            
-        */
-        if (user === "Notification") {
-            sql = id 
-                ? `DELETE FROM NOTIFICATION WHERE NotificationID = ?;` 
-                : `DELETE FROM NOTIFICATION;`;
-            params = id ? [id] : [];
-        } else {
-            return res.status(400).send("Invalid user type specified");
+
+        switch (user) {
+            case "Notification":
+                sql = id 
+                    ? `DELETE FROM NOTIFICATION WHERE NotificationID = ?;` 
+                    : `DELETE FROM NOTIFICATION;`;
+                params = id ? [id] : [];
+                break;
+
+            case "Traffic Alert":
+                sql = id 
+                    ? `DELETE FROM TRAFFIC_ALERT WHERE AlertID = ?;` 
+                    : `DELETE FROM TRAFFIC_ALERT;`;
+                params = id ? [id] : [];
+                break;
+
+            case "Bus":
+                sql = id 
+                    ? `DELETE FROM BUS WHERE BusID = ?;` 
+                    : `DELETE FROM BUS;`;
+                params = id ? [id] : [];
+                break;
+
+            case "Driver":
+                sql = id 
+                    ? `DELETE FROM BUS_DRIVER WHERE DriverID = ?;` 
+                    : `DELETE FROM BUS_DRIVER;`;
+                params = id ? [id] : [];
+                break;
+
+            default:
+                return res.status(400).send("Invalid user type specified");
         }
 
         console.log("SQL Query:", sql);
