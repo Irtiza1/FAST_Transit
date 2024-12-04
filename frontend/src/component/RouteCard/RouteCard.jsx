@@ -8,6 +8,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { LoadingAnimation } from '../LoadingAnimation';
 
 const icon = new L.Icon({
   iconUrl:
@@ -17,6 +18,9 @@ const icon = new L.Icon({
 });
 
 function RouteCard({ routeStops }) {
+  if(!routeStops){
+    return <LoadingAnimation/>
+  }
   return (
     <div className="bg-gray-800 border border-gray-600 rounded p-6 mb-8">
       <h2 className="text-2xl font-bold mb-4 text-gray-100">Route Stops</h2>
@@ -24,8 +28,8 @@ function RouteCard({ routeStops }) {
         {/* Route Map */}
         <div className="lg:w-1/2 z-0">
           <MapContainer
-            center={[24.8607, 67.0011]}
-            zoom={13}
+            center={[routeStops[0]?.Latitude, routeStops[0]?.Longitude]}
+            zoom={12}
             style={{ height: "400px" }}
             className="rounded-lg shadow-lg z-0"
           >

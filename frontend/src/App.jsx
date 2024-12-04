@@ -28,7 +28,7 @@ function App() {
           <Route path="buses/:id" element={<BusDetailPage />} />
           <Route path="create-bus" element={<CreateBusPage />} />
           <Route path="routes" element={<RoutesPage />} />
-          <Route path="route/:id" element={<RouteDetailPage />} />
+          <Route path="route/:routeId" element={<RouteDetailPage />} />
           <Route path="create-route" element={<CreateRoutePage />} />
           <Route path="drivers" element={<DriversPage />} />
           <Route path="register-driver" element={<RegisterDriverPage />} />

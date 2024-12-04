@@ -2,23 +2,34 @@ import React, { useEffect, useState } from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import { LoadingAnimation } from "../component/LoadingAnimation";
+import useFetch from "../hooks/useFetch";
+import { useDispatch } from "react-redux";
+import { setRouteData } from "../features/routeSlice";
+import { useSelector } from "react-redux";
 
 const RoutesPage = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [routes, setRoutes] = useState([
-    { id: 1, name: "Route 1", startPoint: "Downtown", endPoint: "Uptown" },
-    { id: 2, name: "Route 2", startPoint: "Westside", endPoint: "Eastside" },
-    { id: 3, name: "Route 3", startPoint: "North", endPoint: "South" },
-  ]);
+  const dispatch = useDispatch();
 
+  const [searchTerm, setSearchTerm] = useState("");  
+  const [url, setUrl] = useState(null);
+  const { data, loading, error, setError, setLoading, setData } = useFetch(url);
+  if(data?.routes){
+    dispatch(setRouteData({
+      routeData:data.routes
+    }))
+  }
+  const adminData = useSelector((state)=>state.route)
+  console.log(adminData)
+  // setRoutes(useSelector((state)=> state.route))
+  // console.log(routes)
   useEffect(() => {
-    // URL of the page will contain vendor ID
-    // Use vendor ID to fetch all registered routes by this vendor from the database
-    // axios.get(`api/routes?vendorId=${vendorId}`)
-    //   .then(response => setRoutes(response.data))
-    //   .catch(error => console.error("Error fetching routes", error));
+    setUrl('http://localhost:8000/admin/Vendor/dropdown/View/Route');
+    console.log(data)
   }, []);
-
+  if(loading){
+    return <LoadingAnimation/>
+  }
   return (
     <div className="bg-gray-950 p-8">
       <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-600 rounded">
@@ -43,34 +54,34 @@ const RoutesPage = () => {
             </div>
 
             {/* Add Route Button */}
-            <Link to='/vendor/create-route' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
+            {/* <Link to='/vendor/create-route' className="flex items-center bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold lg:px-4 lg:py-2 md:px-4 md:py-2 p-1 rounded text-sm">
               <FaPlus className="mr-2 text-sm" /> Add New Route
-            </Link>
+            </Link> */}
           </div>
         </div>
 
         {/* Route Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {routes
+          {data?.routes
             .filter(
               (route) =>
-                route.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                route.startPoint.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                route.endPoint.toLowerCase().includes(searchTerm.toLowerCase())
+                route.RouteName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                route.RouteStartPoint.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                route.RouteEndPoint.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((route) => (
-              <Link to={`/vendor/route/${route.id}`}
+              <Link to={`/vendor/route/${route.RouteID}`}
                 key={route.id}
                 className="bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-900 hover:shadow-lg transition-shadow duration-200"
               >
                 <h2 className="text-lg font-semibold text-yellow-500 mb-2">
-                  {route.name}
+                  {route.RouteName}
                 </h2>
                 <p className="text-gray-400 mb-1">
-                  <span className="font-medium text-gray-200">Start Point:</span> {route.startPoint}
+                  <span className="font-medium text-gray-200">Start Point:</span> {route.RouteStartPoint}
                 </p>
                 <p className="text-gray-400">
-                  <span className="font-medium text-gray-200">End Point:</span> {route.endPoint}
+                  <span className="font-medium text-gray-200">End Point:</span> {route.RouteEndPoint}
                 </p>
               </Link>
             ))}

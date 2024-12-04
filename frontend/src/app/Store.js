@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import adminReducer from "../features/adminSlice.js";
+import routeReducer from "../features/routeSlice.js"
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   admin: adminReducer,
+  route: routeReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

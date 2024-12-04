@@ -126,17 +126,6 @@ const AdminDashboard = () => {
         );
         console.log(response.data);
         alert(`Successfully added new ${selectedCategory}!`);
-        // const response = await fetch(
-        //   `http://localhost:8000/admin/dropdown/Add/${selectedCategory}`,
-        //   {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify(addOperationFormData),
-        //   }
-        // );
-        // const result = await response.json();
-        // console.log(result);
-        // alert(`Successfully added new ${selectedCategory}!`);
       } catch (error) {
         console.error("Error adding entity:", error);
       }
@@ -166,7 +155,7 @@ const AdminDashboard = () => {
           const responseFromStopApi = await axios.post(`http://localhost:8000/admin/dropdown/Add/Stop`,routeStops)
           console.log(responseFromStopApi.data)
           alert('Successfully added new Route')
-
+          formState.selectedCategory=""
         } catch (error) {
           console.log(error.message || error)
         }

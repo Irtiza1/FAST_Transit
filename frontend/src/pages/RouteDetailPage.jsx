@@ -2,35 +2,18 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { RouteCard } from "../component/RouteCard";
 import { LoadingAnimation } from "../component/LoadingAnimation";
+import { useSelector } from "react-redux";
 function RouteDetailPage() {
   const { routeId } = useParams();
-  const [routeDetails, setRouteDetails] = useState(null);
-
+  const numericRouteId = Number(routeId); 
+  // const [routeDetails, setRouteDetails] = useState(null);
+  const routeData = useSelector((state)=>state.route.routeData)
+  const [routeDetails,setRouteDetails] = useState(null)
+  console.log(routeData)
   useEffect(() => {
-    // Commenting out the API call for now; using dummy data instead
-    // axios.get(`/api/routes/${routeId}`)
-    //   .then((response) => {
-    //     setRouteDetails(response.data);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching route details:", error);
-    //   });
-
-    // Dummy data for testing
-    setRouteDetails({
-      id: 1,
-      name: "Downtown to Uptown Express",
-      startPoint: "Downtown",
-      endPoint: "Uptown",
-      distance: 15.4,
-      estimatedDuration: "30 minutes",
-      stops: [
-        { stopName: "Downtown Station", latitude: 24.8607, longitude: 67.0011, estimatedArrivalTime: "08:30 AM" },
-        { stopName: "Central Park", latitude: 24.8655, longitude: 67.0099, estimatedArrivalTime: "08:45 AM" },
-        { stopName: "Uptown Station", latitude: 24.8705, longitude: 67.0153, estimatedArrivalTime: "09:00 AM" }
-      ]
-    });
-  }, [routeId]);
+    const foundRoute = routeData.find((route) => route.RouteID === numericRouteId);
+    setRouteDetails(foundRoute); // Updates state only once per change in dependencies
+  }, [routeId, routeData]);
 
   if (!routeDetails) {
     return <> <LoadingAnimation/> </>;
@@ -44,26 +27,27 @@ function RouteDetailPage() {
         </h2>
         {/* Route Information */}
         <div className="mb-8 text-gray-400">
+        <p className=" mb-2">
+            <span className="font-semibold text-gray-200">Route ID:</span> {routeDetails.RouteID}
+          </p>
           <p className="text-lg font-bold text-yellow-500 ">
-          <span className="text-lg font-semibold text-gray-200">Route Name: </span>{routeDetails.name}
+          <span className="text-lg font-semibold text-gray-200">Route Name: </span>{routeDetails.RouteName}
           </p>
           <p className=" mb-2">
-            <span className="font-semibold text-gray-200">Start Point:</span> {routeDetails.startPoint}
+            <span className="font-semibold text-gray-200">Start Point:</span> {routeDetails.RouteStartPoint}
           </p>
           <p className=" mb-2">
-            <span className="font-semibold text-gray-200">End Point:</span> {routeDetails.endPoint}
+            <span className="font-semibold text-gray-200">End Point:</span> {routeDetails.RouteEndPoint}
           </p>
           <p className=" mb-2">
-            <span className="font-semibold text-gray-200">Distance:</span> {routeDetails.distance} km
+            <span className="font-semibold text-gray-200">Number of stops:</span> {routeDetails.NumberOfStops}
           </p>
-          <p className=" mb-2">
-            <span className="font-semibold text-gray-200">Estimated Duration:</span> {routeDetails.estimatedDuration}
-          </p>
+        
+          
         </div>
 
         {/* Route Stops with Map */}
-        {/* <RouteCard routeStops={routeDetails.stops} /> */}
-        <RouteCard />
+        <RouteCard routeStops={routeDetails?.StopDetails} />
       </div>
     </div>
   );

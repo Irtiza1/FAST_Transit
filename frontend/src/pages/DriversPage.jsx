@@ -1,53 +1,69 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch, FaPlus, FaEllipsisV } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
+import { LoadingAnimation } from "../component/LoadingAnimation";
+import DeleteDialogueBox from "../component/DeleteDialogueBox/DeleteDialogueBox";
+
+
 function DriversPage() {
-  const [drivers, setDrivers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [menuOpen, setMenuOpen] = useState(null);
+  const [url, setUrl] = useState(null);
+  const { data, loading, error, setError, setLoading, setData } = useFetch(url);
 
+  //will be used to handle delete operation
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [recordToDelete, setRecordToDelete] = useState(null);
+  //will show confimation message to delete data
+  const openDeleteModal = (entityId) => {
+    setRecordToDelete(entityId);
+    setShowDeleteModal(true);
+  };
+  const handleConfirmDelete = async () => {
+    try {
+      // const cat=formState.selectedCategory
+      const response = await fetch(
+        `http://localhost:8000/admin/vendor/dropdown/Delete/Driver/${recordToDelete}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (response.ok) {
+        alert("Record deleted successfully!");
+        setShowDeleteModal(false);
+        setRecordToDelete(null);
+        // Refresh the data or update the UI
+        setUrl(`http://localhost:8000/admin/vendor/dropdown/View/Driver?t=${Date.now()}`);
+      } else {
+        alert("Failed to delete the record.");
+      }
+    } catch (error) {
+      console.error("Error deleting record:", error);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowDeleteModal(false);
+    setRecordToDelete(null);
+  };
   useEffect(() => {
-    // Fetch drivers from API
-    // Uncomment and replace the URL when ready to fetch from your API
-    // axios.get('/api/drivers')
-    //   .then(response => setDrivers(response.data))
-    //   .catch(error => console.error("Error fetching drivers:", error));
-
-    // Dummy data for testing
-    setDrivers([
-      {
-        id: 1,
-        firstName: "John",
-        lastName: "Doe",
-        email: "johndoe@example.com",
-        phoneNumber: "123-456-7890",
-        licenseNumber: "ABC1234567",
-        cnic: "12345-1234567-9",
-        // address: "123 Main St, Cityville",
-        // dateJoined: "2023-01-15",
-      },
-      {
-        id: 2,
-        firstName: "Jane",
-        lastName: "Smith",
-        email: "janesmith@example.com",
-        phoneNumber: "987-654-3210",
-        licenseNumber: "XYZ7654321",
-        cnic: "98765-9876543-1",
-        // address: "456 Elm St, Townsville",
-        // dateJoined: "2023-02-20",
-      },
-    ]);
+    setUrl('http://localhost:8000/admin/Vendor/dropdown/View/Driver');
+    console.log(data)
   }, []);
 
-  const filteredDrivers = drivers.filter(driver =>
-    `${driver.firstName} ${driver.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredDrivers = data?.filter(data =>
+    `${data.DriverName}`.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const toggleMenu = (driverId) => {
     setMenuOpen(menuOpen === driverId ? null : driverId);
   };
 
+  if(loading){
+    return <LoadingAnimation/>
+  }
   return (
     <div className="bg-gray-950 min-h-screen p-8 text-gray-100">
       <div className="p-6 bg-gray-900 min-h-screen text-gray-100 border border-gray-600 rounded">
@@ -71,19 +87,19 @@ function DriversPage() {
             </Link>
           </div>
         </div>
-
+        {/* <div>{data.drivers[0]?.firstName}</div> */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredDrivers.map((driver) => (
+          {filteredDrivers?.map((driver) => (
             <div key={driver.id} className="bg-gray-800 p-6 border border-gray-700 rounded-lg shadow relative">
               {/* Options Menu Button */}
-              <div className="absolute top-2 right-2">
+              {/* <div className="absolute top-2 right-2">
                 <button
-                  onClick={() => toggleMenu(driver.id)}
+                  onClick={() => toggleMenu(driver.DriverID)}
                   className="text-gray-400 hover:text-gray-200 focus:outline-none"
                 >
                   <FaEllipsisV />
                 </button>
-                {menuOpen === driver.id && (
+                {menuOpen === driver.DriverID && (
                   <div className="absolute right-0 mt-2 w-28 bg-gray-800 border border-gray-700 rounded shadow-lg">
                     <button
                       onClick={() => alert(`Updating driver ${driver.firstName} ${driver.lastName}`)}
@@ -92,7 +108,7 @@ function DriversPage() {
                       Update
                     </button>
                     <button
-                      onClick={() => alert(`Deleting driver ${driver.firstName} ${driver.lastName}`)}
+                      onClick={()=> openDeleteModal(driver.DriverID)}
                       className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-700 hover:text-white"
                     >
                       Delete
@@ -100,14 +116,16 @@ function DriversPage() {
                   </div>
                 )}
               </div>
+              <DeleteDialogueBox handleCancelDelete = {handleCancelDelete} handleConfirmDelete={handleConfirmDelete} showDeleteModal={showDeleteModal}/> */}
 
               <h2 className="text-xl font-semibold text-yellow-500">
-                {driver.firstName} {driver.lastName}
+                {driver.DriverName}
               </h2>
-              <p className="text-gray-300">Email: {driver.email}</p>
-              <p className="text-gray-300">Phone: {driver.phoneNumber}</p>
-              <p className="text-gray-300">License: {driver.licenseNumber}</p>
-              <p className="text-gray-300">CNIC: {driver.cnic}</p>
+              <p className="text-gray-300">Driver ID: {driver.DriverID}</p>
+              <p className="text-gray-300">Phone: {driver.PhoneNumber}</p>
+              <p className="text-gray-300">License: {driver.LicenseNumber}</p>
+              <p className="text-gray-300">Bus ID: {driver.BusID}</p>
+              <p className="text-gray-300">Bus number: {driver.BusNumber}</p>
               {/* <p className="text-gray-300">Address: {driver.address}</p>
               <p className="text-gray-300">
                 Date Joined: {new Date(driver.dateJoined).toLocaleDateString()}
