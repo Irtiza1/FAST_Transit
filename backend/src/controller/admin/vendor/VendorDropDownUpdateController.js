@@ -1,4 +1,4 @@
-// import connection from "../../db/index.js";
+/*// import connection from "../../db/index.js";
 
 // export const adminDropDownUpdate = async (req, res) => {
 //     const { operations, user, id } = req.params;
@@ -180,7 +180,7 @@
 //         }
 //     }
 // };
-
+*/
 import connection from "../../../db/index.js";
 
 export const vendorDropDownUpdate = async (req, res) => {
@@ -199,35 +199,44 @@ export const vendorDropDownUpdate = async (req, res) => {
         }
 
         const tableMap = {
-            Vendor: "VENDOR",
-            Student: "STUDENT",
-            Faculty: "FACULTY",
+            // Vendor: "VENDOR",
+            // Student: "STUDENT",
+            // Faculty: "FACULTY",
             // Contract: "CONTRACT",
             // Route: "ROUTE",
             // Stop: "STOP",
             Complaint: "COMPLAINT",
             // Alert: "ALERT",
             Bus: "BUS",
-            Driver : "DRIVER",
+            Driver : "BUS_DRIVER",
             Payment: "PAYMENT",
             Seat : "SEAT",
-            Card: "POINT_CARD",
+            // Card: "POINT_CARD",
             Maintenance: "MAINTENANCE",
 
         };
 
         const idFieldMap = {
-            Vendor: "VendorID",
-            Student: "StudentID",
-            Faculty: "FacultyID",
+            // Vendor: "VendorID",
+            // Student: "StudentID",
+            // Faculty: "FacultyID",
             Complaint: "ComplaintID",
-            Bus: "BusID",
-            DriverID: "DriverID",
+            Bus: "BusID",   // Fixed the correct key here
+            Driver: "DriverID",  // Driver related update
             Payment: "PaymentID",
             Seat: "SeatID",
-            Card: "CardID",
+            // Card: "CardID",  
             Maintenance: "MaintenanceID",
         };
+        /*
+        1- maintenance update : vendor id , [maintenanceid/busid] or also can give vendorid
+        2- seat id : vendorid or busid or row & seat id
+        3- payment : payment id, userid, status
+        4- driver: driver id,
+        5- bus: driverid, busid, 
+        6- complaint: user, bus ,status
+
+        */
 
         if (!tableMap[user] || !idFieldMap[user]) {
             return res.status(400).send("Invalid user type specified");
