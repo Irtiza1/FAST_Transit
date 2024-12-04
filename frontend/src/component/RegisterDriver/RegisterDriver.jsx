@@ -16,8 +16,8 @@ const RegisterDriver = ({ driverData, setDriverData, handleChange }) => {
               </label>
               <input
                 type="text"
-                name="firstName"
-                value={driverData.firstName}
+                name="FirstName"
+                value={driverData.FirstName}
                 onChange={handleChange}
                 className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
                 required
@@ -29,8 +29,8 @@ const RegisterDriver = ({ driverData, setDriverData, handleChange }) => {
               </label>
               <input
                 type="text"
-                name="lastName"
-                value={driverData.lastName}
+                name="LastName"
+                value={driverData.LastName}
                 onChange={handleChange}
                 className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
                 required
@@ -45,13 +45,13 @@ const RegisterDriver = ({ driverData, setDriverData, handleChange }) => {
 
               <InputMask
                 mask="99999-9999999-9"
-                value={driverData.cnic}
+                value={driverData.CNIC}
                 onChange={handleChange}
               >
                 {() => (
                   <input
                     type="text"
-                    name="cnic"
+                    name="CNIC"
                     placeholder="12345-1234567-9"
                     className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
                     required
@@ -65,38 +65,51 @@ const RegisterDriver = ({ driverData, setDriverData, handleChange }) => {
               </label>
               <input
                 type="text"
-                name="licenseNumber"
-                value={driverData.licenseNumber}
+                name="LicenseNumber"
+                value={driverData.LicenseNumber}
                 onChange={handleChange}
                 className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
                 required
               />
             </div>
           </div>
-
-          <label className="block text-lg font-semibold text-gray-400   ">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={driverData.email}
-            onChange={handleChange}
-            className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
-            required
-          />
-
           <label className="block text-lg font-semibold text-gray-400 ">
             Phone Number
           </label>
           <input
             type="text"
-            name="phoneNumber"
-            value={driverData.phoneNumber}
+            name="PhoneNumber"
+            value={driverData.PhoneNumber}
             onChange={handleChange}
             className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
             required
           />
+          
+              <label className="block text-lg font-semibold text-gray-400">
+                Location
+              </label>
+              <input
+                type="text"
+                name="Location"
+                value={driverData.Location}
+                onChange={handleChange}
+                className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
+                required
+              />
+           
+          <label className="block text-lg font-semibold text-gray-400   ">
+            Email
+          </label>
+          <input
+            type="email"
+            name="Email"
+            value={driverData.Email}
+            onChange={handleChange}
+            className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
+            required
+          />
+
+          
 
           <div>
             <label className="block text-lg font-semibold text-gray-400 mb-1">
@@ -104,8 +117,8 @@ const RegisterDriver = ({ driverData, setDriverData, handleChange }) => {
             </label>
             <input
               type="password"
-              name="password"
-              value={driverData.password}
+              name="Password"
+              value={driverData.Password}
               onChange={handleChange}
               className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 transition duration-200"
               required
