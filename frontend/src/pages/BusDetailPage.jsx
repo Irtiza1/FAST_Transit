@@ -4,101 +4,84 @@ import DriverInfoCard from "../component/DriverInfoCard/DriverInfoCard";
 import { BusLayout } from "../component/BusLayout";
 import { RouteCard } from "../component/RouteCard";
 import { LoadingAnimation } from "../component/LoadingAnimation";
-
+import { useParams } from "react-router-dom";
+import axios from "axios";
 const BusDetailPage = () => {
+  const { busID } = useParams();
   const [busData, setBusData] = useState(null);
-  const [routeStops, setRouteStops] = useState([]);
+  const [busDetailData, setBusDetailData] = useState(null);
+  const [driver,setDriver] = useState(null);
+  // const [routeStops, setRouteStops] = useState([]);
 
   useEffect(() => {
-    // Simulated bus data
     const fetchBusData = async () => {
-      const busResponse = {
-        bus: {
-          numberPlate: "AB1234",
-          occupiedSeats: [
-            { seatNumber: 2, gender: "male" },
-            { seatNumber: 5, gender: "female" },
-            { seatNumber: 9, gender: "male" },
-          ],
-          layout: [
-            { row: 1, left: [1, 2], right: [3, 4], last: [] },
-            { row: 2, left: [5, 6], right: [7, 8], last: [] },
-            { row: 3, left: [9, 10], right: [11, 12], last: [] },
-            { row: 4, left: [13, 14], right: [15, 16], last: [] },
-            { row: 5, left: [17, 18], right: [19, 20], last: [] },
-            {
-              row: 6,
-              left: [21, 22],
-              right: [23, 24],
-              last: [25, 26, 27, 28, 29, 29],
-            },
-          ],
-        },
-        driver: {
-          name: "John Doe",
-          contact: "123-456-7890",
-        },
-      };
-      setBusData(busResponse);
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/admin/Vendor/dropdown/View/Bus`
+        );
+        if (response.status === 200) {
+          // Find the selected bus by BusID
+          const selectedBus = response.data.find(
+            (bus) => bus.BusID === parseInt(busID)
+          );
+          if (selectedBus) {
+            setBusData(selectedBus);
+          } else {
+            alert("Bus not found.");
+          }
+        } else {
+          alert("Failed to fetch the bus data.");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    // Simulated route stops data
-    const fetchRouteStops = async () => {
-      const routeResponse = [
-        {
-          stopName: "Main Station",
-          latitude: 24.8607,
-          longitude: 67.0011,
-          estimatedArrivalTime: "08:00 AM",
-        },
-        {
-          stopName: "Central Market",
-          latitude: 24.8623,
-          longitude: 67.0204,
-          estimatedArrivalTime: "08:15 AM",
-        },
-        {
-          stopName: "Park Avenue",
-          latitude: 24.8655,
-          longitude: 67.0359,
-          estimatedArrivalTime: "08:30 AM",
-        },
-        {
-          stopName: "City Square",
-          latitude: 24.8691,
-          longitude: 67.0506,
-          estimatedArrivalTime: "08:45 AM",
-        },
-        {
-          stopName: "University Campus",
-          latitude: 24.8713,
-          longitude: 67.0652,
-          estimatedArrivalTime: "09:00 AM",
-        },
-      ];
-      setRouteStops(routeResponse);
+    const fetchBusDetailData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/admin/Vendor/dropdown/View/BusDetails/${busID}`
+        );
+        if (response.status === 200) {
+          setBusDetailData(response.data);
+          console.log(response.data)
+        } else {
+          alert("Failed to fetch bus details.");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchBusData();
-    fetchRouteStops();
-  }, []);
+    fetchBusDetailData();
+  }, [busID]);
 
-  if (!busData) {
-    return <> <LoadingAnimation/> </>
+  // Fetch the driver once busData has been set
+  useEffect(() => {
+    if (busData && busData.DriverID) {
+      const fetchDriverData = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/admin/Vendor/dropdown/View/Driver/${busData.DriverID}`
+          );
+          if (response.status === 200) {
+            setDriver(response.data);
+          } else {
+            alert("Failed to fetch driver data.");
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchDriverData();
+    }
+  }, [busData]); // This effect runs only when busData changes
+
+  if (!busData || !busDetailData || !driver) {
+    return <LoadingAnimation />;
   }
-
-  const { bus, driver } = busData;
-
-  // Check seat occupancy and gender
-  // const getSeatClass = (seatNumber) => {
-  //   const occupiedSeat = bus.occupiedSeats.find(
-  //     (seat) => seat.seatNumber === seatNumber
-  //   );
-  //   if (occupiedSeat) {
-  //     return occupiedSeat.gender === "male" ? "bg-blue-500" : "bg-pink-500";
-  //   }
-  //   return "bg-yellow-600"; // Vacant seat
-  // };
 
   return (
     <div className="bg-gray-950 p-8 min-h-screen text-gray-100">
@@ -108,8 +91,30 @@ const BusDetailPage = () => {
         </h2>
         {/* Info Cards Row */}
         <div className="flex flex-col md:flex-row gap-8 mb-8 mt-8 ">
-          <BusInfoCard busData={bus} />
-          <DriverInfoCard driver={driver} />
+          <div className="bg-gray-800 border border-gray-600 rounded p-6 w-full lg:w-1/2 ">
+            <h2 className="text-2xl font-bold  text-gray-100 mb-4">
+              Bus Information
+            </h2>
+            <p className="text-gray-400 mb-2">
+              <span className="font-semibold text-gray-200">Bus ID:</span>{" "}
+              {busDetailData?.data?.BusID || "N/A"}
+            </p>
+            <p className="text-gray-400 mb-2">
+              <span className="font-semibold text-gray-200">Bus Number:</span>{" "}
+              {busDetailData?.data?.BusNumber || "N/A"}
+            </p>
+            <p className="text-gray-400 mb-2">
+              <span className="font-semibold text-gray-200">Route:</span>{" "}
+              {busData?.RouteName || "N/A"}
+            </p>
+            <p className="text-gray-400 mb-2">
+              <span className="font-semibold text-gray-200">Total Seats:</span>{" "}
+              {busDetailData?.data?.TotalSeats || "N/A"}
+            </p>
+          </div>
+
+
+          <DriverInfoCard driver={driver[0]} />
         </div>
 
         {/* Bus Layout Section */}
@@ -117,11 +122,10 @@ const BusDetailPage = () => {
           <h2 className="text-2xl font-bold  text-gray-100 md:mb-8 mb-2">
             Bus Layout
           </h2>
-          <BusLayout bus={bus} />
+          {/* <BusLayout bus={bus} /> */}
         </div>
-        
-        <RouteCard />
 
+        {/* <RouteCard /> */}
       </div>
     </div>
   );

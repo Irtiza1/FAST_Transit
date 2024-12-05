@@ -13,6 +13,8 @@ function BusCreationForm({
   setNumberOfSeatsInRightRows,
   numberOfSeatsInLastRows,
   setNumberOfSeatsInLastRows,
+  MaleRows,setMaleRows,
+  FemaleRows,setFemaleRows
 }) {
   return (
     <>
@@ -69,6 +71,7 @@ function BusCreationForm({
             </div>
           </div>
         </div>
+        
 
         <div className="mb-4  ">
           <div className="flex items-center gap-4">
@@ -108,26 +111,39 @@ function BusCreationForm({
             </div>
           </div>
 
-          <div className="mb-4">
-            <label className="block text-lg font-semibold text-gray-400 mb-1 mt-2">
-              Number of seats in last row
-            </label>
-            <input
-              type="number"
-              placeholder="Enter seats"
-              min={0}
-              max={8}
-              value={numberOfSeatsInLastRows || ""}
-              onChange={(e) => setNumberOfSeatsInLastRows(e.target.value)}
-              onKeyDown={(e) => e.preventDefault()} // Disables typing
-              onFocus={(e) => e.target.blur()} // Prevents virtual keyboards on mobile
-              className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
-            />
+          <div className="mb-5 ">
+          <div className="flex items-center gap-4">
+            {/* Left side input for number of rows */}
+            <div className="w-1/2">
+              <label className="block text-lg font-semibold text-gray-400 mb-1">
+                Enter Row for Female
+              </label>
+              <input
+                type="text"
+                placeholder="Enter comma separated row number"
+                value={MaleRows || ""}
+                onChange={(e) => setMaleRows(e.target.value)}
+                className="text-gray-300 bg-gray-800 border border-gray-500 rounded p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
+              />
+            </div>
+
+            {/* Right side input for number of seats */}
+            <div className="w-1/2">
+              <label className="block text-lg font-semibold text-gray-400 mb-1">
+                Enter Row for Female
+              </label>
+              <input
+                type="text"
+                placeholder="Enter comma separated row number"
+                value={FemaleRows || ""}
+                onChange={(e) => setFemaleRows(e.target.value)}
+                className="text-gray-300 bg-gray-800 border border-gray-500  rounded  p-2 w-full focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition duration-200"
+              />
+            </div>
           </div>
         </div>
-        <button className="w-full rounded bg-yellow-500 hover:bg-yellow-400 px-8 py-3 mt-5 mb-2 font-bold text-gray-700  transition-all hover:opacity-90 hover:shadow-lg">
-          Register Bus
-        </button>
+        </div>
+        
       </div>
 
       {/* Bus Layout on the right side */}

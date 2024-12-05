@@ -5,6 +5,7 @@ import axios from "axios";
 
 const BusesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [busData,setBusData] = useState(null)
   const buses = [
     { id: 1, number: "A123", route: "Downtown - Uptown", driver: "John Doe" },
     {
@@ -17,6 +18,36 @@ const BusesPage = () => {
   ];
 
   useEffect(() => {
+    const fetchBusData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8000/admin/Vendor/dropdown/View/Bus"
+        );
+        if (response.status === 200) {
+          console.log(response);
+          setBusData(response)
+          // Optionally reset form or redirect
+        } else {
+          alert("Failed to fetch the bus. Please try again.", response.status);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      // try {
+      //   const response = await axios.get(
+      //     "http://localhost:8000/admin/Vendor/dropdown/View/BusDetails/28"
+      //   );
+      //   if (response.status === 200) {
+      //     console.log(response);
+      //     // Optionally reset form or redirect
+      //   } else {
+      //     alert("Failed to fetch the bus. Please try again.", response.status);
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      // }
+    };
+    fetchBusData();
     //the url of this page will have id of vendor
     //using this id we will query data base and will get all the buses which are registered by this vendor id along detail of its driver  and its route with list of stops as response. This will be saved in store
     //const response = axios.get('')
@@ -57,30 +88,43 @@ const BusesPage = () => {
         {/* Bus Cards */}
         {/* clicking any card will direct to new page by taking id of bus in url which will display detail information of a bus */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {buses
-            .filter(
+          {busData?.data.filter(
               (bus) =>
-                bus.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                bus.route.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                bus.driver.toLowerCase().includes(searchTerm.toLowerCase())
+                bus.BusNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                bus.RouteName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                bus.DriverID.toLowerCase().includes(searchTerm.toLowerCase())
             )
             .map((bus) => (
               <Link
-                to={`/vendor/buses/${bus.id}`}
-                key={bus.id}
+                to={`/vendor/buses/${bus.BusID}`}
+                key={bus.BusID}
                 className="bg-gray-800 border border-gray-700 rounded-lg p-4 cursor-pointer hover:bg-gray-900 hover:shadow-lg transition-shadow duration-200"
                 onClick={() => console.log("Clicked on bus", bus.number)}
               >
                 <h2 className="text-lg font-semibold text-yellow-500 mb-2">
-                  Bus #{bus.number}
+                  Bus #{bus.BusNumber}
                 </h2>
                 <p className="text-gray-400 mb-1">
                   <span className="font-medium text-gray-200">Route:</span>{" "}
-                  {bus.route}
+                  {bus.RouteName}
                 </p>
                 <p className="text-gray-400">
-                  <span className="font-medium text-gray-200">Driver:</span>{" "}
-                  {bus.driver}
+                  <span className="font-medium text-gray-200">Driver ID:</span>{" "}
+                  {bus.DriverID}
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-medium text-gray-200">Status:</span>{" "}
+                  {bus.Status}
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-medium text-gray-200">Arrival Time:</span>{" "}
+                  {bus.ArrivalTIme  }
+
+                </p>
+                <p className="text-gray-400">
+                  <span className="font-medium text-gray-200">Departure Time:</span>{" "}
+                  {bus.DepartureTime}
+
                 </p>
               </Link>
             ))}

@@ -25,7 +25,7 @@ function App() {
         <Route path="vendor" element={<VendorDashboard />}>
           <Route path="buses" element={<BusPage />} />
           <Route path="" index element={<BusPage />} />
-          <Route path="buses/:id" element={<BusDetailPage />} />
+          <Route path="buses/:busID" element={<BusDetailPage />} />
           <Route path="create-bus" element={<CreateBusPage />} />
           <Route path="routes" element={<RoutesPage />} />
           <Route path="route/:routeId" element={<RouteDetailPage />} />
