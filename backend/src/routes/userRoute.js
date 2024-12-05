@@ -22,13 +22,13 @@ router.get('/activate/:token/:role',ActivateUser)
 router.post('/login',LoginUser)
 
 //-----Role Based Access-----
-router.post('/Student', authorizeRole('Student'), studentDropDownCreate )
-router.patch('/Student', authorizeRole('Student'), studentDropDownUpdate )
-router.get('/Student/dropdown/:operations/:user/:id?', authorizeRole('Student'),  studentDropDownView)
+router.post('/Student', /*authorizeRole('Student'),*/ studentDropDownCreate )
+router.patch('/Student', /*authorizeRole('Student'),*/ studentDropDownUpdate )
+router.get('/Student/dropdown/:operations/:user/:id?', /*authorizeRole('Student'),*/  studentDropDownView)
 
-router.post('/Faculty', authorizeRole('Faculty'),  facultyDropDownCreate)
-router.patch('/Faculty', authorizeRole('Faculty'), facultyDropDownUpdate )
-router.get('/Faculty', authorizeRole('Faculty'),  facultyDropDownView)
+router.post('/Faculty', /*authorizeRole('Faculty'),*/ facultyDropDownCreate)
+router.patch('/Faculty', /*authorizeRole('Faculty'),*/ facultyDropDownUpdate )
+router.get('/Faculty', /*authorizeRole('Faculty'),*/  facultyDropDownView)
 
 //  authorizeRole('Driver'), 
 router.post('/Driver/dropdown/:operations/:user', /*authorizeRole('Driver'),*/ driverDropDownCreate)
