@@ -783,8 +783,8 @@ export const vendorDropDownView = async (req, res) => {
                         RightSeatsPerRow: result[0].RightSeatsPerRow,
                         LastSeatsPerRow: result[0].LastSeatsPerRow,
                         TotalOccupiedSeats: result[0].TotalOccupiedSeats,
-                        MaleRowNumbers: result1[0].MaleRow ? result1[0].MaleRow.split(',') : [],
-                        FemaleRowNumbers: result1[0].FemaleRow ? result1[0].FemaleRow.split(',') : [],
+                        MaleRowNumbers: result1[0].MaleRow ? result1[0].MaleRow.split(',').map(Number) : [],
+                        FemaleRowNumbers: result1[0].FemaleRow ? result1[0].FemaleRow.split(',').map(Number) : [],
                         Seats: result.map(seat => ({
                             SeatID: seat.SeatID,
                             RowID: seat.RowID,
