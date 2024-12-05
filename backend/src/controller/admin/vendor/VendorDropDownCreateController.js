@@ -4,8 +4,8 @@
 import connection from "../../../db/index.js";
 const insertRowsAndSeats = async (transactionConnection, busID, leftRows, leftSeatsPerRow, rightRows, rightSeatsPerRow, freeRowSeats,MaleRows,FemaleRows) => {
     const rowSql = `
-        INSERT INTO ROW (BusID, NumberOfSeats, RowCategory)
-        VALUES (?, ?, ?);
+        INSERT INTO ROW (RowNumber,BusID, NumberOfSeats, RowCategory)
+        VALUES (?, ?, ?, ?);
     `;
     
     const seatSql = `
@@ -28,7 +28,7 @@ const insertRowsAndSeats = async (transactionConnection, busID, leftRows, leftSe
         // Insert Left Rows and Seats
     for (let i = 1; i <= leftRows; i++) {
         const rowCategory = getRowCategory(i);
-        const [leftRowResult] = await transactionConnection.query(rowSql, [busID, leftSeatsPerRow, rowCategory]);
+        const [leftRowResult] = await transactionConnection.query(rowSql, [i,busID,leftSeatsPerRow, rowCategory]);
         console.log(`Left row ${i} inserted with RowID: ${leftRowResult.insertId}`);
         const rowID = leftRowResult.insertId;
 
@@ -41,7 +41,7 @@ const insertRowsAndSeats = async (transactionConnection, busID, leftRows, leftSe
     // Insert Right Rows and Seats
     for (let i = leftRows + 1; i <= leftRows + rightRows; i++) {
         const rowCategory = getRowCategory(i);
-        const [rightRowResult] = await transactionConnection.query(rowSql, [busID, rightSeatsPerRow, rowCategory]);
+        const [rightRowResult] = await transactionConnection.query(rowSql, [i,busID, rightSeatsPerRow, rowCategory]);
         console.log(`Right row ${i - leftRows} inserted with RowID: ${rightRowResult.insertId}`);
         const rowID = rightRowResult.insertId;
 
@@ -53,7 +53,7 @@ const insertRowsAndSeats = async (transactionConnection, busID, leftRows, leftSe
 
     // Insert the Final Free Row
     const totalSeatsInFreeRow = freeRowSeats;
-    const [freeRowResult] = await transactionConnection.query(rowSql, [busID, totalSeatsInFreeRow, "FREE"]);
+    const [freeRowResult] = await transactionConnection.query(rowSql, [leftRows + rightRows+1, busID, totalSeatsInFreeRow, "FREE"]);
     console.log(`Free row inserted with RowID: ${freeRowResult.insertId}`);
     const freeRowID = freeRowResult.insertId;
     let seatNumber ;
@@ -148,6 +148,7 @@ export const vendorDropDownCreate = async (req, res) => {
                 const { BusNumber, RouteID, DriverID, LeftRows, LeftSeatsPerRow, RightRows, RightSeatsPerRow, VendorID } = req.body;
                 // const VendorID = req.vendorID || req.params.vendorID;
                 let {MaleRows,FemaleRows}=req.body;
+                let  LastSeatsPerRow= RightSeatsPerRow+LeftSeatsPerRow +1 ;
                 console.log("hello2");
                 // Calculate the total number of seats for the bus
                 const totalFreeRowSeats = LeftSeatsPerRow + RightSeatsPerRow + 1;
@@ -158,10 +159,11 @@ export const vendorDropDownCreate = async (req, res) => {
                 console.log("About to insert bus...");
                 // Insert Bus into the database
                 const busInsertQuery = `
-                    INSERT INTO BUS (BusNumber, RouteID, VendorID, DriverID, TotalSeats) 
-                    VALUES (?, ?, ?, ?, ?);
+                    INSERT INTO BUS (BusNumber, RouteID, VendorID, DriverID, TotalSeats,LeftRows, LeftSeatsPerRow, RightRows, RightSeatsPerRow,LastSeatsPerRow) 
+                    VALUES (?, ?, ?, ?, ?,?,?,?,?,?);
                 `;
-                const [busResult] = await transactionConnection.query(busInsertQuery, [BusNumber, RouteID, VendorID, DriverID, totalSeats]);
+                // let  LastSeatsPerRow= RightSeatsPerRow+LeftSeatsPerRow ;
+                const [busResult] = await transactionConnection.query(busInsertQuery, [BusNumber, RouteID, VendorID, DriverID, totalSeats,LeftRows, LeftSeatsPerRow, RightRows, RightSeatsPerRow,LastSeatsPerRow]);
                 const BusID = busResult.insertId;
                 console.log("Bus added successfully with BusID:", BusID);
                 // MaleRows = Array.isArray(MaleRows) ? MaleRows : [];
