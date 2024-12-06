@@ -189,46 +189,39 @@ export const driverDropDownView = async (req, res) => {
                 try {
                     console.log('id: ', id)
                     sql = id ? 
-                    `
-                    SELECT 
+                    `SELECT 
                         BD.DriverID, 
                         CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  
-                        B.BusID, 
-                        B.BusNumber
-                    FROM
+                        BD.LicenseNumber,
+                        CASE
+                            WHEN U.BusID IS NULL THEN 'Not Assigned'
+                            ELSE 'Assigned'
+                        END AS AssignmentStatus
+                        FROM
                         BUS_DRIVER BD
-                    INNER JOIN
+                        INNER JOIN
                         USERS U ON BD.UserID = U.UserID
-                    INNER JOIN
-                        BUS B ON U.BusID = B.BusID
-                    WHERE
-                        BD.DriverID = ?
-                    GROUP BY
-                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                        WHERE
+                        BD.DriverID = ?;
+
                     `
                     :
                     `
-                    SELECT 
+                   SELECT 
                         BD.DriverID, 
                         CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
                         U.PhoneNumber,
-                        U.BusID,
+                        IF(U.BusID IS NULL, 'No Bus Assigned', U.BusID) AS BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  
-                        B.BusID, 
-                        B.BusNumber
+                        BD.LicenseNumber
                     FROM
                         BUS_DRIVER BD
                     INNER JOIN
-                        USERS U ON BD.UserID = U.UserID
-                    INNER JOIN
-                        BUS B ON U.BusID = B.BusID
-                    GROUP BY
-                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                        USERS U ON BD.UserID = U.UserID;
+
                     `;
                 
                     [result] = await connection.query(sql, id ? [id] : []);
@@ -553,7 +546,99 @@ export const driverDropDownView = async (req, res) => {
                     return res.status(500).send('Internal Server Error');
                 }                                      
 
-            } else {
+            } else if (user === 'BusDetails') {
+                console.log('op3');
+                try {
+                    console.log('op4');
+                    
+                    // Query to fetch Bus details and Seat details
+                    const sql = `
+                        SELECT 
+                            b.BusID,
+                            b.BusNumber,
+                            b.TotalSeats,
+                            b.LeftRows,
+                            b.LeftSeatsPerRow,
+                            b.RightRows,
+                            b.RightSeatsPerRow,
+                            b.LastSeatsPerRow,
+                            b.TotalOccupiedSeats,
+                            s.SeatID,
+                            s.RowID,
+                            s.SeatNumber,
+                            s.OccupancyStatus,
+                            s.BookingStatus
+                        FROM 
+                            BUS b
+                        LEFT JOIN 
+                            ROW r ON b.BusID = r.BusID
+                        LEFT JOIN 
+                            SEAT s ON r.RowID = s.RowID
+                        WHERE 
+                            b.BusID = ? 
+                        GROUP BY 
+                            b.BusID, s.SeatID
+                        ORDER BY 
+                            b.BusID, r.RowNumber, s.SeatNumber;
+                    `;
+                    
+                    // Query to fetch Male and Female Row Numbers
+                    const sql1 = `
+                        SELECT
+                            GROUP_CONCAT(CASE WHEN r.RowCategory = 'Male' THEN r.RowNumber END ORDER BY r.RowNumber) AS MaleRow,
+                            GROUP_CONCAT(CASE WHEN r.RowCategory = 'Female' THEN r.RowNumber END ORDER BY r.RowNumber) AS FemaleRow
+                        FROM 
+                            ROW r
+                        WHERE 
+                            r.BusID = ?;
+                    `;
+            
+                    console.log('Executing SQL for bus details:', sql, id);
+                    const [result] = await connection.query(sql, [id]);
+            
+                    console.log('Executing SQL for row details:', sql1, id);
+                    const [result1] = await connection.query(sql1, [id]);
+            
+                    if (result.length === 0 && result1.length === 0) {
+                        return res.status(404).json({ message: 'No Bus data found.' });
+                    }
+            
+                    // Structure the response data
+                    const busData = {
+                        BusID: result[0].BusID,
+                        BusNumber: result[0].BusNumber,
+                        TotalSeats: result[0].TotalSeats,
+                        LeftRows: result[0].LeftRows,
+                        LeftSeatsPerRow: result[0].LeftSeatsPerRow,
+                        RightRows: result[0].RightRows,
+                        RightSeatsPerRow: result[0].RightSeatsPerRow,
+                        LastSeatsPerRow: result[0].LastSeatsPerRow,
+                        TotalOccupiedSeats: result[0].TotalOccupiedSeats,
+                        MaleRowNumbers: result1[0].MaleRow ? result1[0].MaleRow.split(',').map(Number) : [],
+                        FemaleRowNumbers: result1[0].FemaleRow ? result1[0].FemaleRow.split(',').map(Number) : [],
+                        Seats: result.map(seat => ({
+                            SeatID: seat.SeatID,
+                            RowID: seat.RowID,
+                            SeatNumber: seat.SeatNumber,
+                            OccupancyStatus: seat.OccupancyStatus,
+                            BookingStatus: seat.BookingStatus
+                        }))
+                    };
+            
+                    console.log(busData);
+            
+                    // Send the structured response
+                    return res.status(200).json({
+                        message: 'Bus details retrieved successfully.',
+                        data: busData
+                    });
+            
+                } catch (error) {
+                    console.error('Error fetching Bus data:', error);
+                    return res.status(500).json({ message: 'Internal Server Error' });
+                }
+            }  
+            else {
                 res.status(400).send('Invalid user type for view operation');
             }
         }

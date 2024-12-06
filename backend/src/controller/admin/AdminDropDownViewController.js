@@ -276,46 +276,39 @@ export const adminDropDownView = async (req, res) => {
                 try {
                     console.log('id: ', id)
                     sql = id ? 
-                    `
-                    SELECT 
+                    `SELECT 
                         BD.DriverID, 
                         CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
                         U.PhoneNumber,
                         U.BusID,
                         U.VendorID, 
-                        BD.LicenseNumber, 
-                        B.BusID, 
-                        B.BusNumber
-                    FROM
+                        BD.LicenseNumber,
+                        CASE
+                            WHEN U.BusID IS NULL THEN 'Not Assigned'
+                            ELSE 'Assigned'
+                        END AS AssignmentStatus
+                        FROM
                         BUS_DRIVER BD
-                    INNER JOIN
+                        INNER JOIN
                         USERS U ON BD.UserID = U.UserID
-                    INNER JOIN
-                        BUS B ON U.BusID = B.BusID
-                    WHERE
-                        BD.DriverID = ?
-                    GROUP BY
-                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                        WHERE
+                        BD.DriverID = ?;
+
                     `
                     :
                     `
-                    SELECT 
+                   SELECT 
                         BD.DriverID, 
                         CONCAT(U.FirstName, ' ', U.LastName) AS DriverName, 
                         U.PhoneNumber,
-                        U.BusID,
+                        IF(U.BusID IS NULL, 'No Bus Assigned', U.BusID) AS BusID,
                         U.VendorID, 
-                        BD.LicenseNumber,  
-                        B.BusID, 
-                        B.BusNumber
+                        BD.LicenseNumber
                     FROM
                         BUS_DRIVER BD
                     INNER JOIN
-                        USERS U ON BD.UserID = U.UserID
-                    INNER JOIN
-                        BUS B ON U.BusID = B.BusID
-                    GROUP BY
-                        BD.DriverID, U.FirstName, U.LastName, U.PhoneNumber, U.BusID, U.VendorID, BD.LicenseNumber, B.BusID, B.BusNumber
+                        USERS U ON BD.UserID = U.UserID;
+
                     `;
                 
                     [result] = await connection.query(sql, id ? [id] : []);
