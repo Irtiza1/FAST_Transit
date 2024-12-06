@@ -186,7 +186,7 @@ function CreateBusPage() {
               >
                 <option value="">Select an existing driver</option>
                 {existingDrivers
-                  ?.filter((driver) => driver.BusID === null)
+                  ?.filter((driver) => !driver.BusID)
                   .map((driver) => (
                     <option key={driver.DriverID} value={driver.DriverID}>
                       ID: {driver.DriverID} Name: {driver.DriverName}

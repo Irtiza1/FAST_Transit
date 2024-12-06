@@ -91,8 +91,7 @@ const BusesPage = () => {
           {busData?.data.filter(
               (bus) =>
                 bus.BusNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                bus.RouteName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                bus.DriverID.toLowerCase().includes(searchTerm.toLowerCase())
+                bus.RouteName.toLowerCase().includes(searchTerm.toLowerCase()) 
             )
             .map((bus) => (
               <Link
