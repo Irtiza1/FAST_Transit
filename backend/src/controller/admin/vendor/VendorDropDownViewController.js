@@ -179,7 +179,7 @@ export const vendorDropDownView = async (req, res) => {
                 }
             } else if (user === 'Bus') { // updated the api and working perfectly
                 try {
-                    sql = id
+                    /*sql = id
                         ? `
                             SELECT 
                                 B.BusID, 
@@ -197,7 +197,7 @@ export const vendorDropDownView = async (req, res) => {
                             INNER JOIN ROUTE R ON B.RouteID = R.RouteID
                             INNER JOIN VENDOR V ON B.VendorID = V.VendorID
                             INNER JOIN USERS U ON B.BusID = U.BusID
-                            WHERE B.BusID = ? AND U.Role= 'Driver';
+                            WHERE B.BusID = ? AND U.Role= 'Driver'
 
                         `
                         : `
@@ -217,9 +217,35 @@ export const vendorDropDownView = async (req, res) => {
                             INNER JOIN ROUTE R ON B.RouteID = R.RouteID
                             INNER JOIN VENDOR V ON B.VendorID = V.VendorID
                             INNER JOIN USERS U ON B.BusID = U.BusID
-                            WHERE U.Role= 'Driver';
+                            WHERE U.Role= 'Driver'
+                        `;*/
+                    sql = id
+                        ? `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                B.VendorID, 
+                                B.DriverID
+                            FROM BUS B 
+                            WHERE B.BusID = ?
+
+                        `
+                        : `
+                             SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                B.VendorID, 
+                                B.DriverID
+                            FROM BUS B 
                         `;
-            
                     console.log('Executing SQL:', sql, id ? [id] : []);
                     const [result] = await connection.query(sql, id ? [id] : []);
             

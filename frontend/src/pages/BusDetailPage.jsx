@@ -71,37 +71,35 @@ const BusDetailPage = () => {
           `http://localhost:8000/admin/Vendor/dropdown/View/Bus`
         );
         if (response.status === 200) {
-          // Find the selected bus by BusID
           const selectedBus = response.data.find(
             (bus) => bus.BusID === parseInt(busID)
           );
           if (selectedBus) {
             setBusData(selectedBus);
-            console.log('select',selectedBus)
-
             try {
-              const rresponse = await axios.get('http://localhost:8000/admin/Vendor/dropdown/View/Route')
-              if(response.status === 200){
-                console.log('route',rresponse)
-              const route = rresponse.data.routes.find((route)=>route.RouteID === selectedBus.RouteID)
-              console.log('selec route',route)
-              setRouteStops(route.StopDetails)
+              const rresponse = await axios.get(
+                "http://localhost:8000/admin/Vendor/dropdown/View/Route"
+              );
+              if (rresponse.status === 200) {
+                const route = rresponse.data.routes.find(
+                  (route) => route.RouteID === selectedBus.RouteID
+                );
+                setRouteStops(route?.StopDetails || []);
               }
             } catch (error) {
-              console.log('err',error.message)
+              console.error("Error fetching route data:", error.message);
             }
-
           } else {
             alert("Bus not found.");
           }
         } else {
-          alert("Failed to fetch the bus data.");
+          alert("Failed to fetch bus data.");
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching bus data:", error);
       }
     };
-
+  
     const fetchBusDetailData = async () => {
       try {
         const response = await axios.get(
@@ -114,35 +112,35 @@ const BusDetailPage = () => {
           alert("Failed to fetch bus details.");
         }
       } catch (error) {
-        console.error(error);
+        console.error("Error fetching bus details:", error);
       }
     };
-
+  
     fetchBusData();
     fetchBusDetailData();
   }, [busID]);
 
-  // Fetch the driver once busData has been set
   useEffect(() => {
-    if (busData && busData.DriverID) {
-      const fetchDriverData = async () => {
+    const fetchDriverData = async () => {
+      if (busData?.DriverID) {
         try {
           const response = await axios.get(
             `http://localhost:8000/admin/Vendor/dropdown/View/Driver/${busData.DriverID}`
           );
           if (response.status === 200) {
             setDriver(response.data);
+            console.log('driver',response.data)
           } else {
             alert("Failed to fetch driver data.");
           }
         } catch (error) {
-          console.error(error);
+          console.error("Error fetching driver data:", error);
         }
-      };
-
-      fetchDriverData();
-    }
-  }, [busData]); // This effect runs only when busData changes
+      }
+    };
+  
+    fetchDriverData();
+  }, [busData]);
 
   if (!busData || !busDetailData || !driver) {
     return <LoadingAnimation />;
@@ -187,7 +185,7 @@ const BusDetailPage = () => {
           <h2 className="text-2xl font-bold  text-gray-100 md:mb-8 mb-2">
             Bus Layout
           </h2>
-          <BusLayout busData={bbusData.data} />
+          <BusLayout busData={busDetailData.data} />
         </div>
 
         <RouteCard routeStops={routeStops}/>

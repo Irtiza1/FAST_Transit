@@ -19,6 +19,7 @@ import { vendorDropDownCreate } from '../controller/admin/vendor/VendorDropDownC
 import { vendorDropDownUpdate } from '../controller/admin/vendor/VendorDropDownUpdateController.js';
 import { vendorDropDownView } from '../controller/admin/vendor/VendorDropDownViewController.js';
 import { vendorDropDownDelete } from '../controller/admin/vendor/VendorDropDownDeleteController.js';
+import { LoginVendor } from '../controller/admin/vendor/VendorLoginController.js';
 //login admin
 router.post('/login',LoginAdmin)
 //post notification
@@ -26,7 +27,7 @@ router.post('/notifications/:token',PostNotification)
 //viewStats directly showing everytime
 router.get('/viewStats',viewStats)
 //admin signup vendor
-router.post('/vendorsignup',SignUpUser)
+router.post('/vendorlogin',LoginVendor)
 router.get('/activate/:token/:role',ActivateUser)
 
 //view profile

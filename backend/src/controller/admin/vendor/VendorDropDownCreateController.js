@@ -183,12 +183,13 @@ export const vendorDropDownCreate = async (req, res) => {
             else if (user === "Driver") {
                 const { FirstName, LastName, Email, Password, PhoneNumber, CNIC, Location, LicenseNumber, BusID, Gender = "Male", Role = "Driver", isActive = 1, Status = "Registered" ,VendorID} = req.body;
                 // const VendorID = req.vendorID || req.params.vendorID;
-
+                console.log(req.body);
                 sql = `
                     INSERT INTO USERS (FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location, BusID, VendorID, isActive, Status)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
                 `;
-                [result] = await transactionConnection.query(sql, [FirstName, LastName, Email, Password, PhoneNumber, Gender, CNIC, Role, Location, BusID, VendorID, isActive, Status]);
+                const cleanedCnic= CNIC.replace(/-/g, '');
+                [result] = await transactionConnection.query(sql, [FirstName, LastName, Email, Password, PhoneNumber, Gender, cleanedCnic, Role, Location, BusID, VendorID, isActive, Status]);
                 if (result.affectedRows === 0) throw new Error("User not added");
                 
                 const userID = result.insertId;

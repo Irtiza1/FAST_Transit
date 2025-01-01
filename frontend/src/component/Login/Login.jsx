@@ -57,7 +57,7 @@ function Login() {
       }
     }
     if (formData.Role === "Vendor") {
-      await sendData("http://localhost:8000/vendor/login", "POST", data);
+      await sendData("http://localhost:8000/admin/vendorlogin", "POST", data);
       console.log('response: ',response)
       if (response?.token && response?.adminData) {
         // Dispatch admin data and token to Redux

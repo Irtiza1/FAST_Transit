@@ -40,7 +40,7 @@ const AdminDashboard = () => {
   const [addOperationFormData, setAddOperationFormData] = useState(null);
 
   //operations and categories
-  const operations = ["Add", "Update", "View"];
+  const operations = ["Add", "View"];
   const categories = {
     Add: ["Vendor", "Contract", "Notification","Route"],
     Update: [
@@ -55,7 +55,7 @@ const AdminDashboard = () => {
     ],
     // Delete: ["Vendor", "Student", "Faculty", "Contract", "Route"],
     View: [
-      "User",
+      // "User",
       "Vendor",
       "Student",
       "Faculty",
@@ -63,11 +63,11 @@ const AdminDashboard = () => {
       "Contract",
       "Payment",
       "Route",
-      "Stop",
+      // "Stop",
       "Notification",
       "Complaint",
       "Traffic Alert",
-      "Bus",
+      // "Bus",
       "Attendance",
     ],
   };
@@ -356,13 +356,13 @@ const AdminDashboard = () => {
           Admin <span className="text-yellow-500">Dashboard</span>
         </h1>
 
-        {adminData?.adminData && (
+        {/* {adminData?.adminData && (
           <p className="text-lg mb-6">
             Admin Info: {adminData.adminData.UniversityID}{" "}
             {adminData.adminData.UniversityName} {adminData.adminData.Email}{" "}
             {adminData.adminData.Location}
           </p>
-        )}
+        )} */}
 
         <form className="space-y-6 border border-gray-600 rounded bg-gray-800 p-4">
           <div className="flex flex-col md:flex-row md:space-x-4 space-y-3 md:space-y-0 text-gray-300">
