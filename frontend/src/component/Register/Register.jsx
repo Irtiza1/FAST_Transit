@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import InputMask from "react-input-mask";
 import axios from "axios";
+import Alert from '@mui/material/Alert';
+import Snackbar from "@mui/material/Snackbar";
+
 
 function Register() {
+  const [alert,setAlert] = useState({message:"" , serverity:""  , open: false})
+  const handleCloseAlert = () => {
+    setAlert({ ...alert, open: false });
+  };
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [formData, setFormData] = useState({
     FirstName: "",
@@ -33,11 +40,14 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!emailPattern.test(formData.Email)) {
-      alert("Please enter a valid email address (e.g., xyz@nu.edu.pk)");
-      return;
+      setAlert({ message: "Please enter a valid email address (e.g., xyz@nu.edu.pk).", severity: "error", open: true });
+       return;
+      // return(<Alert severity="error">Please enter a valid email address (e.g., xyz@nu.edu.pk).</Alert>)
     }
     if (formData.Password !== ConfirmPassword) {
-      alert("Passwords do not match!");
+      // alert("Passwords do not match!");
+      // return;
+      setAlert({ message: "Passwords do not match!", severity: "error", open: true });
       return;
     }
     formData.CNIC = removeDashesFromCNIC(formData.CNIC);
@@ -45,10 +55,11 @@ function Register() {
     try {
       console.log(formData); 
       const response = await axios.post("http://localhost:8000/user/signup", formData);
-      alert(response.data.message);
+      console.log(response)
+      setAlert({ message: response.data.message, severity: "success", open: true });
     } catch (error) {
       console.error("Error during registration:", error);
-      alert("Registration failed. Please try again.");
+      setAlert({ message: "Registration failed. Please try again.", severity: "error", open: true });
     }
   };
 
@@ -72,6 +83,11 @@ function Register() {
       </div>
 
       <form onSubmit={handleSubmit} className="w-full max-w-lg px-6 py-12 lg:w-1/2 lg:py-10 m-auto font-zendot">
+        {/* {alert.message && (
+        <Alert severity={alert.serverity} className="mb-4">
+          {alert.message}
+        </Alert>
+        )} */}
         <h2 className="mb-2 text-3xl font-bold">Sign Up</h2>
         <a href="http://localhost:5173/login" className="mb-4 block font-bold text-gray-400 hover:text-gray-800">Already have an account?</a>
 
@@ -153,6 +169,7 @@ function Register() {
             required
           />
         </div>
+        
         <input
           type="email"
           name="Email"
@@ -185,6 +202,20 @@ function Register() {
 
         <button className="w-full px-8 py-3 bg-gray-300 hover:bg-gray-400 rounded font-bold text-gray-900">Sign Up</button>
       </form>
+      <Snackbar
+        open={alert.open}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }} // Custom position
+      >
+        <Alert 
+          severity={alert.severity} 
+          onClose={handleCloseAlert} 
+          className="w-full max-w-md mx-auto text-sm sm:text-base font-medium text-center p-4"
+        >
+          {alert.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

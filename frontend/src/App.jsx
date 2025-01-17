@@ -15,12 +15,15 @@ import BusDetailPage from "./pages/BusDetailPage";
 import RouteDetailPage from "./pages/RouteDetailPage";
 import VendorDashboard from "./pages/VendorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import UserDashboard from "./pages/userDashboard";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
+        <Route path="test" element={<UserDashboard />} />
+
         {/* <Route path="home" element={<HomePage />} /> */}
         <Route path="vendor" element={<VendorDashboard />}>
           <Route path="buses" element={<BusPage />} />
