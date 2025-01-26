@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import useApi from "../../hooks/useApi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setData } from "../../redux/slices/userData/index.js";
 import { setAdminData } from "../../features/adminSlice";
 import { VENDOR_ENDPOINTS,USER_ENDPOINTS,ADMIN_ENDPOINTS } from "../../config/config";
 import Snackbar from "@mui/material/Snackbar";
@@ -11,23 +12,31 @@ import Alert from "@mui/material/Alert";
 function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
+  
+  const check = useSelector((state)=>state.user)
+  console.log("fom redux:",check)
   // const adminData = useSelector((state)=>state.admin)
   // console.log(adminData)
+  
+  const [alert,setAlert] = useState({message:"",severity:"",open:false})
+  const handleCloseAlert= () =>{
+    setAlert({...alert,open:false})
+  }
   const { response, loading, error, sendData } = useApi();
   const [formData, setFormData] = useState({
     Email: "",
     Password: "",
     Role: "",
   });
-  
-  const [alert,setAlert] = useState({message:"",severity:"",open:false})
-  
+  //for role based API calling
   const roleApiMapping = {
     admin:ADMIN_ENDPOINTS.ADMIN_LOGIN,
     vendor:VENDOR_ENDPOINTS.VENDOR_LOGIN,
-    user:USER_ENDPOINTS.USER_LOGIN,
+    // user:USER_ENDPOINTS.USER_LOGIN,
+    student:USER_ENDPOINTS.STUDENT_LOGIN,
+    faculty:USER_ENDPOINTS.FACULTY_LOGIN,
   } 
-
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@nu\.edu\.pk$/;
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -35,87 +44,41 @@ function Login() {
       [name]: value,
     });
   };
-
-  const handleCloseAlert= () =>{
-    setAlert({...alert,open:false})
-  }
-
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@nu\.edu\.pk$/;
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // console.log(formData);
+
     if (!emailPattern.test(formData.Email)) {
       setAlert({ message: "Please enter a valid email (e.g., xyz@nu.edu.pk)", severity: "error", open: true });
       return;
     }
-
     if(!roleApiMapping[formData.Role]){
       setAlert({ message: "Invalid Role Selected!", severity: "error", open: true });
       return;
     }
-
+    const data = {
+      Email:formData.Email,
+      Password:formData.Password,
+      Role:formData.Role,
+    }
     try {
       //two api want role , two dont , a bit mix up but sending these 3 info to all
-      const data = {
-        Email:formData.Email,
-        Password:formData.Password,
-        Role:formData.Role,
-      }
-
-      await sendData(roleApiMapping[data.Role],"POST",data)
-      if(response?.adminData){
+      const responseData = await sendData(roleApiMapping[data.Role],"POST",data)
+      console.log(responseData.data)
+      if(responseData.error){
+        setAlert({ message: responseData.error || 'Incorrect Password or Email', severity: "error", open: true });
+      }else{
         setAlert({ message: `You have logged in successfully as ${data.Email}`, severity: "success", open: true });
-        console.log(response)
-        navigate(`/${data.Role}`)
+        dispatch(setData({payload:responseData.data}))
+        //checking if redux is setup properly
+        
       }
-      
-      
-      // navigate(`${data.Role}`)
 
-    } catch (error) {
+    } catch (err) {
       setAlert({ message: err.message, severity: "error", open: true });
+    } finally{
+      // navigate(`/${data.Role == 'student'||data.Role == 'faculty'? 'user': data.Role}`)
     }
 
-    // const data = {
-    //   Email: formData.Email,
-    //   Password: formData.Password,
-    // };
-    // if (formData.Role === "Admin") {
-    //   await sendData("http://localhost:8000/admin/login", "POST", data);
-    //   console.log('response: ',response)
-    //   if (response?.token && response?.adminData) {
-    //     // Dispatch admin data and token to Redux
-    //     dispatch(
-    //       setAdminData({
-    //         adminData: response.adminData,
-    //         token: response.token,
-    //       })
-    //     );
-    //     alert("Login Successful");
-    //     navigate('/admin')
-    //   } else if (error) {
-    //     alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
-    //   }
-    // }
-    // if (formData.Role === "Vendor") {
-    //   await sendData("http://localhost:8000/admin/vendorlogin", "POST", data);
-    //   console.log('response: ',response)
-    //   if (response?.token && response?.adminData) {
-    //     // Dispatch admin data and token to Redux
-    //     dispatch(
-    //       setAdminData({
-    //         adminData: response.adminData,
-    //         token: response.token,
-    //       })
-    //     );
-    //     alert("Login Successful");
-    //     navigate('/vendor')
-    //   } else if (error) {
-    //     alert(`Error: ${error.response?.data?.message || "Unknown error"}`);
-    //   }
-    // }
   };
 
   return (
@@ -167,11 +130,6 @@ function Login() {
                 return  <option key={role} value={role}>{role}</option>
               })
             }
-            {/* <option value="Student">Student</option>
-            <option value="Faculty">Faculty</option>
-            <option value="Vendor">Vendor</option>
-            <option value="Driver">Driver</option>
-            <option value="Admin">Admin</option> */}
           </select>
         </div>
         <input

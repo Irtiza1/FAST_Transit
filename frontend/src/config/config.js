@@ -3,8 +3,9 @@ export const ADMIN_ENDPOINTS = {
     ADMIN_LOGIN : `${API_BASE_URL}/admin/login`,
 }
 export const VENDOR_ENDPOINTS = {
-    VENDOR_LOGIN : `${API_BASE_URL}/admin/vedorlogin`,
+    VENDOR_LOGIN : `${API_BASE_URL}/admin/vendorlogin`,
 }
 export const USER_ENDPOINTS = {
-    USER_LOGIN : `${API_BASE_URL}/user/login`
+    STUDENT_LOGIN : `${API_BASE_URL}/user/login`,
+    FACULTY_LOGIN : `${API_BASE_URL}/user/login`
 }

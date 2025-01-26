@@ -1,10 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import adminReducer from "../features/adminSlice.js";
-import userReducer from "../features/userSlice.js"
-import routeReducer from "../features/routeSlice.js"
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { combineReducers } from "redux";
+import adminReducer from "./slices/adminData";
+import userReducer from "./slices/userData"
+import routeReducer from "./slices/routeData"
 
 const persistConfig = {
   key: "root",

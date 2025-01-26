@@ -8,15 +8,16 @@ export const LoginUser=async(req,res) => {
         const sql = 'SELECT * FROM USERS WHERE Email = ? AND Password = ? AND Role = ?';
         const  [user] = await connection.query(sql, [Email,Password,Role])
         if(!user.length){
+            console.log('hel')
             return res.status(404).json({message: 'User not found!'})
         }
         else{
-            const userData = user[0]; 
-            console.log(userData.Role);
+            const data = user[0]; 
+            console.log(data.Role);
         
-            const token = jwt.sign({ UserId: userData.UserID, Role: userData.Role }, process.env.JWT_SECRET, { expiresIn: '10m' });
+            const token = jwt.sign({ UserId: data.UserID, Role: data.Role }, process.env.JWT_SECRET, { expiresIn: '10m' });
         
-            res.status(200).json({ message: 'Login Successful!',userData, token });
+            return res.status(200).json({ message: 'Login Successful!',data, token });
         }
     }
     catch(error){
