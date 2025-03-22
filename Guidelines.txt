@@ -20,3 +20,10 @@ for backend:
     a.Driver registration
     b.Bus registration
     c.Route creation
+
+
+    ~/Downloads$ ls /opt/lampp
+	~/Downloads$ sudo /opt/lampp/lampp start
+	~/Downloads$ sudo /opt/lampp/lampp stop
+
+    http://localhost/phpmyadmin/

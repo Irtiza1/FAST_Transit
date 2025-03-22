@@ -28,7 +28,7 @@ router.get('/Student/dropdown/:operations/:user/:id?', /*authorizeRole('Student'
 
 router.post('/Faculty', /*authorizeRole('Faculty'),*/ facultyDropDownCreate)
 router.patch('/Faculty', /*authorizeRole('Faculty'),*/ facultyDropDownUpdate )
-router.get('/Faculty', /*authorizeRole('Faculty'),*/  facultyDropDownView)
+router.get('/Faculty/dropdown/:operations/:user/:id?', /*authorizeRole('Faculty'),*/  facultyDropDownView)
 
 //  authorizeRole('Driver'), 
 router.post('/Driver/dropdown/:operations/:user', /*authorizeRole('Driver'),*/ driverDropDownCreate)

@@ -6,11 +6,11 @@ export const adminDropDownView = async (req, res) => {
     console.log('User:', user);
     console.log('ID:', id);
 
+
     try {
         let sql = '';
         let result;
 
-        
         if (operations === 'View') {
            if (user === 'User'){
                 try {

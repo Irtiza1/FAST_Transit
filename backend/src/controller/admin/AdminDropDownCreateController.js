@@ -128,7 +128,8 @@ export const adminDropDownCreate = async (req, res) => {
 
 import connection from "../../db/index.js";
 
-export const adminDropDownCreate = async (req, res) => {
+export const 
+adminDropDownCreate = async (req, res) => {
     const { operations, user } = req.params;
     console.log('Operation:', operations);
     console.log('User:', user);

@@ -31,13 +31,13 @@ router.post('/vendorlogin',LoginVendor)
 router.get('/activate/:token/:role',ActivateUser)
 
 //view profile
-router.get('/profile',viewProfile)
+router.get('/profile',viewProfile) //university admin profile
 
 //Univeristy admin dropdown
 router.get("/dropdown/:operations/:user/:id?", adminDropDownView);
 router.post("/dropdown/:operations/:user",adminDropDownCreate)
 router.delete("/dropdown/:operations/:user/:id?",adminDropDownDelete)
-router.patch("/dropdown/:operations/:user",vendorDropDownUpdate)
+router.patch("/dropdown/:operations/:user",adminDropDownUpdate)
 
 //Vendor admin dropdown
 router.get("/Vendor/dropdown/:operations/:user/:id?", vendorDropDownView);
