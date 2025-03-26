@@ -16,13 +16,19 @@ import RouteDetailPage from "./pages/RouteDetailPage";
 import VendorDashboard from "./pages/VendorDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import UserDashboard from "./pages/UserDashboard";
+import UserRoutesPage from "./component/UserComponents/UserRoutePage";
+import AvailServiceForm from "./component/UserComponents/AvailServiceForm";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
         <Route path="register" element={<RegisterPage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route path="user" element={<UserDashboard />} />
+        <Route path="user" element={<UserDashboard />}>
+          <Route path="view-routes" element={<UserRoutesPage/>}/>
+          <Route path="route/:routeId" element={<RouteDetailPage />} />
+          <Route path="avail-service" element={<AvailServiceForm />} />
+        </Route>
 
         {/* <Route path="home" element={<HomePage />} /> */}
         <Route path="vendor" element={<VendorDashboard />}>

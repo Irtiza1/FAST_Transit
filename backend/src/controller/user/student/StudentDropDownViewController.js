@@ -209,7 +209,51 @@ export const studentDropDownView = async (req, res) => {
                         `;
                     console.log('Executing SQL:', sql, id ? [id] : []);
                     const [result] = await connection.query(sql, id ? [id] : []);
+                    console.log(result)
+                    if (result.length === 0) {
+                        return res.status(404).send('No Bus data found.');
+                    }
             
+                    return res.status(200).json(result);
+                } catch (error) {
+                    console.error('Error fetching Bus data:', error);
+                    return res.status(500).send('Internal Server Error');
+                }
+            }else if (user === 'BusByRouteID') { // updated the api and working perfectly
+                try {
+                    // ID here will of route and its mandatory for this API to receive ID
+                     sql = id
+                        ? `
+                            SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                B.VendorID, 
+                                B.DriverID
+                            FROM BUS B 
+                            WHERE B.RouteID = ?
+
+                        `
+                        : `
+                             SELECT 
+                                B.BusID, 
+                                B.BusNumber, 
+                                DATE_FORMAT(B.DepartureTime, '%Y-%m-%d %H:%i:%s') AS DepartureTime,
+                                DATE_FORMAT(B.ArrivalTime, '%Y-%m-%d %H:%i:%s') AS ArrivalTime,
+                                B.Status, 
+                                B.RouteID, 
+                                B.VendorID, 
+                                B.DriverID
+                            FROM BUS B 
+                        `;
+                    console.log('Executing SQL:', sql, id ? [id] : []);
+                    const [result] = await connection.query(sql, id ? [id] : []);
+
+                    console.log(result)
+                    
                     if (result.length === 0) {
                         return res.status(404).send('No Bus data found.');
                     }

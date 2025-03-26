@@ -10,15 +10,15 @@ function DriverInfoCard({ driver }) {
       </h2>
       <p className="text-gray-400 mb-2">
         <span className="font-semibold text-gray-200">Name:</span>{" "}
-        {driver.DriverName || "N/A"}
+        {driver?.DriverName || "N/A"}
       </p>
       <p className="text-gray-400 mb-2">
         <span className="font-semibold text-gray-200">License Number:</span>{" "}
-        {driver.LicenseNumber || "N/A"}
+        {driver?.LicenseNumber || "N/A"}
       </p>
       <p className="text-gray-400 mb-2">
         <span className="font-semibold text-gray-200">Phone:</span>{" "}
-        {driver.PhoneNumber || "N/A"} <FaPhone className="inline ml-2" />
+        {driver?.PhoneNumber || "N/A"} <FaPhone className="inline ml-2" />
       </p>
       
     </div>

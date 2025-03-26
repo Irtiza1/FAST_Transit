@@ -76,7 +76,7 @@ function Login() {
     } catch (err) {
       setAlert({ message: err.message, severity: "error", open: true });
     } finally{
-      // navigate(`/${data.Role == 'student'||data.Role == 'faculty'? 'user': data.Role}`)
+      navigate(`/${data.Role == 'student'||data.Role == 'faculty'? 'user': data.Role}`)
     }
 
   };
